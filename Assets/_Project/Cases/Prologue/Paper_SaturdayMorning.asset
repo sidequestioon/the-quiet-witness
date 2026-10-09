@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b3050f8e0abf469a945c730b04678be, type: 3}
+  m_Name: Paper_SaturdayMorning
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.UI.NewspaperData
+  id: sat_morning
+  masthead: THE MILLBROOK COURIER
+  dateLine: "Saturday \xB7 Morning Edition"
+  segment: {fileID: 11400000, guid: 1eb08e64232b54333993687543dd3ff3, type: 2}
+  headlines:
+  - when:
+      requiredClues: []
+      requiredFlags:
+      - talked:test_stranger
+    headline: Lawyer asks questions downtown
+    lead: The defense attorney was seen talking to locals last night.
+  - when:
+      requiredClues: []
+      requiredFlags: []
+    headline: Two days until the trial
+    lead: The town waits for Monday.
+  articles:
+  - title: Weather
+    body: Morning fog, clearing by noon.
+    when:
+      requiredClues: []
+      requiredFlags: []
+    clue: {fileID: 0}
