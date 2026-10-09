@@ -1,21 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace QuietWitness.Dialogue
 {
-    // One answer option. Cloned from a hidden template by DialoguePanel.
+    // A button with a text label: a dialogue choice or a line in the evidence list.
+    // Cloned from a hidden template.
     [RequireComponent(typeof(Button))]
     public class DialogueChoiceButton : MonoBehaviour
     {
         [SerializeField] private TMP_Text label;
 
-        public void Setup(int index, string text, DialoguePanel panel)
+        public void Setup(string text, UnityAction onClick)
         {
-            label.text = $"{index + 1}. {text}";
+            label.text = text;
             var button = GetComponent<Button>();
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => panel.Choose(index));
+            button.onClick.AddListener(onClick);
         }
     }
 }

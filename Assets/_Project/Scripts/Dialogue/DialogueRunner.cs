@@ -119,9 +119,49 @@ namespace QuietWitness.Dialogue
         public void Choose(int index)
         {
             if (!WaitingForChoice || index < 0 || index >= story.currentChoices.Count) return;
+            if (IsSilence(story.currentChoices[index].text))
+                history.Add(new DialogueLine(string.Empty, "(silence)"));
             story.ChooseChoiceIndex(index);
             Next();
         }
+
+        // ---- Present evidence & silence ----
+        // In ink, special choices are not shown as buttons:
+        //   * [present:<clue id>]  -> taken when the player presents that clue
+        //   + [present:any]        -> taken for any other clue (the "that proves nothing" answer)
+        //   * [silence]            -> shown as "... (stay silent)"
+
+        public const string PresentPrefix = "present:";
+        public const string PresentAny = "present:any";
+        public const string Silence = "silence";
+
+        public static bool IsPresent(string choiceText) =>
+            Clean(choiceText).StartsWith(PresentPrefix, StringComparison.Ordinal);
+
+        public static bool IsSilence(string choiceText) => Clean(choiceText) == Silence;
+
+        // True when the current choices accept evidence.
+        public bool CanPresent =>
+            WaitingForChoice && story.currentChoices.Exists(c => IsPresent(c.text));
+
+        // Picks the matching present:<id> choice, or present:any.
+        // Returns false if the story has no answer for this clue.
+        public bool Present(ClueData clue)
+        {
+            if (clue == null || !CanPresent) return false;
+
+            var choices = story.currentChoices;
+            int index = choices.FindIndex(c => Clean(c.text) == PresentPrefix + clue.Id.ToLowerInvariant());
+            if (index < 0) index = choices.FindIndex(c => Clean(c.text) == PresentAny);
+            if (index < 0) return false;
+
+            history.Add(new DialogueLine(string.Empty, $"(presented: {clue.Title})"));
+            story.ChooseChoiceIndex(index);
+            Next();
+            return true;
+        }
+
+        private static string Clean(string text) => (text ?? string.Empty).Trim().ToLowerInvariant();
 
         private void End()
         {

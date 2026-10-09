@@ -5,6 +5,9 @@
 //   Name: text      -> a character speaks
 //   plain text      -> narration or the investigator's thoughts (shown in italics)
 //   * [Choice]      -> the brackets hide the choice text from the dialogue
+//   * [silence]     -> shown as "... (stay silent)"
+//   * [present:<clue id>] -> taken when the player presents that clue
+//   + [present:any]       -> answer for any other clue (use + so it can repeat)
 
 // Game functions. In the game they talk to GameState;
 // the bodies at the bottom only run in Inky, for testing.

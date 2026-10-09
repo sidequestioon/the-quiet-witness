@@ -56,6 +56,19 @@ namespace QuietWitness.EditorTools
             return tmp;
         }
 
+        public static Button NewButton(string name, Transform parent, string label,
+                                       float size, Color background, Color textColor)
+        {
+            var rt = NewUI(name, parent);
+            var image = AddImage(rt, background);
+            var button = rt.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            var text = NewText("Label", rt, label, size, FontStyles.Bold, textColor);
+            text.alignment = TextAlignmentOptions.Center;
+            Stretch(text.transform, 0f, 0f, 1f, 1f);
+            return button;
+        }
+
         public static void Wire(Object target, params (string field, Object value)[] links)
         {
             var so = new SerializedObject(target);
