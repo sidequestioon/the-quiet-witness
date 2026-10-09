@@ -6,7 +6,7 @@ A pixel-art noir detective game set in the late 1980s. A Deaf street artist is f
 
 She couldn't hear, and she couldn't speak. But she saw — and she drew.
 
-🚧 **Status:** early development — paper design
+🚧 **Status:** early development — `v0.1` grey-box prototype is out (placeholder shapes, all core systems playable)
 
 ## Features (planned)
 - **Time without a timer** — story events move the clock, not a countdown
@@ -25,11 +25,16 @@ She couldn't hear, and she couldn't speak. But she saw — and she drew.
 
 ## Docs
 - [Game Design Document](docs/GDD.md) — spoiler-free
+- [Architecture](docs/ARCHITECTURE.md) — how the code and data are organized
+- [Changelog](CHANGELOG.md)
+
+## Controls (prototype)
+A/D walk · E interact · J case file · N newspaper · P present evidence · Esc close · F5/F9 save/load
 
 ## Roadmap
 - [x] Project setup
-- [ ] Paper design (GDD)
-- [ ] Grey-box prototype — `v0.1`
+- [x] Paper design (GDD)
+- [x] Grey-box prototype — `v0.1`
 - [ ] Vertical slice demo — `v0.2`
 
 ## License
