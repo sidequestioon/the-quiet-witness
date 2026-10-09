@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aafc7aa238164f709663570137af67e, type: 3}
+  m_Name: DinerAddress
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Archive.ArchiveEntry
+  id: phone_diner
+  title: Millbrook Diner
+  subtitle: 14 Main Street
+  photo: {fileID: 0}
+  body: "Open daily, 6 am \u2013 11 pm."
+  keywords:
+  - diner
+  - millbrook diner
+  availableWhen:
+    requiredClues: []
+    requiredFlags: []
+  grantsClues: []
+  grantsFlags: []

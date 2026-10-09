@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd43aa40be9c24eebb518f07ce757706, type: 3}
+  m_Name: BottleNoBlood
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ClueData
+  id: bottle_no_blood
+  title: Bottle without blood
+  description: The prosecution's weapon. The client's fingerprints are on it, but
+    there is no trace of blood
+  icon: {fileID: 0}
+  isKey: 0
