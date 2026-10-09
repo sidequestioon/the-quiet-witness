@@ -20,3 +20,4 @@ MonoBehaviour:
     - conclusion:bottle_not_weapon
   warning: Time to go home. Tomorrow is a long day.
   next: {fileID: 11400000, guid: 1eb08e64232b54333993687543dd3ff3, type: 2}
+  lighting: {fileID: 11400000, guid: c5f03ae61d70c4e76a4dbaca0e27d0e1, type: 2}

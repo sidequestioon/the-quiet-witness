@@ -1,3 +1,4 @@
+using QuietWitness.World;
 using UnityEngine;
 
 namespace QuietWitness.Core
@@ -15,12 +16,14 @@ namespace QuietWitness.Core
         [TextArea(2, 5)]
         [SerializeField] private string warning;
         [SerializeField] private TimeSegment next;
+        [SerializeField] private LightingPreset lighting;
 
         public string Id => id;
         public string DisplayName => displayName;
         public Condition KeyCondition => keyCondition;
         public string Warning => warning;
         public TimeSegment Next => next;
+        public LightingPreset Lighting => lighting;
         public string Flag => "time:" + id;
     }
 }
