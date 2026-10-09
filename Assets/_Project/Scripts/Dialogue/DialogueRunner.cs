@@ -84,6 +84,7 @@ namespace QuietWitness.Dialogue
             }
 
             currentKnot = knot;
+            if (history.Count > 0) history.Add(new DialogueLine(string.Empty, Separator));
             IsRunning = true;
             InputBlocker.Push();
             Started?.Invoke();
@@ -130,6 +131,9 @@ namespace QuietWitness.Dialogue
         //   * [present:<clue id>]  -> taken when the player presents that clue
         //   + [present:any]        -> taken for any other clue (the "that proves nothing" answer)
         //   * [silence]            -> shown as "... (stay silent)"
+
+        // Marks the start of a new conversation in History.
+        public const string Separator = "---";
 
         public const string PresentPrefix = "present:";
         public const string PresentAny = "present:any";
