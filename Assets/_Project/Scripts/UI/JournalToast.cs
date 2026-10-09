@@ -14,6 +14,8 @@ namespace QuietWitness.UI
         [SerializeField] private float showTime = 2.5f;
         [SerializeField] private float fadeTime = 0.25f;
 
+        public static JournalToast Instance { get; private set; }
+
         private readonly Queue<string> queue = new Queue<string>();
         private GameState state;
         private bool playing;
@@ -25,12 +27,20 @@ namespace QuietWitness.UI
 
             state = GameState.Instance;
             if (state == null || state.transform.root != transform.root) { state = null; return; } // duplicate Systems
+            Instance = this;
             state.ClueFound += OnClueFound;
         }
 
         private void OnDestroy()
         {
             if (state != null) state.ClueFound -= OnClueFound;
+        }
+
+        // Any short notice, e.g. "Game saved".
+        public void Notify(string message)
+        {
+            queue.Enqueue(message);
+            if (!playing) StartCoroutine(Play());
         }
 
         private void OnClueFound(ClueData clue)

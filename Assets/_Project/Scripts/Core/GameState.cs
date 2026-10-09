@@ -19,6 +19,7 @@ namespace QuietWitness.Core
         private readonly List<ClueData> foundClues = new List<ClueData>();
 
         public IReadOnlyList<ClueData> FoundClues => foundClues;
+        public IEnumerable<string> Flags => flags;
 
         private void Awake()
         {
@@ -53,5 +54,17 @@ namespace QuietWitness.Core
         }
 
         public bool HasClue(ClueData clue) => clue != null && HasFlag(clue.Flag);
+
+        // Loading a save: replaces everything without firing events
+        // (no "New clue" notices for clues found long ago).
+        public void Restore(IEnumerable<string> savedFlags, IEnumerable<ClueData> savedClues)
+        {
+            flags.Clear();
+            foundClues.Clear();
+            foreach (var flag in savedFlags)
+                if (!string.IsNullOrWhiteSpace(flag)) flags.Add(flag);
+            foreach (var clue in savedClues)
+                if (clue != null && !foundClues.Contains(clue)) foundClues.Add(clue);
+        }
     }
 }

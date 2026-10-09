@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using QuietWitness.Core;
 using TMPro;
@@ -18,6 +19,9 @@ namespace QuietWitness.Map
 
         public bool IsTravelling { get; private set; }
 
+        // Fired when a travel or a load has finished and the screen is visible again.
+        public event Action Arrived;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -36,10 +40,18 @@ namespace QuietWitness.Map
         public void Travel(LocationData location)
         {
             if (IsTravelling || location == null) return;
-            StartCoroutine(TravelRoutine(location));
+            StartCoroutine(LoadRoutine(location.SceneName, location.DisplayName, null,
+                () => GameState.Instance.SetFlag(location.VisitedFlag)));
         }
 
-        private IEnumerator TravelRoutine(LocationData location)
+        // Loading a save: whileDark restores the state while the screen is black.
+        public void LoadSaved(string sceneName, string displayName, Action whileDark)
+        {
+            if (IsTravelling || string.IsNullOrEmpty(sceneName)) return;
+            StartCoroutine(LoadRoutine(sceneName, displayName, whileDark, null));
+        }
+
+        private IEnumerator LoadRoutine(string sceneName, string displayName, Action whileDark, Action afterLoad)
         {
             IsTravelling = true;
             InputBlocker.Push();
@@ -47,12 +59,14 @@ namespace QuietWitness.Map
 
             yield return Fade(0f, 1f);
 
+            whileDark?.Invoke();
+
             string time = TimeManager.Instance.Current != null
                 ? TimeManager.Instance.Current.DisplayName
                 : "";
-            title.text = $"{location.DisplayName}\n<size=60%>{time}</size>";
+            title.text = $"{displayName}\n<size=60%>{time}</size>";
 
-            AsyncOperation load = SceneManager.LoadSceneAsync(location.SceneName);
+            AsyncOperation load = SceneManager.LoadSceneAsync(sceneName);
             float shown = 0f;
             while (!load.isDone || shown < titleTime)
             {
@@ -60,13 +74,14 @@ namespace QuietWitness.Map
                 yield return null;
             }
 
-            GameState.Instance.SetFlag(location.VisitedFlag);
+            afterLoad?.Invoke();
             title.text = "";
             yield return Fade(1f, 0f);
 
             fader.blocksRaycasts = false;
             InputBlocker.Pop();
             IsTravelling = false;
+            Arrived?.Invoke();
         }
 
         private IEnumerator Fade(float from, float to)
