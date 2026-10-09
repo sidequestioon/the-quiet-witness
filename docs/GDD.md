@@ -55,33 +55,39 @@ The case is high-profile. Every newspaper writes about it, the town is divided, 
 
 ## 4. Characters
 
-> Full cast to be written in issue #4. Target: 8–10 characters. Names are not final.
+> Names are not final.
 
 | Character | Role |
 |---|---|
 | The investigator | Defense attorney and private investigator; the player character |
-| The client | Homeless man accused of the killing; the victim's friend |
+| The client | Homeless man accused of the killing; the victim's friend, knows sign language |
 | The victim | Deaf street artist; present through memories and drawings |
 | The diner owner | Hires the investigator with money collected by the regulars |
-| The coroner | Examined the body; wrote the official report |
 | The judge | The only judge in Millbrook; presides over the trial |
-| *TBD* | |
+| The prosecutor | Ambitious, and sure the case is open and shut |
+| The coroner | Examined the body; wrote the official report |
+| The developer | Has big plans for the park |
+| The journalist | Writes the headlines; knows every rumor in town |
+| The park kids | Skateboarders who hang out in the park at night |
+
+**Also in town:** a gallery owner who sold the artist's drawings, a rival from the homeless camp, a bartender, a motel night clerk.
 
 ---
 
 ## 5. Locations
 
-> To be finalized in issue #4. Target: 6–8 locations.
-
 | Location | Notes |
 |---|---|
 | Office (hub) | The investigator's agency; returns here between trips |
-| The park | Where the artist drew — and where she was found |
+| The park | Where the artist drew — and where she was found. Fountain, fence with drawings, homeless camp |
 | The diner | Where she traded drawings for food |
-| Downtown | Cinema, theater, bars and neon at night |
+| Police station | Case files, evidence, visits to the client |
+| Morgue | The coroner's domain |
+| Downtown bar | Neon, night life, the bartender who sees everything |
 | The motel | On the edge of town |
-| Police station | Case files and evidence |
 | Courthouse | The finale |
+
+> The full clue list (23 clues, 3 red herrings) is in the private story bible.
 
 ---
 
@@ -226,7 +232,7 @@ There are **five endings**. They depend on the evidence the player collected and
 ## 18. Open questions
 
 - Character names, including the investigator.
-- Full cast, locations and clues (issue #4).
+- Detailed clue scenes and dialogue.
 - Time segment breakdown (issue #5).
 - "What unlocks what" chart (issue #6).
 - Courtroom script (issue #7).
