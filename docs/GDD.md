@@ -121,7 +121,7 @@ There is no visible timer. Time is moved by key story events: when the player fi
 
 **Light:** each location is drawn once; morning, evening and night are lighting setups. At night different people are around and different places are open.
 
-> Segment breakdown to be written in issue #5.
+> The detailed breakdown of each day is in the private story bible.
 
 ---
 
@@ -147,7 +147,7 @@ There is no visible timer. Time is moved by key story events: when the player fi
 
 The player connects two cards with a red thread. If the connection is correct (for example, "café receipt" + "brother's alibi"), a conclusion appears: "the alibi is false". A conclusion unlocks a new question or location. Wrong connections simply do nothing — no penalty.
 
-> Full "what unlocks what" chart: issue #6.
+> The full "what unlocks what" chart is in the private story bible.
 
 ---
 
@@ -158,6 +158,7 @@ The player connects two cards with a red thread. If the connection is correct (f
 - **Silence** is an answer option: sometimes the other person fills the pause and says too much.
 - **Dialogue log:** everything said can be reread.
 - **Notebook:** the investigator automatically notes small details that are easy to miss; rereading them reveals leads.
+- **Trades:** some people only talk after you bring them something they need.
 
 Dialogue is written in Ink.
 
@@ -173,11 +174,11 @@ Dialogue is written in Ink.
 
 ## 12. Courtroom finale & endings
 
-On Monday the investigator stands in court as the defense attorney. The player builds the defense speech: for each point, they choose specific evidence. Strong evidence for most points can carry the case even if something was missed; too little, and the defense falls apart.
+On Monday the investigator stands in court as the defense attorney. First the player cross-examines the prosecution's witnesses, presenting evidence to break their testimony. Then the player builds the defense speech: for each point, they choose specific evidence. Strong evidence for most points can carry the case even if something was missed; too little, and the defense falls apart.
 
 There are **five endings**. They depend on the evidence the player collected and on the choices they make before the trial. The outcome is revealed in Tuesday's newspaper, followed by an epilogue: a newspaper chronicle of what happened to every character.
 
-> Courtroom script: issue #7. Ending conditions are in the private story bible.
+> Prosecution witnesses, the defense speech points and ending conditions are in the private story bible.
 
 ---
 
@@ -233,9 +234,6 @@ There are **five endings**. They depend on the evidence the player collected and
 
 - Character names, including the investigator.
 - Detailed clue scenes and dialogue.
-- Time segment breakdown (issue #5).
-- "What unlocks what" chart (issue #6).
-- Courtroom script (issue #7).
 
 ---
 
