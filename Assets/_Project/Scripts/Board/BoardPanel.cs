@@ -44,6 +44,7 @@ namespace QuietWitness.Board
         private BoardCard selected;
 
         public bool IsOpen => window.activeSelf;
+        public IReadOnlyList<ConclusionData> Conclusions => conclusions;
 
         private void Awake()
         {
