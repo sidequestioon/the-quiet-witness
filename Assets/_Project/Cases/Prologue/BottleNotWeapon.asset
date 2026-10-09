@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef9a18634fd72432fa226af34009d555, type: 3}
+  m_Name: BottleNotWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Board.ConclusionData
+  id: bottle_not_weapon
+  title: The bottle wasn't the weapon
+  description: No blood on the bottle, yet the coroner found a blow to the head.
+    Something else was used.
+  fromClues:
+  - {fileID: 11400000, guid: 4c38c5129e9644037868a35504e3f40d, type: 2}
+  - {fileID: 11400000, guid: c01875b35e97748149c35a6233097a01, type: 2}
+  fromConclusions: []

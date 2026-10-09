@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd57833918f3e4e97b069518b4db8fa5, type: 3}
+  m_Name: TestTrial
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Court.CourtCase
+  id: test_trial
+  title: The People v. the drifter (test)
+  intro: Monday, nine a.m. The courtroom is full. The prosecution looks sure of itself.
+  points:
+  - claim: The defendant struck the victim with the bottle.
+    answeredByClues: []
+    answeredByConclusions:
+    - {fileID: 11400000, guid: dd8097c4b528d4005a7f0c63ba89201b, type: 2}
+    sustained: No blood on the bottle, yet a blow to the head. The jury looks at
+      the bottle differently now.
+    overruled: The bottle stays on the evidence table. The jury nods along.
+  - claim: She simply froze in the cold. There was no one else.
+    answeredByClues:
+    - {fileID: 11400000, guid: c01875b35e97748149c35a6233097a01, type: 2}
+    answeredByConclusions: []
+    sustained: The coroner's report speaks of a blow to the head. Someone else was
+      there.
+    overruled: The word "cold" hangs in the air.
+  verdicts:
+  - id: not_guilty
+    title: Not guilty
+    text: The defendant walks out of the courtroom a free man.
+    minScore: 2
+    when:
+      requiredClues: []
+      requiredFlags: []
+    newspaper: {fileID: 11400000, guid: 1b5554a9ae2db4da18823df5171a469f, type: 2}
+  - id: hung_jury
+    title: Hung jury
+    text: The jury cannot agree. It isn't over yet.
+    minScore: 1
+    when:
+      requiredClues: []
+      requiredFlags: []
+    newspaper: {fileID: 11400000, guid: 1b5554a9ae2db4da18823df5171a469f, type: 2}
+  - id: guilty
+    title: Guilty
+    text: The gavel falls. The town gets the ending it expected.
+    minScore: 0
+    when:
+      requiredClues: []
+      requiredFlags: []
+    newspaper: {fileID: 11400000, guid: 1b5554a9ae2db4da18823df5171a469f, type: 2}
