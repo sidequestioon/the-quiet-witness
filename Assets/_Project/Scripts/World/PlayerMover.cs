@@ -1,3 +1,4 @@
+using QuietWitness.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +21,7 @@ namespace QuietWitness.World
 
         private void Update()
         {
-            if (!CanMove || Keyboard.current == null) return;
+            if (!CanMove || InputBlocker.IsBlocked || Keyboard.current == null) return;
 
             float input = 0f;
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) input -= 1f;

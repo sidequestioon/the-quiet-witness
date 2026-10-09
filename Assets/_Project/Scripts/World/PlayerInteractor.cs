@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using QuietWitness.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +26,8 @@ namespace QuietWitness.World
 
         private void Update()
         {
+            if (InputBlocker.IsBlocked) return;
+
             UpdateCurrent();
 
             if (Current != null && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)

@@ -32,6 +32,8 @@ namespace QuietWitness.Core
 
         private void Start()
         {
+            if (Instance != this) return; // a duplicate that is being removed
+
             GameState.Instance.SetFlag(Current.Flag);
             GameState.Instance.FlagSet += OnFlagSet;
             CheckReady();
