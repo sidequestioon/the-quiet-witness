@@ -7,6 +7,8 @@ namespace QuietWitness.Core
     {
         private void Start()
         {
+            if (TimeManager.Instance.gameObject != gameObject) return;
+
             TimeManager.Instance.ReadyToAdvance += s =>
                 Debug.Log($"Ready to move on from {s.DisplayName}. {s.Warning}");
             TimeManager.Instance.SegmentChanged += s =>
