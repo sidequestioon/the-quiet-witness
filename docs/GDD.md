@@ -47,7 +47,7 @@ The case is high-profile. Every newspaper writes about it, the town is divided, 
 
 **The accused.** A homeless man, her friend — the only person in town who understood her sign language. He found the body and took her blanket. That night he was drunk and remembers nothing, and he already has a record. For the police, the case is closed. The trial is set for Monday.
 
-**The investigator.** A defense attorney who also works as a private investigator, running a one-man agency from a small office downtown. On Friday evening, the owner of the diner where the artist traded her drawings walks in with a tin can of crumpled bills, collected by the regulars all week. They don't believe the official story, and they want him to defend the accused. On his office wall hangs a portrait of him that the artist once drew.
+**The investigator.** A defense attorney who also works as a private investigator, running a one-man agency from a small office downtown. The owner of the diner where the artist traded her drawings and her regulars don't believe the official story. They pooled their money and hired him to defend the accused. The game begins on Friday evening, when he has already taken the case. On his office wall hangs a portrait of him that the artist once drew.
 
 **The quiet witness.** She couldn't hear, and she couldn't speak. But she saw — and she drew. Her drawings are scattered all over Millbrook, and some of them remember more than people do.
 
