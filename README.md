@@ -1,16 +1,30 @@
 # The Quiet Witness
 
-> 48 hours until the trial. The whole city is sure he's guilty. You're not.
+> 48 hours until the trial. The whole town is sure he's guilty. You're not.
 
-A pixel-art noir detective game set in 1988. As a private investigator hired by the defense, you have two days and two nights to search a neon-lit city for the real killer before the judge's gavel falls.
+A pixel-art noir detective game set in the late 1980s. A Deaf street artist is found dead in the park of Millbrook, a rainy autumn town, and her homeless friend is charged with the killing. As a defense attorney and private investigator, you have two days and two nights to find the real killer before the judge's gavel falls.
 
-🚧 **Status:** early development
+She couldn't hear, and she couldn't speak. But she saw — and she drew.
+
+🚧 **Status:** early development — paper design
+
+## Features (planned)
+- **Time without a timer** — story events move the clock, not a countdown
+- **Newspaper as chapter** — every part of the story opens with a front page that reacts to your actions
+- **Evidence board** — connect clues with red thread to draw conclusions
+- **Interrogations** — present evidence to catch a lie, or stay silent and let them talk
+- **Courtroom finale** — build the defense speech from the evidence you found
+- **Five endings** — depending on what you uncover and the choices you make
+- **Her drawings** — scattered all over town, waiting to be found
 
 ## Built with
 - Unity 6.3 LTS (URP 2D)
 - C#
 - Ink (dialogue)
 - AI-assisted workflow
+
+## Docs
+- [Game Design Document](docs/GDD.md) — spoiler-free
 
 ## Roadmap
 - [x] Project setup
