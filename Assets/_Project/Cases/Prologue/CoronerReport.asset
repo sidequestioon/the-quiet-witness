@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd43aa40be9c24eebb518f07ce757706, type: 3}
+  m_Name: CoronerReport
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ClueData
+  id: coroner_blow_to_head
+  title: Coroner's report
+  description: Death by a blow to the back of the head, between midnight and 2 a.m.
+  icon: {fileID: 0}
+  isKey: 0
