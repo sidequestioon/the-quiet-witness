@@ -12652,6 +12652,7 @@ GameObject:
   - component: {fileID: 7533533172071237341}
   - component: {fileID: 1012451628839721151}
   - component: {fileID: 6745530923117052975}
+  - component: {fileID: 2232709733223517563}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -12745,6 +12746,24 @@ MonoBehaviour:
   clues:
   - {fileID: 11400000, guid: 4c38c5129e9644037868a35504e3f40d, type: 2}
   - {fileID: 11400000, guid: c01875b35e97748149c35a6233097a01, type: 2}
+  - {fileID: 11400000, guid: 7e118e7facecd48a2a11d896bbc91db5, type: 2}
+--- !u!114 &2232709733223517563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8055706831165642689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a9a52d7c76a48efb89702de8d99a8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Save.SaveSystem
+  clues:
+  - {fileID: 11400000, guid: 4c38c5129e9644037868a35504e3f40d, type: 2}
+  - {fileID: 11400000, guid: c01875b35e97748149c35a6233097a01, type: 2}
+  - {fileID: 11400000, guid: 7e118e7facecd48a2a11d896bbc91db5, type: 2}
+  autosave: 1
 --- !u!1 &8073649435944390750
 GameObject:
   m_ObjectHideFlags: 0

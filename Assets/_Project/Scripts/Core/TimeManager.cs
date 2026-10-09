@@ -55,6 +55,23 @@ namespace QuietWitness.Core
             ReadyToAdvance?.Invoke(Current);
         }
 
+        // Walks the chain from the start segment.
+        public TimeSegment FindSegment(string id)
+        {
+            for (var s = startSegment; s != null; s = s.Next)
+                if (s.Id == id) return s;
+            return null;
+        }
+
+        // Loading a save. The scene is reloaded right after, so lights and newspapers follow by themselves.
+        public void Restore(TimeSegment segment)
+        {
+            if (segment == null) return;
+            Current = segment;
+            IsReady = false;
+            CheckReady();
+        }
+
         // Called when the player agrees to move on.
         public void Advance()
         {

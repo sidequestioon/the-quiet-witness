@@ -175,6 +175,22 @@ namespace QuietWitness.Dialogue
             Ended?.Invoke();
         }
 
+        // ---- Saving ----
+
+        public string SaveInkState() => story != null ? story.state.ToJson() : null;
+
+        public void LoadInkState(string json)
+        {
+            if (story == null || string.IsNullOrEmpty(json)) return;
+            story.state.LoadJson(json);
+        }
+
+        public void RestoreHistory(IEnumerable<DialogueLine> lines)
+        {
+            history.Clear();
+            history.AddRange(lines);
+        }
+
         private void GiveClue(string id)
         {
             var clue = clues.Find(c => c != null && c.Id == id);
