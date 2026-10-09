@@ -18,4 +18,4 @@ MonoBehaviour:
   unlockCondition:
     requiredClues: []
     requiredFlags:
-    - conclusion:bottle_not_weapon
+    - archive:phone_diner
