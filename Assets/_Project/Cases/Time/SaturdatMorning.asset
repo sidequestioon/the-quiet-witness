@@ -19,3 +19,4 @@ MonoBehaviour:
     requiredFlags: []
   warning: 
   next: {fileID: 0}
+  lighting: {fileID: 11400000, guid: 31975957db25848488c484f86feae050, type: 2}
