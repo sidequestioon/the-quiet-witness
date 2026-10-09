@@ -18,6 +18,26 @@ Stranger: You're the lawyer. The one taking the drifter's case.
     Stranger: Saw a bottle by the bench. No blood on it, if that's what you're after.
     ~ give_clue("bottle_no_blood")
     -> questions
-* [Leave]
+* [Ask where he was that night]
+    Stranger: Home. All night. Didn't even step outside.
+    -> alibi
++ [Leave]
     You: Have a good night.
     -> DONE
+
+// A statement the player can break with evidence or with silence.
+= alibi
+* [present:bottle_no_blood]
+    You: Then how do you know what the bottle by the bench looked like?
+    Stranger: ...Fine. I cut through the park around six. Didn't see anyone.
+    ~ set_flag("test:stranger_lied")
+    -> questions
++ [present:any]
+    Stranger: And? What's that got to do with me?
+    -> alibi
+* [silence]
+    Stranger: What? Why are you looking at me like that?
+    Stranger: Okay, I went out for cigarettes. Ten minutes, tops.
+    -> alibi
+* [Let it go]
+    -> questions
