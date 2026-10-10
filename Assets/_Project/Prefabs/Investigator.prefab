@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842315bf17c5e4a3394484dedada43f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.PlayerMover
-  speed: 3
+  speed: 2.2
   minX: -8
   maxX: 8
 --- !u!114 &8160738013490001001
