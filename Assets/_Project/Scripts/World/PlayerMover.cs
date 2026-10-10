@@ -41,12 +41,15 @@ namespace QuietWitness.World
             float x = Mathf.Clamp(pos.x + input * speed * Time.deltaTime, minX, maxX);
             bool moving = input != 0f && !Mathf.Approximately(x, pos.x); // standing at a wall counts as standing
             SetMoving(moving);
+
+            // Standing he faces the player (front view), so the picture is never mirrored then:
+            // the hand in the pocket and the hair parting stay on their side.
+            // Walking is drawn facing right and mirrored for walking left.
+            if (sprite != null) sprite.flipX = moving && input < 0f;
             if (input == 0f) return;
 
             pos.x = x;
             transform.position = pos;
-
-            if (sprite != null) sprite.flipX = input < 0f; // face the walking direction
         }
 
         private void SetMoving(bool moving)

@@ -248,14 +248,24 @@ namespace QuietWitness.EditorTools
 
         // ---- Animator ----
 
-        // Idle while standing, Walk while the Moving parameter is on. Rebuilt from scratch on every run.
+        // Idle while standing, Walk while the Moving parameter is on.
+        // The same controller asset is emptied and refilled on every run (never deleted:
+        // deleting it left the prefab pointing at a "Missing" controller).
         private static AnimatorController BuildController(AnimationClip idle, AnimationClip walk)
         {
-            AssetDatabase.DeleteAsset(Controller);
-            var controller = AnimatorController.CreateAnimatorControllerAtPath(Controller);
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(Controller)
+                             ?? AnimatorController.CreateAnimatorControllerAtPath(Controller);
+
+            for (int i = controller.parameters.Length - 1; i >= 0; i--)
+                controller.RemoveParameter(i);
             controller.AddParameter(MovingParameter, AnimatorControllerParameterType.Bool);
 
             var machine = controller.layers[0].stateMachine;
+            foreach (var child in machine.states)
+                machine.RemoveState(child.state);
+            foreach (var transition in machine.anyStateTransitions)
+                machine.RemoveAnyStateTransition(transition);
+
             var idleState = machine.AddState("Idle");
             idleState.motion = idle;
             var walkState = machine.AddState("Walk");
@@ -273,6 +283,7 @@ namespace QuietWitness.EditorTools
             toIdle.AddCondition(AnimatorConditionMode.IfNot, 0f, MovingParameter);
 
             EditorUtility.SetDirty(controller);
+            AssetDatabase.SaveAssets();
             return controller;
         }
 
