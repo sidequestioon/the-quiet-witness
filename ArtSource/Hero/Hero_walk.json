@@ -6,7 +6,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    },
    {
     "filename": "Hero #walk 1.aseprite",
@@ -15,7 +15,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    },
    {
     "filename": "Hero #walk 2.aseprite",
@@ -24,7 +24,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    },
    {
     "filename": "Hero #walk 3.aseprite",
@@ -33,7 +33,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    },
    {
     "filename": "Hero #walk 4.aseprite",
@@ -42,7 +42,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    },
    {
     "filename": "Hero #walk 5.aseprite",
@@ -51,7 +51,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 96 },
     "sourceSize": { "w": 48, "h": 96 },
-    "duration": 200
+    "duration": 100
    }
  ],
  "meta": {
