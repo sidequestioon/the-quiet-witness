@@ -15,24 +15,44 @@ namespace QuietWitness.World
         // Turned off during dialogue and cutscenes.
         public bool CanMove { get; set; } = true;
 
-        private SpriteRenderer sprite;
+        // Animator parameter: true while walking, so idle (breathing) plays only when standing.
+        private static readonly int MovingParameter = Animator.StringToHash("Moving");
 
-        private void Awake() => sprite = GetComponent<SpriteRenderer>();
+        private SpriteRenderer sprite;
+        private Animator animator;
+
+        // The picture may sit on a child ("Visual") with its pivot at the feet.
+        private void Awake()
+        {
+            sprite = GetComponentInChildren<SpriteRenderer>();
+            animator = GetComponentInChildren<Animator>();
+        }
 
         private void Update()
         {
-            if (!CanMove || InputBlocker.IsBlocked || Keyboard.current == null) return;
-
             float input = 0f;
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) input -= 1f;
-            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) input += 1f;
-            if (input == 0f) return;
+            if (CanMove && !InputBlocker.IsBlocked && Keyboard.current != null)
+            {
+                if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) input -= 1f;
+                if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) input += 1f;
+            }
 
             Vector3 pos = transform.position;
-            pos.x = Mathf.Clamp(pos.x + input * speed * Time.deltaTime, minX, maxX);
+            float x = Mathf.Clamp(pos.x + input * speed * Time.deltaTime, minX, maxX);
+            bool moving = input != 0f && !Mathf.Approximately(x, pos.x); // standing at a wall counts as standing
+            SetMoving(moving);
+            if (input == 0f) return;
+
+            pos.x = x;
             transform.position = pos;
 
             if (sprite != null) sprite.flipX = input < 0f; // face the walking direction
+        }
+
+        private void SetMoving(bool moving)
+        {
+            if (animator != null && animator.runtimeAnimatorController != null)
+                animator.SetBool(MovingParameter, moving);
         }
     }
 }

@@ -1,0 +1,77 @@
+GIMP Palette
+Name: The Quiet Witness 44 (blocks)
+Columns: 6
+Channels: RGBA
+#
+ 15  14  20 255	Night / ink 1
+ 28  27  38 255	Night / ink 2
+ 42  45  61 255	Night / ink 3
+ 61  70  89 255	Night / ink 4
+ 90 104 128 255	Night / ink 5
+  0   0   0   0	—
+ 26  16  14 255	Warm shadow 1
+ 43  25  21 255	Warm shadow 2
+ 63  38  32 255	Warm shadow 3
+ 86  53  41 255	Warm shadow 4
+  0   0   0   0	—
+  0   0   0   0	—
+ 74  71  68 255	Stone / pavement 1
+ 98  94  88 255	Stone / pavement 2
+127 120 110 255	Stone / pavement 3
+158 149 133 255	Stone / pavement 4
+188 179 161 255	Stone / pavement 5
+216 207 189 255	Stone / pavement 6
+236 228 210 255	Paper 1
+248 243 230 255	Paper 2
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+ 74  42  28 255	Wood / leather 1
+107  63  39 255	Wood / leather 2
+140  90  54 255	Wood / leather 3
+173 122  76 255	Wood / leather 4
+201 157 108 255	Wood / leather 5
+  0   0   0   0	—
+ 90  42  34 255	Brick (muted) 1
+125  58  44 255	Brick (muted) 2
+156  80  64 255	Brick (muted) 3
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+122  74  62 255	Skin 1
+181 125  98 255	Skin 2
+226 179 145 255	Skin 3
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+165 106  40 255	Gold / lamp 1
+207 150  64 255	Gold / lamp 2
+233 191  98 255	Gold / lamp 3
+248 227 160 255	Gold / lamp 4
+  0   0   0   0	—
+  0   0   0   0	—
+ 31  42  30 255	Green / ivy 1
+ 47  66  41 255	Green / ivy 2
+ 75  99  56 255	Green / ivy 3
+118 140  82 255	Green / ivy 4
+  0   0   0   0	—
+  0   0   0   0	—
+ 31  74  80 255	Teal / neon 1
+ 47 138 136 255	Teal / neon 2
+ 95 208 192 255	Teal / neon 3
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+ 79 124 154 255	Glass / blue 1
+143 180 200 255	Glass / blue 2
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
+ 79  20  26 255	Red accent 1
+158  32  40 255	Red accent 2
+222  63  52 255	Red accent 3
+  0   0   0   0	—
+  0   0   0   0	—
+  0   0   0   0	—
