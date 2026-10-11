@@ -45,13 +45,17 @@ namespace QuietWitness.EditorTools
                 return;
             }
 
+            // hero_idle.json, Hero_idle.json, hero-idle.json... any case, "_" or "-".
             var jsons = Directory.Exists(HeroFolder)
-                ? Directory.GetFiles(HeroFolder, Prefix + "*.json").Select(p => p.Replace('\\', '/')).ToList()
+                ? Directory.GetFiles(HeroFolder, "*.json")
+                    .Select(p => p.Replace('\\', '/'))
+                    .Where(p => AnimationName(p) != null)
+                    .ToList()
                 : new List<string>();
             if (jsons.Count == 0)
             {
                 EditorUtility.DisplayDialog("Hero sprite",
-                    $"No {Prefix}*.json in {HeroFolder}.\nAseprite: File > Export Sprite Sheet, tick JSON Data (Array).", "OK");
+                    $"No hero_<animation>.json in {HeroFolder}.\nAseprite: File > Export Sprite Sheet, tick JSON Data (Array).", "OK");
                 return;
             }
 
@@ -59,14 +63,14 @@ namespace QuietWitness.EditorTools
             var clips = new Dictionary<string, (AnimationClip clip, Sprite first)>();
             foreach (var json in jsons)
             {
-                string animName = Path.GetFileNameWithoutExtension(json).Substring(Prefix.Length).ToLowerInvariant();
+                string animName = AnimationName(json);
                 var result = ImportAnimation(json, animName);
                 if (result.clip != null) clips[animName] = result;
             }
 
             if (!clips.TryGetValue(DefaultAnimation, out var idle))
             {
-                EditorUtility.DisplayDialog("Hero sprite", $"No {Prefix}{DefaultAnimation}.json, the hero needs an idle animation.", "OK");
+                EditorUtility.DisplayDialog("Hero sprite", $"No hero_{DefaultAnimation}.json, the hero needs an idle animation.", "OK");
                 return;
             }
 
@@ -82,6 +86,17 @@ namespace QuietWitness.EditorTools
 
             AssetDatabase.SaveAssets();
             Debug.Log($"[Setup] Hero sprite done: {string.Join(", ", clips.Keys)}. Press Play in Office.");
+        }
+
+        // "hero_idle.json" / "Hero-Walk.json" -> "idle" / "walk"; null for other files.
+        private static string AnimationName(string jsonPath)
+        {
+            string name = Path.GetFileNameWithoutExtension(jsonPath);
+            if (name.Length <= Prefix.Length) return null;
+            if (!name.StartsWith("hero", StringComparison.OrdinalIgnoreCase)) return null;
+            char separator = name[Prefix.Length - 1];
+            if (separator != '_' && separator != '-') return null;
+            return name.Substring(Prefix.Length).ToLowerInvariant();
         }
 
         // ---- Aseprite json (Array format) ----
@@ -104,6 +119,9 @@ namespace QuietWitness.EditorTools
             }
 
             string imagePath = Path.GetDirectoryName(jsonPath).Replace('\\', '/') + "/" + sheet.meta.image;
+            // The json may name the picture differently after a rename (hero_idle.png vs hero-idle.png):
+            // then take the picture next to it with the same name as the json.
+            if (!File.Exists(imagePath)) imagePath = Path.ChangeExtension(jsonPath, ".png").Replace('\\', '/');
             if (!File.Exists(imagePath))
             {
                 Debug.LogError($"[Setup] {jsonPath} points to {imagePath}, which is not there.");

@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 8b4a04a4334bb4241bdea3fc2c17099f
+guid: a282ec7127b7a4873a15c9f3b497eb5c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4163703631882081668
-    second: Hero_walk_0
+      213: 2346182890281610864
+    second: hero-walk_0
+  - first:
+      213: -455174220492397507
+    second: hero-walk_1
+  - first:
+      213: -7650383948441359445
+    second: hero-walk_2
+  - first:
+      213: 6234307218793819537
+    second: hero-walk_3
+  - first:
+      213: -1113085210967958502
+    second: hero-walk_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,7 +118,7 @@ TextureImporter:
         x: 0
         y: 0
         width: 48
-        height: 96
+        height: 82
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a86b34c6672fd4941876c6381f3e24b3
-      internalID: -872478384
+      spriteID: 513d48016484a4f159349f63baee3084
+      internalID: 287391309
       vertices: []
       indices: 
       edges: []
@@ -128,7 +140,7 @@ TextureImporter:
         x: 50
         y: 0
         width: 48
-        height: 96
+        height: 82
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,8 +149,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e1370e7e4ee10463cafa2161418a4dfa
-      internalID: 606478922
+      spriteID: c6782eb84dcd648bbbd58045868b8ee9
+      internalID: -1481489793
       vertices: []
       indices: 
       edges: []
@@ -150,7 +162,7 @@ TextureImporter:
         x: 100
         y: 0
         width: 48
-        height: 96
+        height: 82
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,8 +171,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7e9c961d7c85d4d04a9c10ad8e6106ae
-      internalID: -285482080
+      spriteID: fb78c891832be40ecb3e4e7b7cf53542
+      internalID: 218874192
       vertices: []
       indices: 
       edges: []
@@ -172,7 +184,7 @@ TextureImporter:
         x: 150
         y: 0
         width: 48
-        height: 96
+        height: 82
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,8 +193,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08c494cf71ebe4b3492c732c505cb936
-      internalID: 1988323638
+      spriteID: 32d153ca2f0f245c1a113d61cf66d36e
+      internalID: 1294576684
       vertices: []
       indices: 
       edges: []
@@ -194,7 +206,7 @@ TextureImporter:
         x: 200
         y: 0
         width: 48
-        height: 96
+        height: 82
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,30 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87a2744f1a1da4e648beeffd0e2fd541
-      internalID: 1873387661
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hero_walk_5
-      rect:
-        serializedVersion: 2
-        x: 250
-        y: 0
-        width: 48
-        height: 96
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e72074e727b84453b92a989170a51949
-      internalID: 1123128212
+      spriteID: e1a52c6cebfda46599494d9ba44be904
+      internalID: -440596089
       vertices: []
       indices: 
       edges: []
@@ -235,7 +225,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5b0f2b58fa1cb480cabcf891a847870d
+    spriteID: bcd585dd62ada46ed90879b021120cca
     internalID: 0
     vertices: []
     indices: 
@@ -245,12 +235,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      hero_walk_0: -872478384
-      hero_walk_1: 606478922
-      hero_walk_2: -285482080
-      hero_walk_3: 1988323638
-      hero_walk_4: 1873387661
-      hero_walk_5: 1123128212
+      hero_walk_0: 287391309
+      hero_walk_1: -1481489793
+      hero_walk_2: 218874192
+      hero_walk_3: 1294576684
+      hero_walk_4: -440596089
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
