@@ -30,6 +30,8 @@ namespace QuietWitness.World
         [SerializeField] private bool oneLineAtATime = false;
         [Tooltip("The hero is 10: the text is drawn over him.")]
         [SerializeField] private int sortingOrder = 30;
+        [Tooltip("Unlit, so the plate stays black in any room light. Set by Setup.")]
+        [SerializeField] private Material plateMaterial;
 
         private const float PixelsPerUnit = 36f;
         private const float FadeTime = 0.15f;
@@ -105,6 +107,7 @@ namespace QuietWitness.World
             var plateGo = new GameObject("Plate");
             plateGo.transform.SetParent(transform, false);
             plate = plateGo.AddComponent<SpriteRenderer>();
+            if (plateMaterial != null) plate.sharedMaterial = plateMaterial;
             plate.sprite = plateSprite;
             plate.drawMode = SpriteDrawMode.Sliced;
             plate.sortingOrder = sortingOrder - 1;
@@ -123,6 +126,7 @@ namespace QuietWitness.World
             var tailGo = new GameObject("Tail");
             tailGo.transform.SetParent(transform, false);
             tail = tailGo.AddComponent<SpriteRenderer>();
+            if (plateMaterial != null) tail.sharedMaterial = plateMaterial;
             tail.sprite = tailSprite;
             tail.sortingOrder = sortingOrder - 1;
             tail.enabled = false;

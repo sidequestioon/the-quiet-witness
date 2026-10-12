@@ -8,6 +8,9 @@ namespace QuietWitness.World
     [RequireComponent(typeof(Light2D))]
     public class LampSwitch : MonoBehaviour
     {
+        [Tooltip("On at any time of day, even in the morning and the afternoon (a desk lamp he never switches off).")]
+        [SerializeField] private bool alwaysOn;
+
         private Light2D lamp;
 
         private void Awake() => lamp = GetComponent<Light2D>();
@@ -22,7 +25,7 @@ namespace QuietWitness.World
         }
 
 #if UNITY_EDITOR
-        private void OnPreview(LightingPreset preset) => lamp.enabled = preset.LampsOn;
+        private void OnPreview(LightingPreset preset) => lamp.enabled = alwaysOn || preset.LampsOn;
 #endif
 
         private void OnDestroy()
@@ -37,7 +40,7 @@ namespace QuietWitness.World
         private void OnSegmentChanged(TimeSegment segment)
         {
             if (segment == null || segment.Lighting == null) return;
-            lamp.enabled = segment.Lighting.LampsOn;
+            lamp.enabled = alwaysOn || segment.Lighting.LampsOn;
         }
     }
 }
