@@ -48,6 +48,45 @@ namespace QuietWitness.World
             }
         }
 
+#if UNITY_EDITOR
+        // Editor only: F2 cycles Day → Morning → Evening → Night, to see a location in every light.
+        // The story's real time is not changed.
+        public static event System.Action<LightingPreset> PreviewChanged;
+        private LightingPreset[] previewPresets;
+        private int previewIndex = -1;
+
+        private void Update()
+        {
+            var keyboard = UnityEngine.InputSystem.Keyboard.current;
+            if (keyboard == null || !keyboard.f2Key.wasPressedThisFrame) return;
+
+            if (previewPresets == null)
+            {
+                string[] order = { "Day", "Morning", "Evening", "Night" };
+                var all = new System.Collections.Generic.List<LightingPreset>();
+                foreach (string guid in UnityEditor.AssetDatabase.FindAssets("t:LightingPreset"))
+                    all.Add(UnityEditor.AssetDatabase.LoadAssetAtPath<LightingPreset>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid)));
+                all.Sort((a, b) => Rank(a).CompareTo(Rank(b)));
+                previewPresets = all.ToArray();
+
+                int Rank(LightingPreset p)
+                {
+                    int i = System.Array.IndexOf(order, p.name);
+                    return i < 0 ? order.Length : i;
+                }
+            }
+            if (previewPresets.Length == 0) return;
+
+            previewIndex = (previewIndex + 1) % previewPresets.Length;
+            var preset = previewPresets[previewIndex];
+            if (fade != null) StopCoroutine(fade);
+            globalLight.color = preset.GlobalColor;
+            globalLight.intensity = preset.GlobalIntensity;
+            PreviewChanged?.Invoke(preset);
+            Debug.Log($"[Light preview] {preset.name} (F2 for the next one)");
+        }
+#endif
+
         private IEnumerator Fade(Color toColor, float toIntensity)
         {
             Color fromColor = globalLight.color;
