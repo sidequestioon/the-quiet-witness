@@ -1,3 +1,4 @@
+using QuietWitness.Audio;
 using QuietWitness.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +13,11 @@ namespace QuietWitness.Map
 
         [Tooltip("The map window that is shown and hidden.")]
         [SerializeField] private GameObject panel;
+        [Header("Sounds")]
+        [SerializeField] private AudioClip openSound;
+        [SerializeField] private AudioClip closeSound;
+        [Range(0f, 1f)]
+        [SerializeField] private float soundVolume = 0.6f;
 
         private MapButton[] buttons;
 
@@ -38,6 +44,7 @@ namespace QuietWitness.Map
 
             foreach (var button in buttons) button.Refresh();
             panel.SetActive(true);
+            Sfx.Play(openSound, soundVolume);
             InputBlocker.Push();
         }
 
@@ -45,6 +52,7 @@ namespace QuietWitness.Map
         {
             if (!IsOpen) return;
             panel.SetActive(false);
+            Sfx.Play(closeSound, soundVolume);
             InputBlocker.Pop();
         }
     }

@@ -16,6 +16,8 @@ namespace QuietWitness.Map
         [SerializeField] private TMP_Text title;
         [SerializeField] private float fadeTime = 0.6f;
         [SerializeField] private float titleTime = 1.2f;
+        [Tooltip("Through a door to the next room: just a short fade, no title.")]
+        [SerializeField] private float quickFadeTime = 0.25f;
 
         public bool IsTravelling { get; private set; }
 
@@ -37,11 +39,14 @@ namespace QuietWitness.Map
             title.text = "";
         }
 
-        public void Travel(LocationData location)
+        public void Travel(LocationData location) => Travel(location, quick: false);
+
+        // quick: a door to the next room, a short fade without the title card.
+        public void Travel(LocationData location, bool quick)
         {
             if (IsTravelling || location == null) return;
             StartCoroutine(LoadRoutine(location.SceneName, location.DisplayName, null,
-                () => GameState.Instance.SetFlag(location.VisitedFlag)));
+                () => GameState.Instance.SetFlag(location.VisitedFlag), quick));
         }
 
         // Loading a save: whileDark restores the state while the screen is black.
@@ -51,24 +56,27 @@ namespace QuietWitness.Map
             StartCoroutine(LoadRoutine(sceneName, displayName, whileDark, null));
         }
 
-        private IEnumerator LoadRoutine(string sceneName, string displayName, Action whileDark, Action afterLoad)
+        private IEnumerator LoadRoutine(string sceneName, string displayName, Action whileDark, Action afterLoad,
+                                        bool quick = false)
         {
             IsTravelling = true;
             InputBlocker.Push();
             fader.blocksRaycasts = true;
+            float fade = quick ? quickFadeTime : fadeTime;
 
-            yield return Fade(0f, 1f);
+            yield return Fade(0f, 1f, fade);
 
             whileDark?.Invoke();
 
             string time = TimeManager.Instance.Current != null
                 ? TimeManager.Instance.Current.DisplayName
                 : "";
-            title.text = $"{displayName}\n<size=60%>{time}</size>";
+            if (!quick) title.text = $"{displayName}\n<size=60%>{time}</size>";
+            float hold = quick ? 0f : titleTime;
 
             AsyncOperation load = SceneManager.LoadSceneAsync(sceneName);
             float shown = 0f;
-            while (!load.isDone || shown < titleTime)
+            while (!load.isDone || shown < hold)
             {
                 shown += Time.deltaTime;
                 yield return null;
@@ -76,7 +84,7 @@ namespace QuietWitness.Map
 
             afterLoad?.Invoke();
             title.text = "";
-            yield return Fade(1f, 0f);
+            yield return Fade(1f, 0f, fade);
 
             fader.blocksRaycasts = false;
             InputBlocker.Pop();
@@ -84,9 +92,22 @@ namespace QuietWitness.Map
             Arrived?.Invoke();
         }
 
-        private IEnumerator Fade(float from, float to)
+        // A dip to black inside a scene (a cut in a cutscene), without loading anything.
+        public IEnumerator FadeToBlack(float duration)
         {
-            for (float t = 0f; t < 1f; t += Time.deltaTime / fadeTime)
+            fader.blocksRaycasts = true;
+            yield return Fade(fader.alpha, 1f, duration);
+        }
+
+        public IEnumerator FadeFromBlack(float duration)
+        {
+            yield return Fade(fader.alpha, 0f, duration);
+            fader.blocksRaycasts = false;
+        }
+
+        private IEnumerator Fade(float from, float to, float duration)
+        {
+            for (float t = 0f; t < 1f; t += Time.deltaTime / duration)
             {
                 fader.alpha = Mathf.Lerp(from, to, t);
                 yield return null;
