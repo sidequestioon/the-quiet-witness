@@ -13,6 +13,8 @@ namespace QuietWitness.UI
         [SerializeField] private TMP_Text text;
         [SerializeField] private float showTime = 2.5f;
         [SerializeField] private float fadeTime = 0.25f;
+        [Tooltip("Show \"New clue: ...\" when a clue is found. Off: the case file icon gets a yellow dot instead.")]
+        [SerializeField] private bool announceClues = true;
 
         public static JournalToast Instance { get; private set; }
 
@@ -45,6 +47,7 @@ namespace QuietWitness.UI
 
         private void OnClueFound(ClueData clue)
         {
+            if (!announceClues) return;
             string kind = clue.IsKey ? "Key evidence" : "New clue";
             queue.Enqueue($"{kind}: <b>{clue.Title}</b>\n<size=75%>[J] Case file</size>");
             if (!playing) StartCoroutine(Play());

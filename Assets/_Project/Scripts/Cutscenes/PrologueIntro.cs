@@ -38,11 +38,15 @@ namespace QuietWitness.Cutscenes
         [SerializeField] private float beforeGettingUp = 1.6f;
 
         [Header("What he says when he gets up")]
+        [Tooltip("A line from Hero Lines (Resources/HeroLines). Its text can be edited right under it.")]
+        [HeroLine]
+        [SerializeField] private string getUpLine = "prologue.get_up";
+        [Tooltip("Only used when Get Up Line is empty.")]
         [TextArea(2, 6)]
         [SerializeField] private string[] afterGettingUp = { "Nobody knocks on my door after nine. Nobody good." };
-        [Tooltip("Widest the plate may get, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
+        [Tooltip("Only used when Get Up Line is empty. Widest the plate may get, in pixels. 0 = Hero Speech > Max Width.")]
         [SerializeField] private int afterGettingUpWidth = 0;
-        // What he says when he picks up the envelope: Take_Envelope > Hotspot Actions > Lines (and Plate Width).
+        // What he says when he picks up the envelope: Take_Envelope > Hotspot Actions > Line.
 
         private IEnumerator Start()
         {
@@ -96,8 +100,8 @@ namespace QuietWitness.Cutscenes
             if (envelopeHotspot != null) envelopeHotspot.SetActive(true);
             state?.SetFlag(doneFlag);
             InputBlocker.Pop();
-            if (afterGettingUp.Length > 0)
-                HeroSpeech.Say(new HotspotAction { lines = afterGettingUp, plateWidth = afterGettingUpWidth });
+            var getUp = new HotspotAction { line = getUpLine, lines = afterGettingUp, plateWidth = afterGettingUpWidth };
+            if (getUp.HasSpeech) HeroSpeech.Say(getUp);
         }
 
         private static bool SkipPressed()
@@ -112,6 +116,16 @@ namespace QuietWitness.Cutscenes
             if (envelopeSlide != null) envelopeSlide.gameObject.SetActive(false);
             if (envelopeHotspot != null) envelopeHotspot.SetActive(false);
             GameState.Instance?.SetFlag(takenFlag);
+            StartCoroutine(OpenEnvelope());
+        }
+
+        // When he has said his line, the close-up of the envelope opens.
+        private IEnumerator OpenEnvelope()
+        {
+            yield return null;
+            while (HeroSpeech.IsSpeaking) yield return null;
+            var inspect = Object.FindFirstObjectByType<EnvelopeInspect>(FindObjectsInactive.Include);
+            if (inspect != null) inspect.Open();
         }
     }
 }

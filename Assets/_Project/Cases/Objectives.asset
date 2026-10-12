@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9661454b94b93495aa822abe065b5ca2, type: 3}
+  m_Name: Objectives
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ObjectiveList
+  goals:
+  - id: who_sent
+    main: 1
+    text: Find out who sent the envelope, and why.
+    showWhen: prologue:envelope_opened
+    doneWhen: 
+  - id: riviera
+    main: 0
+    text: Be at the Riviera for the last show. Row seven, seat twelve.
+    showWhen: prologue:envelope_opened
+    doneWhen: visited:riviera
+  - id: diner
+    main: 0
+    text: Ask around at the all-night diner on Main.
+    showWhen: prologue:envelope_opened
+    doneWhen: visited:diner
+  - id: film
+    main: 0
+    text: Take a closer look at the film frames in the darkroom.
+    showWhen: prologue:envelope_opened
+    doneWhen: darkroom:film_enlarged
