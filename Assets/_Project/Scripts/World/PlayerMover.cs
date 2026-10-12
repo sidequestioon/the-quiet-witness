@@ -15,6 +15,9 @@ namespace QuietWitness.World
         // Turned off during dialogue and cutscenes.
         public bool CanMove { get; set; } = true;
 
+        // True while he walks (for footsteps).
+        public bool IsMoving { get; private set; }
+
         // Animator parameter: true while walking, so idle (breathing) plays only when standing.
         private static readonly int MovingParameter = Animator.StringToHash("Moving");
 
@@ -41,6 +44,7 @@ namespace QuietWitness.World
             float x = Mathf.Clamp(pos.x + input * speed * Time.deltaTime, minX, maxX);
             bool moving = input != 0f && !Mathf.Approximately(x, pos.x); // standing at a wall counts as standing
             SetMoving(moving);
+            IsMoving = moving;
 
             // Standing he faces the player (front view), so the picture is never mirrored then:
             // the hand in the pocket and the hair parting stay on their side.

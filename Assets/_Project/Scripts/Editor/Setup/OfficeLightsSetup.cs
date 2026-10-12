@@ -17,7 +17,9 @@ namespace QuietWitness.EditorTools
     //    on the sofa and the rug. Its colour changes with the time of day (LightByPreset).
     //  - the desk lamp and the table lamp stay on all day; the room is a bit darker than outside
     //    (Global Light > Brightness 0.8);
-    //  - a colour "filter" (Color Grade, OfficeGrade.asset): muted, yellowish colours, dark corners.
+    //  - a colour "filter" (Color Grade, OfficeGrade.asset): muted, yellowish colours, dark corners;
+    //  - the "DARKROOM IN USE" sign drawn in the picture flickers: a copy of its visible pixels
+    //    (On / Dim / Off) lies exactly over it, with a glow (FlickerLight).
     // Lights are only created once: what you move or retune by hand is kept when this runs again.
     // To get the defaults back, delete the "Lights" object and run it again.
     // Run after Location backgrounds. Menu: Tools > The Quiet Witness > Setup > Office lights
@@ -30,6 +32,10 @@ namespace QuietWitness.EditorTools
         private const string GradeName = "Color Grade";
         private const float RoomBrightness = 0.8f;
         private static readonly string[] AlwaysOn = { "Lamp_Desk", "Lamp_Table" };
+        private const string PropsFolder = ProjectRoot + "/Art/Locations/Office/Props";
+        private const string SignName = "Sign_DarkroomInUse";
+        private const int SignX = 98, SignY = 27;         // its top-left corner, px of Office.png (on the drawn sign)
+        private const int OldSignX = 8, OldSignY = 22;    // where an earlier version put it
         private static readonly string[] MoodOrder = { "Morning", "Day", "Evening", "Night" };
 
         private enum Kind { Lamp, Ceiling, Always, Window }
@@ -185,6 +191,7 @@ namespace QuietWitness.EditorTools
             }
 
             AddColorGrade();
+            AddSign(Px, ppu, allLayers);
 
             // The grey-box lamp from the first prototype: switched off, not deleted.
             var oldLamp = GameObject.Find("Lamp_Bottle");
@@ -260,13 +267,69 @@ namespace QuietWitness.EditorTools
             return preset;
         }
 
+        // The sign over the darkroom door: lit sprite + a small warm-red glow, both flicker.
+        // Made once: where you move it, and how you tune the flicker, is kept.
+        private static void AddSign(System.Func<float, float, Vector2> px, float ppu, int[] layers)
+        {
+            var existing = GameObject.Find(SignName);
+            if (existing != null)
+            {
+                // Still where the first version put it: move it onto the sign drawn in the picture.
+                if (((Vector2)existing.transform.position - px(OldSignX, OldSignY)).sqrMagnitude < 0.0001f)
+                    existing.transform.position = px(SignX, SignY);
+                return;
+            }
+            var on = LoadSprite($"{PropsFolder}/Sign_DarkroomInUse_On.png", ppu);
+            var dim = LoadSprite($"{PropsFolder}/Sign_DarkroomInUse_Dim.png", ppu);
+            var off = LoadSprite($"{PropsFolder}/Sign_DarkroomInUse_Off.png", ppu);
+            if (on == null) return;
+
+            var go = new GameObject(SignName);
+            go.transform.position = px(SignX, SignY);
+            var sprite = go.AddComponent<SpriteRenderer>();
+            sprite.sprite = on;
+            sprite.sortingOrder = -98;                      // over the background and its animations
+
+            var glowGo = new GameObject("Glow");
+            glowGo.transform.SetParent(go.transform, false);
+            glowGo.transform.localPosition = new Vector3(on.rect.width / 2f / ppu, -on.rect.height / 2f / ppu, 0f);
+            var glow = glowGo.AddComponent<Light2D>();
+            glow.targetSortingLayers = layers;
+            glow.lightType = Light2D.LightType.Point;
+            glow.pointLightInnerRadius = 0f;
+            glow.pointLightOuterRadius = 40f / ppu;
+            glow.falloffIntensity = 0.6f;
+            glow.color = new Color(1f, 0.45f, 0.35f);
+            glow.intensity = 0.8f;
+            glow.volumeIntensityEnabled = true;
+            glow.volumeIntensity = 0.08f;
+
+            var flicker = go.AddComponent<FlickerLight>();
+            var so = new SerializedObject(flicker);
+            so.FindProperty("target").objectReferenceValue = sprite;
+            so.FindProperty("onSprite").objectReferenceValue = on;
+            so.FindProperty("dimSprite").objectReferenceValue = dim;
+            so.FindProperty("offSprite").objectReferenceValue = off;
+            so.FindProperty("glow").objectReferenceValue = glow;
+            so.FindProperty("glowIntensity").floatValue = 0.8f;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
         // The window patch: 1 texel = 1 pixel of the room, its top-left corner on the light's position.
         private static Sprite LoadStripes(float ppu)
         {
-            var importer = AssetImporter.GetAtPath(StripesFile) as TextureImporter;
+            var sprite = LoadSprite(StripesFile, ppu);
+            if (sprite == null) Debug.LogWarning($"[Setup] Not found: {StripesFile}. The window light will have no shape.");
+            return sprite;
+        }
+
+        // A pixel-art sprite: 1 texel = 1 pixel of the room, pivot in its top-left corner.
+        private static Sprite LoadSprite(string path, float ppu)
+        {
+            var importer = AssetImporter.GetAtPath(path) as TextureImporter;
             if (importer == null)
             {
-                Debug.LogWarning($"[Setup] Not found: {StripesFile}. The window light will have no shape.");
+                Debug.LogWarning($"[Setup] Not found: {path}");
                 return null;
             }
             importer.textureType = TextureImporterType.Sprite;
@@ -282,7 +345,7 @@ namespace QuietWitness.EditorTools
             settings.spriteMeshType = SpriteMeshType.FullRect;
             importer.SetTextureSettings(settings);
             importer.SaveAndReimport();
-            return AssetDatabase.LoadAssetAtPath<Sprite>(StripesFile);
+            return AssetDatabase.LoadAssetAtPath<Sprite>(path);
         }
     }
 }
