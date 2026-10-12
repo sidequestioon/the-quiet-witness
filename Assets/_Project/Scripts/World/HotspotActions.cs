@@ -13,14 +13,42 @@ namespace QuietWitness.World
         public ActionKind kind;
         [Tooltip("Shown over the icon, e.g. \"Aquarium\" or \"Inspect cork board\". Empty = Look, Take...")]
         public string label;
-        [Tooltip("What the hero says when this is chosen. Enter (or \\n) inside a box starts a new line.")]
+        [Tooltip("What the hero says when this is chosen: a line from Hero Lines (Resources/HeroLines). " +
+                 "Pick it in the list; its text and plate width can be edited right under it. Empty = Lines below.")]
+        [HeroLine]
+        public string line;
+        [Tooltip("Only used when Line is empty. Enter (or \\n) inside a box starts a new line.")]
         [TextArea(2, 8)]
         public string[] lines;
-        [Tooltip("Widest the plate may get for this text, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
+        [Tooltip("Only used when Line is empty. Widest the plate may get, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
         public int plateWidth;
         public UnityEvent onChosen;
 
         public string Label => string.IsNullOrEmpty(label) ? DefaultLabel(kind) : label;
+
+        // What he says: the Hero Lines text, or Lines when there is none.
+        public string[] SaidLines
+        {
+            get
+            {
+                var found = HeroLines.Find(line);
+                return found != null && !string.IsNullOrWhiteSpace(found.text) ? new[] { found.text } : lines;
+            }
+        }
+
+        public int SaidWidth
+        {
+            get
+            {
+                var found = HeroLines.Find(line);
+                return found != null && !string.IsNullOrWhiteSpace(found.text) ? found.plateWidth : plateWidth;
+            }
+        }
+
+        public bool HasSpeech
+        {
+            get { var said = SaidLines; return said != null && said.Length > 0; }
+        }
 
         public static string DefaultLabel(ActionKind kind) => kind switch
         {
@@ -67,7 +95,7 @@ namespace QuietWitness.World
             if (index < 0 || index >= actions.Count) return;
             var action = actions[index];
             Debug.Log($"[{action.kind}] {name}");
-            bool said = action.lines != null && action.lines.Length > 0 && HeroSpeech.Say(action);
+            bool said = action.HasSpeech && HeroSpeech.Say(action);
             if (action.onChosen != null && action.onChosen.GetPersistentEventCount() > 0) action.onChosen.Invoke();
             else if (!said) GetComponent<Interactable>().Interact();
         }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd43aa40be9c24eebb518f07ce757706, type: 3}
+  m_Name: Envelope_Money
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ClueData
+  id: envelope_money
+  title: Forty Dollars
+  description: Forty dollars, crumpled like somebody held them too long. Not a fee.
+    An advance.
+  icon: {fileID: 21300000, guid: 96bf1f5f8b2ee4cceb7140e1e3a38ca7, type: 3}
+  isKey: 0

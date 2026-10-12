@@ -185,9 +185,10 @@ namespace QuietWitness.EditorTools
             var first = items.GetArrayElementAtIndex(0);
             first.FindPropertyRelative("kind").enumValueIndex = (int)spot.Kind;
             first.FindPropertyRelative("label").stringValue = spot.Label;
-            var lines = first.FindPropertyRelative("lines");
-            lines.arraySize = spot.Lines?.Length ?? 0;
-            for (int i = 0; i < lines.arraySize; i++) lines.GetArrayElementAtIndex(i).stringValue = spot.Lines[i];
+            // His line lives in Hero Lines (made once, then never overwritten).
+            if (spot.Lines != null && spot.Lines.Length > 0)
+                first.FindPropertyRelative("line").stringValue =
+                    HeroLinesSetup.Ensure(HeroLinesSetup.IdFor(SceneName, spot.Name, 0), string.Join(" ", spot.Lines));
             so.ApplyModifiedPropertiesWithoutUndo();
             return go;
         }

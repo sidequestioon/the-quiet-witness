@@ -12,6 +12,9 @@ namespace QuietWitness.Map
         // Set by LocationTravel just before the scene changes.
         public static string Next;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => Next = null;
+
         private void Awake()
         {
             if (string.IsNullOrEmpty(Next) || Next != id) return;

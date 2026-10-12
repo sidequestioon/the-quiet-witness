@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e554b253507904dc2a194594ff54e704, type: 3}
+  m_Name: HeroLines
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HeroLines
+  lines:
+  - id: prologue.get_up
+    text: Huh?
+    plateWidth: 0
+  - id: office.take_envelope
+    text: No stamp, no name. Somebody climbed three floors in the rain to slip this
+      under my door.
+    plateWidth: 70
+  - id: office.look_aquarium
+    text: Captain Miller. The only one in this office who never interrupts me.
+    plateWidth: 47
+  - id: office.look_policeshirt
+    text: Eleven years in that uniform. They took the badge. I kept the shirt.
+    plateWidth: 67
+  - id: office.look_answeringmachine
+    text: No blinking light. Nobody called. Again.
+    plateWidth: 47
+  - id: office.look_lockeddrawer
+    text: Locked. I remember locking it. I don't remember where I put the key.
+    plateWidth: 54
+  - id: office.look_bookcase
+    text: Law codes, old case files and a cookbook I have never opened.
+    plateWidth: 46
+  - id: office.look_window
+    text: Rain on Millbrook. It never washes anything clean.
+    plateWidth: 56
+  - id: office.look_radio
+    text: Rain, jazz and bad news. Usually in that order.
+    plateWidth: 49
+  - id: darkroom.look_filmdryer
+    text: Negatives drying in the dark. Every frame is a second somebody thought
+      nobody saw.
+    plateWidth: 67
+  - id: darkroom.look_sink
+    text: Developer, stop bath, fixer. Smells like every night I couldn't sleep.
+    plateWidth: 71
+  - id: darkroom.look_enlarger
+    text: My old enlarger. Still the best way to see what a negative is hiding.
+    plateWidth: 69
+  - id: darkroom.look_prints
+    text: Prints from old cases. Half of them nobody ever paid for.
+    plateWidth: 60
+  - id: darkroom.look_chemicals
+    text: Mix them wrong and a photo forgets everything it saw. Mix them right and
+      it remembers too much.
+    plateWidth: 67

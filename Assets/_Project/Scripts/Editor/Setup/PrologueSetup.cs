@@ -82,10 +82,10 @@ namespace QuietWitness.EditorTools
             items.arraySize = 1;
             items.GetArrayElementAtIndex(0).FindPropertyRelative("kind").enumValueIndex = (int)ActionKind.Take;
             items.GetArrayElementAtIndex(0).FindPropertyRelative("label").stringValue = "Envelope";
-            var lines = items.GetArrayElementAtIndex(0).FindPropertyRelative("lines");
-            lines.arraySize = 1;
-            lines.GetArrayElementAtIndex(0).stringValue =
-                "No stamp, no name. Somebody climbed three floors in the rain to slip this under my door.";
+            // His line lives in Hero Lines (made once, then never overwritten).
+            items.GetArrayElementAtIndex(0).FindPropertyRelative("line").stringValue = HeroLinesSetup.Ensure("office.take_envelope",
+                "No stamp, no name. Somebody climbed three floors in the rain to slip this under my door.");
+            HeroLinesSetup.Ensure("prologue.get_up", "Nobody knocks on my door after nine. Nobody good.");
             so.ApplyModifiedPropertiesWithoutUndo();
 
             var intro = root.AddComponent<PrologueIntro>();
