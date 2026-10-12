@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 namespace QuietWitness.UI
 {
-    // The front page that opens every time segment (and at the start of the game).
+    // The front page of each time segment. It used to open by itself every segment (and at the start);
+    // now only if openOnNewSegment is on. N re-reads the latest edition.
     // Click an article to circle it: if it hides a clue, the clue is found.
     // N re-reads the latest edition. Esc / E puts it down.
     public class NewspaperPanel : MonoBehaviour
@@ -22,6 +23,10 @@ namespace QuietWitness.UI
         [SerializeField] private TMP_Text lead;
         [Tooltip("Hidden article that gets cloned for every printed article.")]
         [SerializeField] private NewspaperArticleView articleTemplate;
+
+        [Tooltip("Off: a new edition no longer pops up by itself at the start and every time segment " +
+                 "(it is still read with N, and later at the kiosk). On: the old behaviour.")]
+        [SerializeField] private bool openOnNewSegment = false;
 
         [Tooltip("Every edition in the game. Use ⋮ > Collect all newspapers.")]
         [SerializeField] private List<NewspaperData> editions = new List<NewspaperData>();
@@ -78,6 +83,7 @@ namespace QuietWitness.UI
             var edition = editions.Find(e => e != null && e.Segment == segment);
             if (edition == null) return;
             if (GameState.Instance != null && GameState.Instance.HasFlag(edition.ReadFlag)) return;
+            if (!openOnNewSegment) { latest = edition; return; }
             Open(edition);
         }
 
