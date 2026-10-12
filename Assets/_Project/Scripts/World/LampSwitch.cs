@@ -16,12 +16,22 @@ namespace QuietWitness.World
         {
             TimeManager.Instance.SegmentChanged += OnSegmentChanged;
             OnSegmentChanged(TimeManager.Instance.Current);
+#if UNITY_EDITOR
+            GlobalLightController.PreviewChanged += OnPreview;
+#endif
         }
+
+#if UNITY_EDITOR
+        private void OnPreview(LightingPreset preset) => lamp.enabled = preset.LampsOn;
+#endif
 
         private void OnDestroy()
         {
             if (TimeManager.Instance != null)
                 TimeManager.Instance.SegmentChanged -= OnSegmentChanged;
+#if UNITY_EDITOR
+            GlobalLightController.PreviewChanged -= OnPreview;
+#endif
         }
 
         private void OnSegmentChanged(TimeSegment segment)

@@ -391,12 +391,21 @@ namespace QuietWitness.EditorTools
             ppc.cropFrame = PixelPerfectCamera.CropFrame.None;
             EditorUtility.SetDirty(ppc);
 
-            // The room is as wide as the floor for now; later, as wide as the drawn background.
+            // The room is as wide as the drawn background (Setup > Location backgrounds), or the grey floor without one.
             var follow = cameraObject.GetComponent<QuietWitness.World.CameraFollow>();
             var floor = GameObject.Find("Floor");
             if (follow != null && floor != null && floor.TryGetComponent<Renderer>(out var floorRenderer))
             {
-                Bounds room = floorRenderer.bounds;
+                bool floorHidden = !floorRenderer.enabled;
+                floorRenderer.enabled = true;              // hidden renderers may report empty bounds
+                Bounds floorBounds = floorRenderer.bounds;
+                floorRenderer.enabled = !floorHidden;
+
+                var background = GameObject.Find("Background");
+                Bounds room = background != null && background.TryGetComponent<SpriteRenderer>(out var picture) && picture.sprite != null
+                    ? picture.bounds
+                    : floorBounds;
+                room.max = new Vector3(room.max.x, floorBounds.max.y, room.max.z); // feet line stays the floor's top
                 var so = new SerializedObject(follow);
                 so.FindProperty("roomLeft").floatValue = room.min.x;
                 so.FindProperty("roomRight").floatValue = room.max.x;

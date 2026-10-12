@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using QuietWitness.World;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -13,7 +15,10 @@ namespace QuietWitness.EditorTools
     //     feet line (the top of the grey Floor), centered on x = 0, on the pixel grid;
     //   - the camera and the hero stay inside the picture;
     //   - hotspots that ended up outside the picture are pulled inside its edges;
-    //   - the grey placeholder pictures are hidden (their hotspots keep working); NPCs and exits stay visible.
+    //   - every grey placeholder picture is hidden, NPCs and exits too (their hotspots keep working);
+    //   - looping animations from Art/Locations/<Scene>/Anim/<Name>/ are placed on top of the picture
+    //     (frames <Name>_00.png, _01.png ... plus anim.json: { "x": 152, "y": 25, "frameMs": 100 },
+    //     x/y = the frame's top-left corner in background pixels).
     // Run again after every new export of the background.
     // Menu: Tools > The Quiet Witness > Setup > Location backgrounds
     public static class LocationBackgroundSetup
@@ -27,6 +32,7 @@ namespace QuietWitness.EditorTools
         private const int SortingOrder = -100;
         // A 16:9 screen shows 135-144 px above the bottom of the view; lower pictures leave a black band on top.
         private const int MinHeight = 145;
+        private const string AnimPrefix = "Anim_";
 
         [MenuItem("Tools/The Quiet Witness/Setup/Location backgrounds")]
         private static void Run()
@@ -149,20 +155,97 @@ namespace QuietWitness.EditorTools
                 float x = Mathf.Clamp(p.x, left + EdgeInset, right - EdgeInset);
                 if (!Mathf.Approximately(x, p.x)) t.position = new Vector3(x, p.y, p.z);
 
-                bool keepVisible = spot.name.StartsWith("Npc_") || spot.name == "Exit";
-                if (!keepVisible && spot.TryGetComponent<SpriteRenderer>(out var grey)) grey.enabled = false;
+                if (spot.TryGetComponent<SpriteRenderer>(out var grey)) grey.enabled = false;
             }
 
             // Test markers and other grey boxes that are not hotspots: hidden too.
             foreach (var grey in Object.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
-                if (grey == renderer || grey.GetComponentInParent<PlayerMover>() != null) continue;
-                var owner = grey.gameObject.name;
-                if (owner.StartsWith("Npc_") || owner == "Exit") continue;
+                if (grey == renderer || grey.transform.IsChildOf(background.transform) ||
+                    grey.GetComponentInParent<PlayerMover>() != null) continue;
                 grey.enabled = false;
             }
 
+            int heightPx = Mathf.RoundToInt(sprite.rect.height);
+            PlaceAnimations(sceneName, renderer, leftPx, bottomPx + heightPx, ppu);
             return true;
+        }
+
+        [System.Serializable]
+        private class AnimInfo
+        {
+            public int x;
+            public int y;
+            public int frameMs = 100;
+        }
+
+        // A ceiling fan, fish in a tank... Each folder under Anim/ becomes one looping sprite
+        // in front of the background, at the pixel given in its anim.json.
+        // The still picture under it must be erased from the background or fully covered by the frames.
+        private static void PlaceAnimations(string sceneName, SpriteRenderer background, int leftPx, int topPx, float ppu)
+        {
+            var parent = background.transform;
+            for (int i = parent.childCount - 1; i >= 0; i--)
+                if (parent.GetChild(i).name.StartsWith(AnimPrefix)) Object.DestroyImmediate(parent.GetChild(i).gameObject);
+
+            string root = $"{LocationsFolder}/{sceneName}/Anim";
+            if (!Directory.Exists(root)) return;
+
+            int order = SortingOrder + 1;
+            foreach (var dir in Directory.GetDirectories(root).OrderBy(d => d, System.StringComparer.Ordinal))
+            {
+                string folder = dir.Replace('\\', '/');
+                string name = Path.GetFileName(folder);
+                string jsonPath = folder + "/anim.json";
+                if (!File.Exists(jsonPath))
+                {
+                    Debug.LogWarning($"[Setup] {folder}: no anim.json with the position, skipped.");
+                    continue;
+                }
+                var info = JsonUtility.FromJson<AnimInfo>(File.ReadAllText(jsonPath));
+
+                var frames = new List<Sprite>();
+                foreach (var path in Directory.GetFiles(folder, "*.png").Select(f => f.Replace('\\', '/'))
+                             .OrderBy(f => f, System.StringComparer.Ordinal))
+                {
+                    AssetDatabase.ImportAsset(path);
+                    var importer = (TextureImporter)AssetImporter.GetAtPath(path);
+                    var settings = new TextureImporterSettings();
+                    importer.ReadTextureSettings(settings);
+                    // Top-left pivot: the frame's corner sits exactly on the pixel from anim.json.
+                    // (Unity's 2D default is "Multiple": then the sprite is a cut-out with a centre pivot.)
+                    if (settings.spriteMode != (int)SpriteImportMode.Single ||
+                        settings.spriteAlignment != (int)SpriteAlignment.TopLeft)
+                    {
+                        settings.spriteMode = (int)SpriteImportMode.Single;
+                        settings.spriteAlignment = (int)SpriteAlignment.TopLeft;
+                        settings.spritePivot = new Vector2(0f, 1f);
+                        importer.SetTextureSettings(settings);
+                        importer.SaveAndReimport();
+                    }
+                    var frame = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+                    if (frame != null) frames.Add(frame);
+                }
+                if (frames.Count == 0) continue;
+
+                var go = new GameObject(AnimPrefix + name);
+                go.transform.SetParent(parent, false);
+                // Measured from the sprite itself, so the corner lands right whatever its pivot is.
+                Bounds local = frames[0].bounds;
+                go.transform.position = new Vector3((leftPx + info.x) / ppu - local.min.x,
+                                                    (topPx - info.y) / ppu - local.max.y, 0f);
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sprite = frames[0];
+                sr.sortingLayerID = background.sortingLayerID;
+                sr.sortingOrder = order++;
+
+                var flipbook = go.AddComponent<SpriteFlipbook>();
+                var so = new SerializedObject(flipbook);
+                SetObjectList(so, "frames", frames.ToArray());
+                so.FindProperty("frameTime").floatValue = info.frameMs / 1000f;
+                so.ApplyModifiedPropertiesWithoutUndo();
+                Debug.Log($"[Setup] {sceneName}: animation {name}, {frames.Count} frames at ({info.x}, {info.y}).");
+            }
         }
     }
 }
