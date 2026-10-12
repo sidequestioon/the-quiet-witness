@@ -172,7 +172,8 @@ namespace QuietWitness.EditorTools
                 if (grey == renderer || grey.transform.IsChildOf(background.transform) ||
                     grey.GetComponentInParent<PlayerMover>() != null ||
                     grey.GetComponent<FlickerLight>() != null ||             // drawn props like the flickering sign
-                    grey.GetComponent<ParallaxLayer>() != null) continue;    // the view outside the window
+                    grey.GetComponent<ParallaxLayer>() != null ||            // the view outside the window
+                    grey.GetComponent<SpriteFlipbook>() != null) continue;   // drawn animations (the prologue)
                 grey.enabled = false;
             }
 

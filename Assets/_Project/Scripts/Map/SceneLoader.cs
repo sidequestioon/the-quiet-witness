@@ -92,6 +92,19 @@ namespace QuietWitness.Map
             Arrived?.Invoke();
         }
 
+        // A dip to black inside a scene (a cut in a cutscene), without loading anything.
+        public IEnumerator FadeToBlack(float duration)
+        {
+            fader.blocksRaycasts = true;
+            yield return Fade(fader.alpha, 1f, duration);
+        }
+
+        public IEnumerator FadeFromBlack(float duration)
+        {
+            yield return Fade(fader.alpha, 0f, duration);
+            fader.blocksRaycasts = false;
+        }
+
         private IEnumerator Fade(float from, float to, float duration)
         {
             for (float t = 0f; t < 1f; t += Time.deltaTime / duration)
