@@ -123,7 +123,10 @@ namespace QuietWitness.EditorTools
             var promptGo = GameObject.Find(PromptName);
             if (promptGo == null) promptGo = new GameObject(PromptName);
             var prompt = GetOrAdd<InteractionPrompt>(promptGo);
-            GetOrAdd<HeroSpeech>(promptGo);   // the hero's lines over his head
+            var speech = GetOrAdd<HeroSpeech>(promptGo);   // the hero's lines over his head
+            var speechSo = new SerializedObject(speech);
+            speechSo.FindProperty("plateMaterial").objectReferenceValue = material;   // black in any light
+            speechSo.ApplyModifiedPropertiesWithoutUndo();
             var pso = new SerializedObject(prompt);
             var iconList = pso.FindProperty("icons");
             iconList.arraySize = icons.Length;

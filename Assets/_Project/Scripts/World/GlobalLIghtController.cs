@@ -10,9 +10,14 @@ namespace QuietWitness.World
     public class GlobalLightController : MonoBehaviour
     {
         [SerializeField] private float fadeDuration = 1.5f;
+        [Tooltip("This location's light compared with the time of day: below 1 is darker " +
+                 "(an office with one small window), 1 = exactly as the preset says.")]
+        [Range(0f, 1.5f)]
+        [SerializeField] private float brightness = 1f;
 
         private Light2D globalLight;
         private Coroutine fade;
+        private LightingPreset current;   // the preset shown now
 
         private void Awake() => globalLight = GetComponent<Light2D>();
 
@@ -34,17 +39,19 @@ namespace QuietWitness.World
         {
             if (segment == null || segment.Lighting == null) return;
             var preset = segment.Lighting;
+            current = preset;
 
             if (fade != null) StopCoroutine(fade);
+            fade = null;
 
             if (instant)
             {
                 globalLight.color = preset.GlobalColor;
-                globalLight.intensity = preset.GlobalIntensity;
+                globalLight.intensity = preset.GlobalIntensity * brightness;
             }
             else
             {
-                fade = StartCoroutine(Fade(preset.GlobalColor, preset.GlobalIntensity));
+                fade = StartCoroutine(Fade(preset.GlobalColor, preset.GlobalIntensity * brightness));
             }
         }
 
@@ -56,6 +63,19 @@ namespace QuietWitness.World
         private int previewIndex = -1;
 
         private void Update()
+        {
+            PreviewKey();
+
+            // While playing in the editor, changes to the preset (Global Color, Global Intensity)
+            // and to Brightness are seen at once.
+            if (fade == null && current != null)
+            {
+                globalLight.color = current.GlobalColor;
+                globalLight.intensity = current.GlobalIntensity * brightness;
+            }
+        }
+
+        private void PreviewKey()
         {
             var keyboard = UnityEngine.InputSystem.Keyboard.current;
             if (keyboard == null || !keyboard.f2Key.wasPressedThisFrame) return;
@@ -79,9 +99,11 @@ namespace QuietWitness.World
 
             previewIndex = (previewIndex + 1) % previewPresets.Length;
             var preset = previewPresets[previewIndex];
+            current = preset;
             if (fade != null) StopCoroutine(fade);
+            fade = null;
             globalLight.color = preset.GlobalColor;
-            globalLight.intensity = preset.GlobalIntensity;
+            globalLight.intensity = preset.GlobalIntensity * brightness;
             PreviewChanged?.Invoke(preset);
             Debug.Log($"[Light preview] {preset.name} (F2 for the next one)");
         }
@@ -101,6 +123,7 @@ namespace QuietWitness.World
 
             globalLight.color = toColor;
             globalLight.intensity = toIntensity;
+            fade = null;
         }
     }
 }
