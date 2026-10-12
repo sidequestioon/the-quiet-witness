@@ -88,8 +88,8 @@ namespace QuietWitness.Save
             {
                 File.WriteAllText(SavePath, JsonUtility.ToJson(data, prettyPrint: true));
                 Debug.Log($"[Save] Saved to {SavePath}");
-                if (JournalToast.Instance != null)
-                    JournalToast.Instance.Notify(quiet ? "<size=80%>Autosaved</size>" : "Game saved");
+                // A floppy disk in the corner instead of a text notice (autosaves too).
+                SaveIndicator.Show();
             }
             catch (Exception e)
             {
