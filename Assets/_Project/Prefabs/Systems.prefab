@@ -1170,6 +1170,7 @@ MonoBehaviour:
   headline: {fileID: 2191523103281277393}
   lead: {fileID: 4573565015431397472}
   articleTemplate: {fileID: 3396564866530806279}
+  openOnNewSegment: 0
   editions:
   - {fileID: 11400000, guid: 6cceac61682394ff7b8968df9add450c, type: 2}
   - {fileID: 11400000, guid: 05de86615edfe4e6da627b7d31177519, type: 2}
@@ -11359,6 +11360,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Map.MapPanel
   panel: {fileID: 6142356708482660363}
+  openSound: {fileID: 8300000, guid: 60f9afa1481a540428102e4b640c97c4, type: 3}
+  closeSound: {fileID: 8300000, guid: 17cba326624e4433e83f72b037a8d21e, type: 3}
+  soundVolume: 0.6
 --- !u!1 &7129551884726105930
 GameObject:
   m_ObjectHideFlags: 0
@@ -12718,6 +12722,7 @@ MonoBehaviour:
   title: {fileID: 8845192914958479313}
   fadeTime: 0.6
   titleTime: 1.2
+  quickFadeTime: 0.25
 --- !u!114 &1012451628839721151
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ namespace QuietWitness.EditorTools
     public static class LocationBackgroundSetup
     {
         private const string LocationsFolder = ProjectRoot + "/Art/Locations";
-        private static readonly string[] Scenes = { "Office", "Diner", "PoliceStation" };
+        private static readonly string[] Scenes = { "Office", "Darkroom", "Diner", "PoliceStation" };
         // Pixels between the picture's bottom row and the hero's feet (the camera shows 8 below the feet).
         private const int FeetAboveBottom = 10;
         // How far before the picture's edge the hero stops, in world units.
@@ -33,9 +33,16 @@ namespace QuietWitness.EditorTools
         // A 16:9 screen shows 135-144 px above the bottom of the view; lower pictures leave a black band on top.
         private const int MinHeight = 145;
         private const string AnimPrefix = "Anim_";
+        // Where the hero's centre stops, in pixels of the picture (left, right): right next to the drawn doors.
+        // Scenes not listed: EdgeInset from the picture's edges.
+        private static readonly Dictionary<string, Vector2Int> WalkLimits = new Dictionary<string, Vector2Int>
+        {
+            ["Office"] = new Vector2Int(32, 391),
+            ["Darkroom"] = new Vector2Int(30, 391),
+        };
 
         [MenuItem("Tools/The Quiet Witness/Setup/Location backgrounds")]
-        private static void Run()
+        internal static void Run()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -143,8 +150,9 @@ namespace QuietWitness.EditorTools
             if (mover != null)
             {
                 var so = new SerializedObject(mover);
-                so.FindProperty("minX").floatValue = left + EdgeInset;
-                so.FindProperty("maxX").floatValue = right - EdgeInset;
+                bool limited = WalkLimits.TryGetValue(sceneName, out var walk);
+                so.FindProperty("minX").floatValue = limited ? (leftPx + walk.x) / ppu : left + EdgeInset;
+                so.FindProperty("maxX").floatValue = limited ? (leftPx + walk.y) / ppu : right - EdgeInset;
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
 
@@ -162,7 +170,9 @@ namespace QuietWitness.EditorTools
             foreach (var grey in Object.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
                 if (grey == renderer || grey.transform.IsChildOf(background.transform) ||
-                    grey.GetComponentInParent<PlayerMover>() != null) continue;
+                    grey.GetComponentInParent<PlayerMover>() != null ||
+                    grey.GetComponent<FlickerLight>() != null ||             // drawn props like the flickering sign
+                    grey.GetComponent<ParallaxLayer>() != null) continue;    // the view outside the window
                 grey.enabled = false;
             }
 

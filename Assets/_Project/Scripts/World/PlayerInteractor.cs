@@ -100,6 +100,9 @@ namespace QuietWitness.World
             {
                 if (item == null || !item.isActiveAndEnabled) continue;
                 float distance = Mathf.Abs(item.transform.position.x - transform.position.x);
+                // Hotspots with an icon (Hotspot Actions) come first: an old grey-box hotspot
+                // only wins when nothing with an icon is in reach.
+                if (!item.TryGetComponent<HotspotActions>(out _)) distance += 100f;
                 if (distance < best)
                 {
                     best = distance;
