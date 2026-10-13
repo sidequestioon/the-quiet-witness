@@ -285,6 +285,7 @@ namespace QuietWitness.UI
         private void ShowPage(Page p, bool force)
         {
             if (!force && p == page) return;
+            if (!force) UiSounds.Play(s => s.click);
             page = p;
             if (objectivesPage != null) objectivesPage.SetActive(p == Page.Objectives);
             if (inventoryPage != null) inventoryPage.SetActive(p == Page.Inventory);
@@ -414,7 +415,8 @@ namespace QuietWitness.UI
         {
             if (i == index || i < 0 || i >= clues.Count) return;
             index = i;
-            Sfx.Play(turnSound, soundVolume);
+            if (turnSound != null) Sfx.Play(turnSound, soundVolume);
+            else UiSounds.Play(s => s.page);
             ShowItemText();
         }
 

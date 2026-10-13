@@ -1,4 +1,5 @@
 using System.Collections;
+using QuietWitness.Audio;
 using QuietWitness.Core;
 using TMPro;
 using UnityEngine;
@@ -139,6 +140,8 @@ namespace QuietWitness.Cutscenes
             ShowPrompt(handIcon, "Open");
             yield return WaitForPress(anywhere: true, keys: true, escape: false);
             ShowPrompt(null, null);
+            UiSounds.Play(s => s.click);
+            UiSounds.Play(s => s.envelopeTear);
             for (int i = 1; i < tearFrames.Length; i++)
             {
                 envelope.sprite = tearFrames[i];
@@ -149,6 +152,8 @@ namespace QuietWitness.Cutscenes
             ShowPrompt(handIcon, "Take out");
             yield return WaitForPress(anywhere: true, keys: true, escape: false);
             ShowPrompt(null, null);
+            UiSounds.Play(s => s.click);
+            UiSounds.Play(s => s.envelopeItems);
             if (emptyEnvelope != null) envelope.sprite = emptyEnvelope;
             Vector2 mouth = new Vector2(0f, env.rect.height * 0.35f);
             foreach (var item in items)
@@ -185,6 +190,7 @@ namespace QuietWitness.Cutscenes
             ShowPrompt(closeIcon, "Close");
             yield return WaitForPress(anywhere: false, keys: false, escape: true);   // only a click on Close (or Esc)
             ShowPrompt(null, null);
+            UiSounds.Play(s => s.click);
             HideCaption();
             foreach (var item in items) item.SetInteractive(false);
             for (float t = 1f; t > 0f; t -= Time.unscaledDeltaTime / fadeTime)

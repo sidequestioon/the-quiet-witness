@@ -1,3 +1,4 @@
+using QuietWitness.Audio;
 using QuietWitness.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -90,6 +91,7 @@ namespace QuietWitness.Cutscenes
         {
             if (!Interactive) return;
             Read = true;
+            UiSounds.Play(s => s.click);
             rect.SetAsLastSibling();
             owner.ShowCaption(this);
         }
