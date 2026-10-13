@@ -10,7 +10,7 @@ namespace QuietWitness.EditorTools
     // Menu: Tools > The Quiet Witness > Build > macOS
     public static class ReleaseBuild
     {
-        public const string Version = "0.1.0";
+        public const string Version = "0.2.0";
         private const string ProductName = "The Quiet Witness";
 
         [MenuItem("Tools/The Quiet Witness/Build/macOS")]
@@ -42,11 +42,39 @@ namespace QuietWitness.EditorTools
             if (report.summary.result == BuildResult.Succeeded)
             {
                 Debug.Log($"[Build] Done: {Path.GetFullPath(app)} ({report.summary.totalSize / (1024 * 1024)} MB)");
-                EditorUtility.RevealInFinder(app);
+                string zip = Zip(folder, ProductName + ".app");
+                EditorUtility.RevealInFinder(zip ?? app);
             }
             else
             {
                 Debug.LogError($"[Build] {report.summary.result}: {report.summary.totalErrors} errors. See the Console above.");
+            }
+        }
+
+        // The app packed for the GitHub release (ditto keeps the app's links and signature intact).
+        private static string Zip(string folder, string appName)
+        {
+            string zip = $"TheQuietWitness-v{Version}-macOS.zip";
+            string full = Path.Combine(folder, zip);
+            if (File.Exists(full)) File.Delete(full);
+            try
+            {
+                var process = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "/usr/bin/ditto",
+                    Arguments = $"-c -k --sequesterRsrc --keepParent \"{appName}\" \"{zip}\"",
+                    WorkingDirectory = Path.GetFullPath(folder),
+                    UseShellExecute = false,
+                });
+                process.WaitForExit();
+                if (process.ExitCode != 0 || !File.Exists(full)) throw new System.Exception("ditto exit code " + process.ExitCode);
+                Debug.Log($"[Build] Packed for the release: {Path.GetFullPath(full)} ({new FileInfo(full).Length / (1024 * 1024)} MB)");
+                return full;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[Build] Could not zip the app ({e.Message}). Right-click the .app > Compress instead.");
+                return null;
             }
         }
     }

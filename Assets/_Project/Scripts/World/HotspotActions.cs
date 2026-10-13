@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using QuietWitness.Audio;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -94,6 +95,7 @@ namespace QuietWitness.World
         {
             if (index < 0 || index >= actions.Count) return;
             var action = actions[index];
+            UiSounds.Play(s => s.click);
             Debug.Log($"[{action.kind}] {name}");
             bool said = action.HasSpeech && HeroSpeech.Say(action);
             if (action.onChosen != null && action.onChosen.GetPersistentEventCount() > 0) action.onChosen.Invoke();
