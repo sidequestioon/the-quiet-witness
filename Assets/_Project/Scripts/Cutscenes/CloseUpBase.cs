@@ -49,6 +49,7 @@ namespace QuietWitness.Cutscenes
         private float promptPop;
         private float shownLetters;
         private bool typing;
+        private string fullCaption = string.Empty;   // the whole thought (the text shows part of it while typing)
 
         protected virtual void Awake()
         {
@@ -70,8 +71,8 @@ namespace QuietWitness.Cutscenes
             if (typing && captionText != null)
             {
                 shownLetters += lettersPerSecond * Time.unscaledDeltaTime;
-                captionText.maxVisibleCharacters = Mathf.FloorToInt(shownLetters);
-                if (shownLetters >= captionText.text.Length) typing = false;
+                QuietWitness.UI.TextBlock.Reveal(captionText, fullCaption, Mathf.FloorToInt(shownLetters));
+                if (shownLetters >= fullCaption.Length) typing = false;
             }
         }
 
@@ -170,10 +171,10 @@ namespace QuietWitness.Cutscenes
                 return;
             }
             if (captionText.fontSharedMaterial == null && captionText.font != null) captionText.fontSharedMaterial = captionText.font.material;
-            captionText.text = line.text.Replace("\\n", "\n");
-            float maxWidth = line.plateWidth > 0 ? line.plateWidth * 4f : captionMaxWidth;   // plate width in pixels, at 4x
-            Vector2 size = captionText.GetPreferredValues(captionText.text, maxWidth - platePadding.x * 2f, 0f);
-            size.x = Mathf.Min(size.x, maxWidth - platePadding.x * 2f);
+            captionText.text = fullCaption = line.text.Replace("\\n", "\n");
+            float wrap = QuietWitness.UI.TextBlock.Width(captionText, fullCaption, captionMaxWidth - platePadding.x * 2f, 3, 0f, 40);
+            Vector2 size = captionText.GetPreferredValues(captionText.text, wrap, 0f);
+            size.x = Mathf.Min(size.x, wrap);
             caption.sizeDelta = size + platePadding * 2f;
             var r = captionText.rectTransform;
             r.anchorMin = Vector2.zero;
@@ -181,7 +182,7 @@ namespace QuietWitness.Cutscenes
             r.offsetMin = platePadding;
             r.offsetMax = -platePadding;
             shownLetters = 0f;
-            captionText.maxVisibleCharacters = 0;
+            QuietWitness.UI.TextBlock.Reveal(captionText, fullCaption, 0);   // letters appear where they will stay
             typing = true;
             caption.gameObject.SetActive(true);
         }
@@ -189,7 +190,7 @@ namespace QuietWitness.Cutscenes
         protected void FinishTyping()
         {
             typing = false;
-            if (captionText != null) captionText.maxVisibleCharacters = 99999;
+            if (captionText != null) QuietWitness.UI.TextBlock.Reveal(captionText, fullCaption, fullCaption.Length);
         }
 
         protected void HideCaption()

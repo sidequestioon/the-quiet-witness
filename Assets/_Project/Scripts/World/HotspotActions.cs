@@ -15,15 +15,12 @@ namespace QuietWitness.World
         public ActionKind kind;
         [Tooltip("Shown over the icon, e.g. \"Aquarium\" or \"Inspect cork board\". Empty = Look, Take...")]
         public string label;
-        [Tooltip("What the hero says when this is chosen: a line from Hero Lines (Resources/HeroLines). " +
-                 "Pick it in the list; its text and plate width can be edited right under it. Empty = Lines below.")]
+        [Tooltip("What the hero says when this is chosen: the id of a line in Hero Lines (Resources/HeroLines). Empty = Lines below.")]
         [HeroLine]
         public string line;
         [Tooltip("Only used when Line is empty. Enter (or \\n) inside a box starts a new line.")]
         [TextArea(2, 8)]
         public string[] lines;
-        [Tooltip("Only used when Line is empty. Widest the plate may get, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
-        public int plateWidth;
         public UnityEvent onChosen;
         [Tooltip("This action (its icon) shows only once all of these flags are set, e.g. darkroom:enlarger_found. Empty = always.")]
         public List<string> showWhen = new List<string>();
@@ -57,14 +54,6 @@ namespace QuietWitness.World
             }
         }
 
-        public int SaidWidth
-        {
-            get
-            {
-                var found = HeroLines.Find(line);
-                return found != null && !string.IsNullOrWhiteSpace(found.text) ? found.plateWidth : plateWidth;
-            }
-        }
 
         public bool HasSpeech
         {

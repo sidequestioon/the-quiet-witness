@@ -53,7 +53,7 @@ namespace QuietWitness.Cutscenes
         [SerializeField] private Image captionPlate;
         [SerializeField] private Image captionTail;
         [SerializeField] private TMP_Text captionText;
-        [Tooltip("The plate never gets wider than this (canvas units); longer text wraps. A thing's own Plate Width wins.")]
+        [Tooltip("The plate never gets wider than this (canvas units); longer text wraps into an even block.")]
         [SerializeField] private float maxWidth = 560f;
         [Tooltip("The plate is never narrower than this.")]
         [SerializeField] private float minWidth = 0f;
@@ -318,8 +318,9 @@ namespace QuietWitness.Cutscenes
         {
             // After the font file changes (e.g. a Git merge), the text can still point at the old, destroyed material.
             if (captionText.fontSharedMaterial == null && captionText.font != null) captionText.fontSharedMaterial = captionText.font.material;
+            width = QuietWitness.UI.TextBlock.Width(captionText, captionText.text, width);   // an even block
             Vector2 size = captionText.GetPreferredValues(captionText.text, width, 0f);
-            size.x = Mathf.Clamp(size.x, minWidth, width);
+            size.x = Mathf.Max(minWidth, Mathf.Min(size.x, width));
             size.y = captionText.GetPreferredValues(captionText.text, size.x, 0f).y;
             captionText.rectTransform.sizeDelta = size;
             captionText.rectTransform.anchoredPosition = Vector2.zero;
@@ -336,9 +337,8 @@ namespace QuietWitness.Cutscenes
             if (item == null) return;
 
             // this thing's own settings, or the usual ones
-            captionText.fontSize = item.FontSize > 0f ? item.FontSize : defaultFontSize;
-            FitPlate(item.PlateWidth > 0 ? item.PlateWidth : maxWidth,
-                     item.PlatePadding != Vector2.zero ? item.PlatePadding : platePadding);
+            captionText.fontSize = defaultFontSize;
+            FitPlate(maxWidth, platePadding);
 
             var r = (RectTransform)item.transform;
             var half = ((RectTransform)transform).rect.size / 2f;
