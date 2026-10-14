@@ -101,7 +101,7 @@ namespace QuietWitness.Court
             if (right) score++;
 
             stage.text = card == null ? "You stay silent." : right ? "Objection sustained." : "Objection overruled.";
-            string presented = card != null ? $"<i>You present: {card.Title}.</i>\n" : string.Empty;
+            string presented = card != null ? $"You present: {card.Title}.\n" : string.Empty;
             body.text = presented + (right ? point.sustained : point.overruled);
 
             ShowEvidence(false);
@@ -153,7 +153,7 @@ namespace QuietWitness.Court
                 while (cards.Count <= i)
                     cards.Add(Instantiate(cardTemplate, cardTemplate.transform.parent));
                 var card = list[i];
-                string label = card.IsConclusion ? $"<b>{card.Title}</b>" : card.Title;
+                string label = card.IsConclusion ? $"{card.Title}" : card.Title;
                 cards[i].gameObject.SetActive(true);
                 cards[i].Setup(label, () => Answer(card));
             }

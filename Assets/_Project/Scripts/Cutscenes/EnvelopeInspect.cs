@@ -316,6 +316,8 @@ namespace QuietWitness.Cutscenes
 
         private Vector2 FitPlate(float width, Vector2 padding)
         {
+            // After the font file changes (e.g. a Git merge), the text can still point at the old, destroyed material.
+            if (captionText.fontSharedMaterial == null && captionText.font != null) captionText.fontSharedMaterial = captionText.font.material;
             Vector2 size = captionText.GetPreferredValues(captionText.text, width, 0f);
             size.x = Mathf.Clamp(size.x, minWidth, width);
             size.y = captionText.GetPreferredValues(captionText.text, size.x, 0f).y;

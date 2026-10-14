@@ -3142,6 +3142,50 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &710538027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 710538029}
+  - component: {fileID: 710538028}
+  m_Layer: 0
+  m_Name: CloseUpOpener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &710538028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710538027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c80e383743746a4a60479d54fc2217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Cutscenes.CloseUpOpener
+--- !u!4 &710538029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710538027}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &713712053
 GameObject:
   m_ObjectHideFlags: 0
@@ -6817,6 +6861,7 @@ GameObject:
   - component: {fileID: 1658080201}
   - component: {fileID: 1658080200}
   - component: {fileID: 1658080202}
+  - component: {fileID: 1658080203}
   m_Layer: 0
   m_Name: Look_LockedDrawer
   m_TagString: Untagged
@@ -6917,15 +6962,90 @@ MonoBehaviour:
   actions:
   - kind: 0
     label: Locked drawer
-    line: office.look_lockeddrawer
-    lines:
-    - Locked. I remember locking it. I don't remember where I put the key.
+    line: 
+    lines: []
     plateWidth: 54
     onChosen:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1658080203}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   promptOffset: {x: 0.013888836, y: 0.34444475}
   story: 0
+--- !u!114 &1658080203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658080197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: 'first time: he forgot the code (a new goal in the case file)'
+    needs: []
+    unless:
+    - office:drawer_opened
+    - office:drawer_tried
+    line: office.drawer_lock
+    setFlag: office:drawer_tried
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710538028}
+          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
+          m_MethodName: OpenCodeLock
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - note: not opened yet
+    needs: []
+    unless:
+    - office:drawer_opened
+    line: 
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710538028}
+          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
+          m_MethodName: OpenCodeLock
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - note: open, empty
+    needs: []
+    unless: []
+    line: office.drawer_empty
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &1671831050
 GameObject:
   m_ObjectHideFlags: 0
@@ -8301,3 +8421,4 @@ SceneRoots:
   - {fileID: 683593863}
   - {fileID: 1779929042}
   - {fileID: 222829837}
+  - {fileID: 710538029}

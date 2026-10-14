@@ -19,11 +19,12 @@ namespace QuietWitness.EditorTools
     // The rest of the prologue:
     //  - office: the locked drawer opens a code lock (the code is his old badge number); the badge inside
     //  - darkroom: an old photo on the wall gives the number; the enlarger develops the film frames
-    //  - when both are done he says "Riviera..." (Story Beats on Systems) and the map lets him go
-    //  - the cork board map says "not yet" until then
-    // Adds his lines to Hero Lines, two new pieces of evidence, the goals; builds the two close-ups on Systems.
-    // Lines, goals, evidence and hotspot steps are made once and never overwritten; the close-up screens are
-    // rebuilt on every run. Menu: Tools > The Quiet Witness > Setup > Prologue story
+    //  - when both are done he says "Riviera..." (Story Beats on Systems)
+    //  - the cork board map stays as it is: he can leave earlier, the map asks "Am I done here?"
+    // Adds his lines to Hero Lines, two new pieces of evidence; writes the goals (the same as
+    // Setup > Case file: objectives look); builds the two close-ups on Systems.
+    // Lines and evidence are made once and never overwritten; hotspot steps are remade only when the story
+    // here changed; the close-up screens are rebuilt on every run. Menu: Tools > The Quiet Witness > Setup > Prologue story
     public static class PrologueStorySetup
     {
         private const string Ui = ProjectRoot + "/Art/UI";
@@ -37,12 +38,15 @@ namespace QuietWitness.EditorTools
         public const string DrawerOpened = "office:drawer_opened";
         public const string FilmEnlarged = "darkroom:film_enlarged";
         public const string Ready = "prologue:ready";
+        public const string PhotoSeen = "darkroom:photo_seen";
+        public const string DrawerTried = "office:drawer_tried";
+        public const string EnlargerFound = "darkroom:enlarger_found";
         private const string EnvelopeOpened = "prologue:envelope_opened";
         private const string FilmClue = "clue:envelope_filmclip";
 
         private static readonly (string id, string text)[] Lines =
         {
-            ("office.drawer_lock", "Four numbers. I'd have picked something I couldn't forget. Didn't help."),
+            ("office.drawer_lock", "Locked. Four numbers, and I can't remember a single one. I wrote them down somewhere, I'm sure of it."),
             ("office.drawer_badge", "My badge. Eleven years, one shield. Officially it isn't mine anymore. In a dark projection booth, nobody checks."),
             ("office.drawer_empty", "Empty now. Just dust and an old habit."),
             ("office.map_not_yet", "Not yet. I'm not walking into that cinema with empty pockets and no idea who I'm looking for."),
@@ -102,20 +106,19 @@ namespace QuietWitness.EditorTools
             });
 
             // 3. Goals
-            PatchObjectives();
+            var objectives = AssetDatabase.LoadAssetAtPath<ObjectiveList>(ObjectivesPath);
+            if (objectives != null) ObjectivesLookSetup.FillGoals(objectives);
+            else Debug.LogWarning("[Setup] No Objectives yet: run Setup > Case file first.");
 
             // 4. The office
             if (!OpenScene(Scene("Office"))) return;
             var opener = Opener();
             WireSteps("Look_LockedDrawer", new[]
             {
+                Step("first time: he forgot the code (a new goal in the case file)", unless: new[] { DrawerOpened, DrawerTried },
+                     line: "office.drawer_lock", setFlag: DrawerTried, then: opener.OpenCodeLock),
                 Step("not opened yet", unless: new[] { DrawerOpened }, then: opener.OpenCodeLock),
                 Step("open, empty", line: "office.drawer_empty"),
-            });
-            WireSteps("Look_Map", new[]
-            {
-                Step("ready to go", needs: new[] { Ready }, then: opener.OpenMap),
-                Step("not yet", line: "office.map_not_yet"),
             });
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             SaveOpenScene();
@@ -126,11 +129,15 @@ namespace QuietWitness.EditorTools
             WireSteps("Look_Enlarger", new[]
             {
                 Step("the film from the envelope", needs: new[] { FilmClue }, unless: new[] { FilmEnlarged },
-                     line: "darkroom.enlarger_film", then: opener.OpenEnlarger),
+                     line: "darkroom.enlarger_film", then: opener.OpenEnlarger, setFlag: EnlargerFound),
                 Step("already done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
                 Step("before the envelope", line: "darkroom.look_enlarger"),
             });
             AddPhotoHotspot();
+            WireSteps("Look_OldPhoto", new[]
+            {
+                Step("the badge number", line: "darkroom.look_photo", setFlag: PhotoSeen),
+            });
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             SaveOpenScene();
 
@@ -164,44 +171,6 @@ namespace QuietWitness.EditorTools
         private static string LineText(string id) => HeroLines.Find(id)?.text ??
             AssetDatabase.LoadAssetAtPath<HeroLines>(HeroLinesSetup.AssetPath)?.lines.FirstOrDefault(l => l.id == id)?.text ?? "";
 
-        // ---- Goals ----
-
-        private static void PatchObjectives()
-        {
-            var list = AssetDatabase.LoadAssetAtPath<ObjectiveList>(ObjectivesPath);
-            if (list == null) { Debug.LogWarning("[Setup] No Objectives yet: run Setup > Case file first."); return; }
-            var goals = list.goals;
-            ObjectiveList.Goal Get(string id) => goals.FirstOrDefault(g => g.id == id);
-
-            if (Get("badge") == null)
-            {
-                int at = Mathf.Max(0, goals.FindIndex(g => g.id == "who_sent") + 1);
-                goals.Insert(at, new ObjectiveList.Goal
-                {
-                    id = "badge", main = false,
-                    text = "Get my old badge out of the locked drawer. A projection booth doesn't open for a private eye.",
-                    showWhen = EnvelopeOpened, doneWhen = DrawerOpened,
-                });
-            }
-            // The film before the cinema, the cinema only once he's ready, the diner later.
-            var film = Get("film");
-            if (film != null)
-            {
-                goals.Remove(film);
-                goals.Insert(goals.IndexOf(Get("badge")) + 1, film);
-            }
-            var riviera = Get("riviera");
-            if (riviera != null && riviera.showWhen == EnvelopeOpened) riviera.showWhen = Ready;
-            if (riviera != null)
-            {
-                goals.Remove(riviera);
-                goals.Insert(goals.IndexOf(film ?? Get("badge")) + 1, riviera);
-            }
-            var diner = Get("diner");
-            if (diner != null && diner.showWhen == EnvelopeOpened) diner.showWhen = "visited:riviera";
-            EditorUtility.SetDirty(list);
-        }
-
         // ---- Hotspots ----
 
         private static CloseUpOpener Opener()
@@ -212,13 +181,14 @@ namespace QuietWitness.EditorTools
 
         private struct StepSpec
         {
-            public string note, line;
+            public string note, line, setFlag;
             public string[] needs, unless;
             public UnityAction then;
         }
 
-        private static StepSpec Step(string note, string[] needs = null, string[] unless = null, string line = null, UnityAction then = null) =>
-            new StepSpec { note = note, needs = needs, unless = unless, line = line, then = then };
+        private static StepSpec Step(string note, string[] needs = null, string[] unless = null, string line = null,
+                                     UnityAction then = null, string setFlag = null) =>
+            new StepSpec { note = note, needs = needs, unless = unless, line = line, then = then, setFlag = setFlag };
 
         // The hotspot's action does nothing itself any more: it runs Hotspot Steps (made once).
         private static void WireSteps(string hotspotName, StepSpec[] specs)
@@ -231,7 +201,10 @@ namespace QuietWitness.EditorTools
             }
             bool fresh = !go.TryGetComponent<HotspotSteps>(out var steps);
             if (fresh) steps = go.AddComponent<HotspotSteps>();
-            if (fresh || steps.steps.Count == 0)
+            // Rebuilt when the steps here are not the ones this setup makes (the story changed); kept otherwise.
+            bool same = steps.steps.Count == specs.Length &&
+                        steps.steps.Select(s => s.note + "|" + s.setFlag).SequenceEqual(specs.Select(s => s.note + "|" + (s.setFlag ?? string.Empty)));
+            if (fresh || !same)
             {
                 steps.steps.Clear();
                 foreach (var spec in specs)
@@ -240,6 +213,7 @@ namespace QuietWitness.EditorTools
                     {
                         note = spec.note,
                         line = spec.line ?? string.Empty,
+                        setFlag = spec.setFlag ?? string.Empty,
                         needs = spec.needs?.ToList() ?? new List<string>(),
                         unless = spec.unless?.ToList() ?? new List<string>(),
                     };

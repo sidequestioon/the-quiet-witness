@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 207299041}
   - component: {fileID: 207299040}
   - component: {fileID: 207299039}
+  - component: {fileID: 207299042}
   m_Layer: 0
   m_Name: Look_Enlarger
   m_TagString: Untagged
@@ -507,13 +508,24 @@ MonoBehaviour:
   actions:
   - kind: 0
     label: Enlarger
-    line: darkroom.look_enlarger
-    lines:
-    - My old enlarger. Still the best way to see what a negative is hiding.
+    line: 
+    lines: []
     plateWidth: 69
     onChosen:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 207299042}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   promptOffset: {x: -0.027778149, y: 1.066667}
   story: 0
 --- !u!114 &207299040
@@ -579,6 +591,58 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.2222223, y: 2.6}
   m_EdgeRadius: 0
+--- !u!114 &207299042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207299037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: the film from the envelope
+    needs:
+    - clue:envelope_filmclip
+    unless:
+    - darkroom:film_enlarged
+    line: darkroom.enlarger_film
+    setFlag: darkroom:enlarger_found
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710538028}
+          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
+          m_MethodName: OpenEnlarger
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - note: already done
+    needs:
+    - darkroom:film_enlarged
+    unless: []
+    line: darkroom.enlarger_done
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+  - note: before the envelope
+    needs: []
+    unless: []
+    line: darkroom.look_enlarger
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &349510333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,6 +1091,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.GlobalLightController
   fadeDuration: 1.5
   brightness: 0.3
+--- !u!1 &710538027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 710538029}
+  - component: {fileID: 710538028}
+  m_Layer: 0
+  m_Name: CloseUpOpener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &710538028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710538027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c80e383743746a4a60479d54fc2217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Cutscenes.CloseUpOpener
+--- !u!4 &710538029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710538027}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &727409055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,8 +1812,163 @@ Transform:
   - {fileID: 66372780}
   - {fileID: 930999825}
   - {fileID: 1102112219}
+  - {fileID: 1247246333}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1247246332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247246333}
+  - component: {fileID: 1247246337}
+  - component: {fileID: 1247246336}
+  - component: {fileID: 1247246335}
+  - component: {fileID: 1247246334}
+  m_Layer: 0
+  m_Name: Look_OldPhoto
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1247246333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247246332}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3055553, y: -1.1500001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1186070570}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247246334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247246332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: the badge number
+    needs: []
+    unless: []
+    line: darkroom.look_photo
+    setFlag: darkroom:photo_seen
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &1247246335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247246332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a6d3a41c1cf4c22875dfb52b13d8e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
+  actions:
+  - kind: 0
+    label: Old photo
+    line: 
+    lines: []
+    plateWidth: 0
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1247246334}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  promptOffset: {x: -0.027777791, y: 1.9833336}
+  story: 0
+--- !u!114 &1247246336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247246332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5faab006f27e42ac84bd1773a72160a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.Interactable
+  prompt: Old photo
+  description: 
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!61 &1247246337
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247246332}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.6666666, y: 2.6}
+  m_EdgeRadius: 0
 --- !u!1 &1395328714
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,3 +3150,4 @@ SceneRoots:
   - {fileID: 1784090067}
   - {fileID: 415666684}
   - {fileID: 1827881037}
+  - {fileID: 710538029}

@@ -87,7 +87,7 @@ namespace QuietWitness.Board
         public void Click(BoardCardView view)
         {
             var card = view.Card;
-            detailText.text = $"<b>{card.Title}</b>\n{card.Description}";
+            detailText.text = $"{card.Title}\n{card.Description}";
 
             if (selected == null)
             {
@@ -124,7 +124,7 @@ namespace QuietWitness.Board
             {
                 state.SetFlag(conclusion.Flag);
                 statusText.text = $"<color=#E8B05C>New conclusion:</color> {conclusion.Title}";
-                detailText.text = $"<b>{conclusion.Title}</b>\n{conclusion.Description}";
+                detailText.text = $"{conclusion.Title}\n{conclusion.Description}";
             }
         }
 

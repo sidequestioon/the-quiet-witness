@@ -58,6 +58,16 @@ namespace QuietWitness.Map
         [Tooltip("Which district the preview box shows. Empty = the first one.")]
         [SerializeField] private MapDistrict previewDistrict;
 
+        [Header("Leaving for good")]
+        [Tooltip("Scenes he may not come back to: going anywhere from here asks first.")]
+        [SerializeField] private System.Collections.Generic.List<string> askWhenLeaving =
+            new System.Collections.Generic.List<string> { "Office", "Darkroom" };
+        [Tooltip("What he asks himself before leaving (from Hero Lines).")]
+        [HeroLine]
+        [SerializeField] private string leaveLine = "map.leave_office";
+        [SerializeField] private string leaveYes = "Go";
+        [SerializeField] private string leaveNo = "Stay";
+
         [Header("Sounds")]
         [SerializeField] private AudioClip openSound;
         [SerializeField] private AudioClip closeSound;
@@ -69,6 +79,7 @@ namespace QuietWitness.Map
         private MapDistrict shownInfo;
         private bool open;
         private float shown;
+        private bool asking;   // the "Am I done here?" question is up
 
         private void Awake()
         {
@@ -126,8 +137,26 @@ namespace QuietWitness.Map
         // Called by a district dot or a pin.
         public void Go(LocationData location)
         {
-            if (!open || location == null) return;
+            if (!open || location == null || asking) return;
             UiSounds.Play(s => s.click);
+
+            // Leaving the office for good: "Am I done here?" first.
+            string scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            var confirm = ConfirmPanel.Instance;
+            var line = HeroLines.Find(leaveLine);
+            if (askWhenLeaving.Contains(scene) && confirm != null && line != null && !string.IsNullOrWhiteSpace(line.text))
+            {
+                asking = true;
+                HideInfo(null);
+                confirm.Ask(string.Empty, line.text, leaveYes, leaveNo, () => Leave(location));
+                return;
+            }
+            Leave(location);
+        }
+
+        private void Leave(LocationData location)
+        {
+            asking = false;
             Close(sound: false);
             if (SceneLoader.Instance != null) SceneLoader.Instance.Travel(location);
         }
@@ -188,7 +217,10 @@ namespace QuietWitness.Map
                 return;
             }
             if (Instance != this) return;
-            if (open && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) Close();
+            // Esc closes the map, but not on the frame it closed the question box.
+            bool confirmOpen = ConfirmPanel.Instance != null && ConfirmPanel.Instance.IsOpen;
+            if (open && !confirmOpen && !asking && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) Close();
+            if (!confirmOpen) asking = false;
 
             float target = open ? 1f : 0f;
             if (Mathf.Approximately(shown, target)) return;

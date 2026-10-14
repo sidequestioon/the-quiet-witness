@@ -6,7 +6,8 @@ namespace QuietWitness.Core
 {
     // What the hero is trying to do, for the Objectives page of the case file.
     // Each goal shows up once its flag is set and is crossed out once its done-flag is set.
-    // A main goal is the big yellow line; the goals under it in this list are its smaller steps.
+    // A main goal is the big yellow line; the goals under it in this list are its steps.
+    // A step marked Mini is a smaller step of the step above it (shown under it, with a dot).
     // Only the newest main goal that is not done yet is shown (with its steps).
     [CreateAssetMenu(fileName = "Objectives", menuName = "The Quiet Witness/Objectives")]
     public class ObjectiveList : ScriptableObject
@@ -18,6 +19,8 @@ namespace QuietWitness.Core
             public string id;
             [Tooltip("Main goal: the big yellow line. The goals below it (up to the next main goal) are its steps.")]
             public bool main;
+            [Tooltip("A smaller step of the step above it: shown under it, a little to the right, with a dot.")]
+            public bool mini;
             [TextArea(1, 3)]
             public string text;
             [Tooltip("Shown once this flag is set, e.g. prologue:envelope_opened or visited:diner. Empty = from the start.")]

@@ -15,7 +15,7 @@ namespace QuietWitness.UI
 {
     // The case file. The small icon at the top of the screen opens it (or Tab / J); Esc closes.
     // The room behind blurs and darkens (like the envelope close-up). On the left: Objectives and Inventory.
-    //  - Objectives: the main goal in yellow in the middle, its smaller steps under it (Objectives asset, by flags).
+    //  - Objectives: the main goal in yellow, its steps and mini steps under it on a dashed line (Objectives asset, by flags).
     //  - Inventory: what was found, one thing in the middle with its name and what the hero said about it.
     //    A / D, the arrows, the mouse wheel or a click on a thing at the side turn them.
     // A yellow dot on the icon and on the menu line = something new there.
@@ -61,6 +61,9 @@ namespace QuietWitness.UI
         [Header("Objectives")]
         [SerializeField] private ObjectiveList objectives;
         [SerializeField] private GameObject objectivesPage;
+        [Tooltip("The page as a tree: main goal, dashed line, steps and mini steps (Setup > Case file: objectives look). " +
+                 "Empty = the old two texts below.")]
+        [SerializeField] private ObjectivesView objectivesView;
         [SerializeField] private TMP_Text mainGoal;
         [SerializeField] private TMP_Text steps;
         [SerializeField] private string noGoals = "Nothing to do. For now.";
@@ -318,12 +321,13 @@ namespace QuietWitness.UI
         {
             if (objectives == null) return;
             var goal = objectives.Current(stepList);
-            if (mainGoal != null)
+            if (objectivesView != null) objectivesView.Show(goal, stepList);
+            else if (mainGoal != null)
             {
                 if (goal == null) mainGoal.text = noGoals;
                 else mainGoal.text = ObjectiveList.Done(goal) ? Crossed(goal.text) : goal.text;
             }
-            if (steps != null)
+            if (objectivesView == null && steps != null)
             {
                 var sb = new StringBuilder();
                 foreach (var step in stepList)
