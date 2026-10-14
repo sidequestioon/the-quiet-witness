@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using QuietWitness.Audio;
+using QuietWitness.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,6 +25,25 @@ namespace QuietWitness.World
         [Tooltip("Only used when Line is empty. Widest the plate may get, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
         public int plateWidth;
         public UnityEvent onChosen;
+        [Tooltip("This action (its icon) shows only once all of these flags are set, e.g. darkroom:enlarger_found. Empty = always.")]
+        public List<string> showWhen = new List<string>();
+        [Tooltip("Hidden again once any of these flags is set, e.g. darkroom:film_enlarged.")]
+        public List<string> hideWhen = new List<string>();
+
+        public bool Available
+        {
+            get
+            {
+                var state = GameState.Instance;
+                if (showWhen != null)
+                    foreach (var f in showWhen)
+                        if (!string.IsNullOrWhiteSpace(f) && (state == null || !state.HasFlag(f.Trim()))) return false;
+                if (hideWhen != null)
+                    foreach (var f in hideWhen)
+                        if (!string.IsNullOrWhiteSpace(f) && state != null && state.HasFlag(f.Trim())) return false;
+                return true;
+            }
+        }
 
         public string Label => string.IsNullOrEmpty(label) ? DefaultLabel(kind) : label;
 
@@ -65,7 +85,7 @@ namespace QuietWitness.World
     }
 
     // What you can do with a hotspot: shown by InteractionPrompt (an icon per action with its name)
-    // over the hotspot E would use.
+    // over the hotspot E would use. An action can show only after some flags (Show When / Hide When).
     [RequireComponent(typeof(Interactable))]
     public class HotspotActions : MonoBehaviour
     {
@@ -81,7 +101,18 @@ namespace QuietWitness.World
         private void OnEnable() => all.Add(this);
         private void OnDisable() => all.Remove(this);
 
-        public IReadOnlyList<HotspotAction> Actions => actions;
+        // The actions he can do right now (Show When / Hide When).
+        private readonly List<HotspotAction> available = new List<HotspotAction>();
+        public IReadOnlyList<HotspotAction> Actions
+        {
+            get
+            {
+                available.Clear();
+                foreach (var a in actions)
+                    if (a != null && a.Available) available.Add(a);
+                return available;
+            }
+        }
         public Vector2 PromptPoint => (Vector2)transform.position + promptOffset;
         public bool IsStory => story;
 
@@ -93,8 +124,9 @@ namespace QuietWitness.World
 
         public void Choose(int index)
         {
-            if (index < 0 || index >= actions.Count) return;
-            var action = actions[index];
+            var list = Actions;
+            if (index < 0 || index >= list.Count) return;
+            var action = list[index];
             UiSounds.Play(s => s.click);
             Debug.Log($"[{action.kind}] {name}");
             bool said = action.HasSpeech && HeroSpeech.Say(action);

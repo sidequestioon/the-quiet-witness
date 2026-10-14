@@ -9,7 +9,8 @@ namespace QuietWitness.World
     // Backbone-style prompt over the hotspot E would use: a black round icon per action
     // (eye, hand, footsteps...) with the action's name above it.
     // It pops in when the hero walks up, and fades out when he walks away.
-    // Several actions: icons in a row, W/S or arrows (or the mouse) pick one, its name is shown.
+    // Several actions: icons in a column (top first; or a row), W/S or arrows (or the mouse) pick one,
+    // its name is shown next to it.
     // E or a click does it. Drawn under the hero.
     public class InteractionPrompt : MonoBehaviour
     {
@@ -28,6 +29,8 @@ namespace QuietWitness.World
         [SerializeField] private float fontSize = 2f;
         [SerializeField] private int iconSpacing = 16;   // px between icon centres
         [SerializeField] private int textGap = 2;        // px between icon top and text
+        [Tooltip("Several actions: one under another (the name to the right of the chosen one). Off = in a row.")]
+        [SerializeField] private bool column = true;
         [Header("Other things nearby")]
         [Tooltip("Things this close to the hero (pixels, left/right) show a small icon without a name.")]
         [SerializeField] private int nearbyDistance = 70;
@@ -63,6 +66,8 @@ namespace QuietWitness.World
         private TextMeshPro label;
         private HotspotActions target;
         private int selected;
+        private int builtCount;
+        private bool vertical;
         private bool visible;
         private float appear;      // 0 hidden .. 1 shown
         private float pop = 1f;    // 0 right after showing .. 1
@@ -123,6 +128,11 @@ namespace QuietWitness.World
         private void Build()
         {
             int count = target.Actions.Count;
+            builtCount = count;
+            selected = Mathf.Clamp(selected, 0, Mathf.Max(0, count - 1));
+            vertical = column && count > 1;
+            label.alignment = vertical ? TextAlignmentOptions.Left : TextAlignmentOptions.Bottom;
+            label.rectTransform.pivot = vertical ? new Vector2(0f, 0.5f) : new Vector2(0.5f, 0f);
             while (iconRenderers.Count < count)
             {
                 var go = new GameObject("Icon");
@@ -143,7 +153,7 @@ namespace QuietWitness.World
                     iconRenderers[i].sprite = kind < set.Length ? set[kind] : null;
                 }
             }
-            label.text = target.Actions[selected].Label;
+            label.text = count > 0 ? target.Actions[selected].Label : string.Empty;
         }
 
         private void Select(int index)
@@ -157,7 +167,13 @@ namespace QuietWitness.World
         private void Update()
         {
             if (target == null) return;
-            if (visible && !InputBlocker.IsBlocked) HandleInput();
+            // An action can appear or go away while the prompt is up (e.g. Use, once he has looked).
+            if (target.Actions.Count != builtCount)
+            {
+                if (target.Actions.Count == 0) visible = false;
+                Build();
+            }
+            if (visible && !InputBlocker.IsBlocked && builtCount > 0) HandleInput();
 
             appear = Mathf.MoveTowards(appear, visible ? 1f : 0f, Time.deltaTime / (visible ? ShowTime : HideTime));
             pop = Mathf.MoveTowards(pop, 1f, Time.deltaTime / ShowTime);
@@ -165,9 +181,9 @@ namespace QuietWitness.World
 
             bool any = visible || appear > 0f;
             label.enabled = any;
-            int count = target.Actions.Count;
+            int count = builtCount;
             for (int i = 0; i < count; i++) iconRenderers[i].enabled = any;
-            if (!any) return;
+            if (!any || count == 0) return;
 
             // Icons in a row, centred on the hotspot's prompt point, on the pixel grid.
             Vector2 point = target.PromptPoint;
@@ -182,8 +198,10 @@ namespace QuietWitness.World
                 var r = iconRenderers[i];
                 int size = r.sprite != null ? Mathf.RoundToInt(r.sprite.rect.width) : 13;
                 iconHeight = Mathf.RoundToInt(size * iconSize);
-                int x = cx + Mathf.RoundToInt((i - (count - 1) / 2f) * iconSpacing * iconSize);
-                int cornerX = x - (size - 1) / 2, cornerY = cy - (size - 1) / 2;
+                int step = Mathf.RoundToInt((i - (count - 1) / 2f) * iconSpacing * iconSize);
+                int x = vertical ? cx : cx + step;
+                int y = vertical ? cy - step : cy;
+                int cornerX = x - (size - 1) / 2, cornerY = y - (size - 1) / 2;
                 r.transform.position = new Vector3((cornerX + size / 2f) / PixelsPerUnit, (cornerY + size / 2f) / PixelsPerUnit, 0f);
                 bool on = i == selected;
                 float s = iconScale * iconSize * (on || count == 1 ? 1f : 0.85f);
@@ -193,8 +211,19 @@ namespace QuietWitness.World
 
             // The name above, sliding up a little as it fades in.
             float slide = (1f - EaseOut(textIn)) * 3f;
-            float textY = (cy + (iconHeight + 1) / 2 + textGap - slide) / PixelsPerUnit;
-            float textX = (cx + Mathf.RoundToInt((selected - (count - 1) / 2f) * iconSpacing * iconSize) + 0.5f) / PixelsPerUnit;
+            int chosen = Mathf.RoundToInt((selected - (count - 1) / 2f) * iconSpacing * iconSize);
+            float textX, textY;
+            if (vertical)
+            {
+                // To the right of the chosen icon, sliding in from the left.
+                textX = (cx + (iconHeight + 1) / 2 + textGap + 2 - slide) / PixelsPerUnit;
+                textY = (cy - chosen + 0.5f) / PixelsPerUnit;
+            }
+            else
+            {
+                textY = (cy + (iconHeight + 1) / 2 + textGap - slide) / PixelsPerUnit;
+                textX = (cx + chosen + 0.5f) / PixelsPerUnit;
+            }
             label.transform.position = new Vector3(textX, textY, 0f);
             var tc = target.IsStory ? storyTextColor : plainTextColor;
             tc.a *= alpha * Mathf.Clamp01(textIn * 1.5f);
@@ -203,7 +232,7 @@ namespace QuietWitness.World
 
         private void HandleInput()
         {
-            int count = target.Actions.Count;
+            int count = builtCount;
             var kb = Keyboard.current;
             if (kb != null && count > 1)
             {

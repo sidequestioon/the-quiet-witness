@@ -126,13 +126,7 @@ namespace QuietWitness.EditorTools
             // 5. The darkroom
             if (!OpenScene(Scene("Darkroom"))) return;
             opener = Opener();
-            WireSteps("Look_Enlarger", new[]
-            {
-                Step("the film from the envelope", needs: new[] { FilmClue }, unless: new[] { FilmEnlarged },
-                     line: "darkroom.enlarger_film", then: opener.OpenEnlarger, setFlag: EnlargerFound),
-                Step("already done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
-                Step("before the envelope", line: "darkroom.look_enlarger"),
-            });
+            Enlarger(opener);
             AddPhotoHotspot();
             WireSteps("Look_OldPhoto", new[]
             {
@@ -234,6 +228,72 @@ namespace QuietWitness.EditorTools
             for (int i = chosen.GetPersistentEventCount() - 1; i >= 0; i--) UnityEventTools.RemovePersistentListener(chosen, i);
             UnityEventTools.AddPersistentListener(chosen, steps.Run);
             EditorUtility.SetDirty(actions);
+        }
+
+        // The enlarger: two actions, one under another.
+        //  Look - the first time he finds out about it (a new goal: enlarge the film); later just a line.
+        //  Use  - shows once he has looked at it (and has the film), until the film is enlarged: develops the frames.
+        private static void Enlarger(CloseUpOpener opener)
+        {
+            var go = GameObject.Find("Look_Enlarger");
+            if (go == null || !go.TryGetComponent<HotspotActions>(out var actions))
+            {
+                Debug.LogWarning("[Setup] Look_Enlarger not found in the darkroom.");
+                return;
+            }
+            // Two Hotspot Steps on it: the first for Look, the second for Use.
+            var all = go.GetComponents<HotspotSteps>().ToList();
+            while (all.Count < 2) all.Add(go.AddComponent<HotspotSteps>());
+            Fill(all[0], new[]
+            {
+                Step("after the film is done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
+                Step("finds out about it", line: "darkroom.look_enlarger", setFlag: EnlargerFound),
+            });
+            Fill(all[1], new[]
+            {
+                Step("develop the film: straight to the close-up, no line", then: opener.OpenEnlarger),
+            });
+
+            var field = typeof(HotspotActions).GetField("actions", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var list = (List<HotspotAction>)field.GetValue(actions);
+            if (list.Count == 0) list.Add(new HotspotAction { kind = ActionKind.Look });
+            while (list.Count > 2) list.RemoveAt(list.Count - 1);
+            if (list.Count < 2) list.Add(new HotspotAction());
+            SetAction(list[0], ActionKind.Look, string.Empty, all[0], null, null);
+            SetAction(list[1], ActionKind.Use, "Use", all[1], new[] { EnlargerFound, FilmClue }, new[] { FilmEnlarged });
+            EditorUtility.SetDirty(actions);
+        }
+
+        private static void Fill(HotspotSteps steps, StepSpec[] specs)
+        {
+            steps.steps.Clear();
+            foreach (var spec in specs)
+            {
+                var step = new HotspotSteps.Step
+                {
+                    note = spec.note,
+                    line = spec.line ?? string.Empty,
+                    setFlag = spec.setFlag ?? string.Empty,
+                    needs = spec.needs?.ToList() ?? new List<string>(),
+                    unless = spec.unless?.ToList() ?? new List<string>(),
+                };
+                if (spec.then != null) UnityEventTools.AddPersistentListener(step.then, spec.then);
+                steps.steps.Add(step);
+            }
+            EditorUtility.SetDirty(steps);
+        }
+
+        private static void SetAction(HotspotAction a, ActionKind kind, string label, HotspotSteps steps, string[] showWhen, string[] hideWhen)
+        {
+            a.kind = kind;
+            if (kind != ActionKind.Look || string.IsNullOrEmpty(a.label)) a.label = label;
+            a.line = string.Empty;
+            a.lines = new string[0];
+            a.showWhen = showWhen?.ToList() ?? new List<string>();
+            a.hideWhen = hideWhen?.ToList() ?? new List<string>();
+            a.onChosen ??= new UnityEvent();
+            for (int i = a.onChosen.GetPersistentEventCount() - 1; i >= 0; i--) UnityEventTools.RemovePersistentListener(a.onChosen, i);
+            UnityEventTools.AddPersistentListener(a.onChosen, steps.Run);
         }
 
         // The framed photo on the darkroom wall, between the prints and the chemicals.

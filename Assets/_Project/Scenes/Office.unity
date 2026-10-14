@@ -1251,6 +1251,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.5111114}
   story: 0
 --- !u!1 &345134158
@@ -1780,6 +1782,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.0388892}
   story: 0
 --- !u!1 &511338206
@@ -2200,6 +2204,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.000000014901161, y: 1.4000003}
   story: 0
 --- !u!1 &537745659
@@ -2411,6 +2417,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.19444466, y: -0.71111083}
   story: 1
 --- !u!114 &567360259
@@ -2755,6 +2763,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.0111114}
   story: 0
 --- !u!1 &619394800
@@ -4457,6 +4467,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 0.90000033}
   story: 0
 --- !u!1 &975952880
@@ -4838,6 +4850,7 @@ MonoBehaviour:
   fontSize: 1
   iconSpacing: 16
   textGap: 0
+  column: 1
   nearbyDistance: 70
   nearbySize: 0.6
   nearbyOpacity: 0.75
@@ -4974,6 +4987,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.55555534, y: 0.62222254}
   story: 0
 --- !u!114 &1102112222
@@ -6628,6 +6643,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013889074, y: 1.566667}
   story: 1
 --- !u!114 &1592913291
@@ -6980,6 +6997,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.013888836, y: 0.34444475}
   story: 0
 --- !u!114 &1658080203
@@ -7912,6 +7931,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.56}
   story: 0
 --- !u!1 &1927612134
