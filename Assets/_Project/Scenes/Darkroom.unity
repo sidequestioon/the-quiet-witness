@@ -512,7 +512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
   - kind: 0
-    label: Enlarger
+    label: Look
     line: 
     lines: []
     plateWidth: 69
@@ -666,10 +666,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
   steps:
-  - note: develop the film
+  - note: 'develop the film: straight to the close-up, no line'
     needs: []
     unless: []
-    line: darkroom.enlarger_film
+    line: 
     setFlag: 
     then:
       m_PersistentCalls:

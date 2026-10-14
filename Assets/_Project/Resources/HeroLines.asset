@@ -99,3 +99,7 @@ MonoBehaviour:
   - id: prologue.ready
     text: Riviera. Last show's at eleven thirty. Time to go.
     plateWidth: 0
+  - id: office.look_map
+    text: The cork board. The whole town pinned to one wall, and every case I never
+      closed.
+    plateWidth: 0

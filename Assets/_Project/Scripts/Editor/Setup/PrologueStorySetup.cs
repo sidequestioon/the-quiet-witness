@@ -49,6 +49,7 @@ namespace QuietWitness.EditorTools
             ("office.drawer_lock", "Locked. Four numbers, and I can't remember a single one. I wrote them down somewhere, I'm sure of it."),
             ("office.drawer_badge", "My badge. Eleven years, one shield. Officially it isn't mine anymore. In a dark projection booth, nobody checks."),
             ("office.drawer_empty", "Empty now. Just dust and an old habit."),
+            ("office.look_map", "The cork board. The whole town pinned to one wall, and every case I never closed."),
             ("office.map_not_yet", "Not yet. I'm not walking into that cinema with empty pockets and no idea who I'm looking for."),
             ("darkroom.look_photo", "Me, fresh out of the academy. Badge one, one, seven, four. Some numbers you don't forget."),
             ("darkroom.enlarger_film", "Two frames, a few seconds of somebody's night. Let's see whose."),
@@ -113,20 +114,35 @@ namespace QuietWitness.EditorTools
             // 4. The office
             if (!OpenScene(Scene("Office"))) return;
             var opener = Opener();
-            WireSteps("Look_LockedDrawer", new[]
-            {
-                Step("first time: he forgot the code (a new goal in the case file)", unless: new[] { DrawerOpened, DrawerTried },
-                     line: "office.drawer_lock", setFlag: DrawerTried, then: opener.OpenCodeLock),
-                Step("not opened yet", unless: new[] { DrawerOpened }, then: opener.OpenCodeLock),
-                Step("open, empty", line: "office.drawer_empty"),
-            });
+            // The drawer: Look first (he forgot the code: a new goal), then Use opens the code lock.
+            LookAndUse("Look_LockedDrawer",
+                look: new[]
+                {
+                    Step("open, empty", needs: new[] { DrawerOpened }, line: "office.drawer_empty"),
+                    Step("locked: he forgot the code (a new goal in the case file)", line: "office.drawer_lock", setFlag: DrawerTried),
+                },
+                use: new[] { Step("enter the code", then: opener.OpenCodeLock) },
+                useShowWhen: new[] { DrawerTried }, useHideWhen: new[] { DrawerOpened });
+            // The cork board: Look says what it is, Use opens the map (both from the start).
+            LookAndUse("Look_Map",
+                look: new[] { Step("about the board", line: "office.look_map") },
+                use: new[] { Step("open the map", then: opener.OpenMap) },
+                useShowWhen: null, useHideWhen: null);
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             SaveOpenScene();
 
             // 5. The darkroom
             if (!OpenScene(Scene("Darkroom"))) return;
             opener = Opener();
-            Enlarger(opener);
+            // The enlarger: Look first (a new goal), then Use develops the film.
+            LookAndUse("Look_Enlarger",
+                look: new[]
+                {
+                    Step("after the film is done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
+                    Step("finds out about it", line: "darkroom.look_enlarger", setFlag: EnlargerFound),
+                },
+                use: new[] { Step("develop the film: straight to the close-up, no line", then: opener.OpenEnlarger) },
+                useShowWhen: new[] { EnlargerFound, FilmClue }, useHideWhen: new[] { FilmEnlarged });
             AddPhotoHotspot();
             WireSteps("Look_OldPhoto", new[]
             {
@@ -230,37 +246,28 @@ namespace QuietWitness.EditorTools
             EditorUtility.SetDirty(actions);
         }
 
-        // The enlarger: two actions, one under another.
-        //  Look - the first time he finds out about it (a new goal: enlarge the film); later just a line.
-        //  Use  - shows once he has looked at it (and has the film), until the film is enlarged: develops the frames.
-        private static void Enlarger(CloseUpOpener opener)
+        // Two actions on a hotspot, one under another: Look (top) and Use (bottom, shown by flags).
+        // Two Hotspot Steps on it: the first is what Look does, the second what Use does.
+        private static void LookAndUse(string hotspot, StepSpec[] look, StepSpec[] use, string[] useShowWhen, string[] useHideWhen)
         {
-            var go = GameObject.Find("Look_Enlarger");
+            var go = GameObject.Find(hotspot);
             if (go == null || !go.TryGetComponent<HotspotActions>(out var actions))
             {
-                Debug.LogWarning("[Setup] Look_Enlarger not found in the darkroom.");
+                Debug.LogWarning($"[Setup] {hotspot} not found in {EditorSceneManager.GetActiveScene().name}.");
                 return;
             }
-            // Two Hotspot Steps on it: the first for Look, the second for Use.
             var all = go.GetComponents<HotspotSteps>().ToList();
             while (all.Count < 2) all.Add(go.AddComponent<HotspotSteps>());
-            Fill(all[0], new[]
-            {
-                Step("after the film is done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
-                Step("finds out about it", line: "darkroom.look_enlarger", setFlag: EnlargerFound),
-            });
-            Fill(all[1], new[]
-            {
-                Step("develop the film: straight to the close-up, no line", then: opener.OpenEnlarger),
-            });
+            Fill(all[0], look);
+            Fill(all[1], use);
 
             var field = typeof(HotspotActions).GetField("actions", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             var list = (List<HotspotAction>)field.GetValue(actions);
             if (list.Count == 0) list.Add(new HotspotAction { kind = ActionKind.Look });
             while (list.Count > 2) list.RemoveAt(list.Count - 1);
             if (list.Count < 2) list.Add(new HotspotAction());
-            SetAction(list[0], ActionKind.Look, string.Empty, all[0], null, null);
-            SetAction(list[1], ActionKind.Use, "Use", all[1], new[] { EnlargerFound, FilmClue }, new[] { FilmEnlarged });
+            SetAction(list[0], ActionKind.Look, "Look", all[0], null, null);
+            SetAction(list[1], ActionKind.Use, "Use", all[1], useShowWhen, useHideWhen);
             EditorUtility.SetDirty(actions);
         }
 
@@ -286,7 +293,7 @@ namespace QuietWitness.EditorTools
         private static void SetAction(HotspotAction a, ActionKind kind, string label, HotspotSteps steps, string[] showWhen, string[] hideWhen)
         {
             a.kind = kind;
-            if (kind != ActionKind.Look || string.IsNullOrEmpty(a.label)) a.label = label;
+            a.label = label;
             a.line = string.Empty;
             a.lines = new string[0];
             a.showWhen = showWhen?.ToList() ?? new List<string>();

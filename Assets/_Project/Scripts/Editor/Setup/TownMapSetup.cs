@@ -206,6 +206,7 @@ namespace QuietWitness.EditorTools
                 Debug.LogWarning("[Setup] Look_Map has no Hotspot Steps yet: run Setup > Prologue story first.");
                 return;
             }
+            if (go.GetComponents<HotspotSteps>().Length >= 2) return;   // Look and Use already (Setup > Prologue story)
             var opener = Object.FindFirstObjectByType<CloseUpOpener>();
             if (opener == null) opener = new GameObject("CloseUpOpener").AddComponent<CloseUpOpener>();
             steps.steps.Clear();

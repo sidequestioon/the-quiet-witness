@@ -6525,6 +6525,8 @@ GameObject:
   - component: {fileID: 1592913288}
   - component: {fileID: 1592913290}
   - component: {fileID: 1592913291}
+  - component: {fileID: 1592913293}
+  - component: {fileID: 1592913292}
   m_Layer: 0
   m_Name: Look_Map
   m_TagString: Untagged
@@ -6623,17 +6625,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
-  - kind: 2
-    label: Map
+  - kind: 0
+    label: Look
     line: 
     lines: []
     plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1592913291}
-          m_TargetAssemblyTypeName: QuietWitness.Map.MapOpener, Assembly-CSharp
-          m_MethodName: Open
+        - m_Target: {fileID: 1592913293}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen: []
+    hideWhen: []
+  - kind: 2
+    label: Use
+    line: 
+    lines: []
+    plateWidth: 0
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1592913292}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -6659,6 +6683,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c0abc1bc91b4562918e16fc6c228c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Map.MapOpener
+--- !u!114 &1592913292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592913285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: open the map
+    needs: []
+    unless: []
+    line: 
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710538028}
+          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
+          m_MethodName: OpenMap
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1592913293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592913285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: about the board
+    needs: []
+    unless: []
+    line: office.look_map
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &1635990710
 GameObject:
   m_ObjectHideFlags: 0
@@ -6879,6 +6957,7 @@ GameObject:
   - component: {fileID: 1658080200}
   - component: {fileID: 1658080202}
   - component: {fileID: 1658080203}
+  - component: {fileID: 1658080204}
   m_Layer: 0
   m_Name: Look_LockedDrawer
   m_TagString: Untagged
@@ -6978,7 +7057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
   - kind: 0
-    label: Locked drawer
+    label: Look
     line: 
     lines: []
     plateWidth: 54
@@ -6999,6 +7078,30 @@ MonoBehaviour:
           m_CallState: 2
     showWhen: []
     hideWhen: []
+  - kind: 2
+    label: Use
+    line: 
+    lines: []
+    plateWidth: 0
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1658080204}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen:
+    - office:drawer_tried
+    hideWhen:
+    - office:drawer_opened
   promptOffset: {x: 0.013888836, y: 0.34444475}
   story: 0
 --- !u!114 &1658080203
@@ -7014,32 +7117,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
   steps:
-  - note: 'first time: he forgot the code (a new goal in the case file)'
-    needs: []
-    unless:
+  - note: open, empty
+    needs:
     - office:drawer_opened
-    - office:drawer_tried
+    unless: []
+    line: office.drawer_empty
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+  - note: 'locked: he forgot the code (a new goal in the case file)'
+    needs: []
+    unless: []
     line: office.drawer_lock
     setFlag: office:drawer_tried
     then:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 710538028}
-          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
-          m_MethodName: OpenCodeLock
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - note: not opened yet
+        m_Calls: []
+--- !u!114 &1658080204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658080197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: enter the code
     needs: []
-    unless:
-    - office:drawer_opened
+    unless: []
     line: 
     setFlag: 
     then:
@@ -7057,14 +7167,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - note: open, empty
-    needs: []
-    unless: []
-    line: office.drawer_empty
-    setFlag: 
-    then:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1 &1671831050
 GameObject:
   m_ObjectHideFlags: 0
