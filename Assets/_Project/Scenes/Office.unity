@@ -2967,6 +2967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 683593863}
   - component: {fileID: 683593862}
+  - component: {fileID: 683593864}
   m_Layer: 0
   m_Name: Prologue
   m_TagString: Untagged
@@ -3019,6 +3020,21 @@ Transform:
   - {fileID: 2129233244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &683593864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683593861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8cc19f0e65a44afb9f5b75e785efe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotLock
+  untilFlag: prologue:envelope_opened
+  except:
+  - {fileID: 567360257}
 --- !u!1 &695122153
 GameObject:
   m_ObjectHideFlags: 0
