@@ -18,4 +18,4 @@ MonoBehaviour:
   unlockCondition:
     requiredClues: []
     requiredFlags:
-    - prologue:ready
+    - prologue:envelope_opened

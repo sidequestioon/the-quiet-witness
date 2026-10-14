@@ -126,7 +126,7 @@ namespace QuietWitness.Dialogue
             speakerBox.SetActive(!line.IsNarration);
             speakerText.text = line.Speaker;
             // Narration and the investigator's thoughts are in italics.
-            lineText.fontStyle = line.IsNarration ? FontStyles.Italic : FontStyles.Normal;
+            lineText.fontStyle = line.IsNarration ? FontStyles.Normal : FontStyles.Normal;
             lineText.text = line.Text;
             lineText.maxVisibleCharacters = 0;
             lineText.ForceMeshUpdate();
@@ -165,7 +165,7 @@ namespace QuietWitness.Dialogue
                 if (DialogueRunner.IsSilence(text))
                 {
                     action = () => StartCoroutine(StaySilent(inkIndex));
-                    label = "<i>... (stay silent)</i>";
+                    label = "... (stay silent)";
                 }
                 else
                 {
@@ -220,7 +220,7 @@ namespace QuietWitness.Dialogue
             busy = true;
             continueHint.SetActive(false);
             speakerBox.SetActive(false);
-            lineText.fontStyle = FontStyles.Italic;
+            lineText.fontStyle = FontStyles.Normal;
             lineText.maxVisibleCharacters = int.MaxValue;
 
             for (int dots = 1; dots <= 3; dots++)

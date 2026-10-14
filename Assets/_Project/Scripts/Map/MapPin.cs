@@ -82,7 +82,7 @@ namespace QuietWitness.Map
             if (pin != null)
                 pin.rectTransform.localScale = Vector3.one * (hovered && !isHere ? 1.15f : 1f);
             if (label != null)
-                label.fontStyle = hovered && !isHere ? FontStyles.Underline : FontStyles.Normal;
+                label.fontStyle = hovered && !isHere ? FontStyles.Normal : FontStyles.Normal;
         }
 
         public void OnPointerEnter(PointerEventData e) => hovered = true;

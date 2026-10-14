@@ -14,7 +14,7 @@ using static QuietWitness.EditorTools.SetupUtil;
 namespace QuietWitness.EditorTools
 {
     // The case file: the icon at the top of the screen, and the screen it opens -
-    // Objectives (main goal + steps) and Inventory (the things found, turned left and right).
+    // Objectives (main goal, steps, mini steps) and Inventory (the things found, turned left and right).
     // Also makes the five things from the envelope into evidence (Cases/Evidence) and links them
     // to the envelope close-up, and makes the Objectives list (Cases/Objectives.asset).
     // Lives on Systems, so it is in every scene. Running it again rebuilds the screen
@@ -42,14 +42,8 @@ namespace QuietWitness.EditorTools
             ("Item_FilmClip",  "Envelope_FilmClip",  "envelope_filmclip",  "Film Clip"),
         };
 
-        // First goals. id, main, text, shown when, done when.
-        private static readonly (string id, bool main, string text, string show, string done)[] Goals =
-        {
-            ("who_sent", true,  "Find out who sent the envelope, and why.", "prologue:envelope_opened", ""),
-            ("riviera",  false, "Be at the Riviera for the last show. Row seven, seat twelve.", "prologue:envelope_opened", "visited:riviera"),
-            ("diner",    false, "Ask around at the all-night diner on Main.", "prologue:envelope_opened", "visited:diner"),
-            ("film",     false, "Take a closer look at the film frames in the darkroom.", "prologue:envelope_opened", "darkroom:film_enlarged"),
-        };
+        // First goals: the same as Setup > Case file: objectives look.
+        private static (string id, bool main, bool mini, string text, string show, string done)[] Goals => ObjectivesLookSetup.Goals;
 
         [MenuItem("Tools/The Quiet Witness/Setup/Case file")]
         private static void Run()
@@ -117,6 +111,7 @@ namespace QuietWitness.EditorTools
                 var g = list.GetArrayElementAtIndex(i);
                 g.FindPropertyRelative("id").stringValue = Goals[i].id;
                 g.FindPropertyRelative("main").boolValue = Goals[i].main;
+                g.FindPropertyRelative("mini").boolValue = Goals[i].mini;
                 g.FindPropertyRelative("text").stringValue = Goals[i].text;
                 g.FindPropertyRelative("showWhen").stringValue = Goals[i].show;
                 g.FindPropertyRelative("doneWhen").stringValue = Goals[i].done;
@@ -204,15 +199,7 @@ namespace QuietWitness.EditorTools
             // Objectives page
             var objectivesPage = Rect("ObjectivesPage", window);
             Stretch(objectivesPage);
-            var mainGoal = Text("MainGoal", objectivesPage, font, 46f, Yellow, TextAlignmentOptions.Bottom);
-            Place(mainGoal.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0f), new Vector2(60f, 90f), new Vector2(1100f, 200f));
-            mainGoal.text = "Find out who sent the envelope, and why.";
-            var line = Img("Line", objectivesPage, null, new Color(Yellow.r, Yellow.g, Yellow.b, 0.4f));
-            Place(line.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(60f, 50f), new Vector2(120f, 2f));
-            var steps = Text("Steps", objectivesPage, font, 32f, new Color(Plain.r, Plain.g, Plain.b, 0.9f), TextAlignmentOptions.Top);
-            Place(steps.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1f), new Vector2(60f, 10f), new Vector2(1000f, 460f));
-            steps.lineSpacing = 40f;
-            steps.text = "Be at the Riviera for the last show.\nAsk around at the all-night diner on Main.";
+            var objectivesView = ObjectivesLookSetup.BuildPage(objectivesPage, font, objectives);
 
             // Inventory page
             var inventoryPage = Rect("InventoryPage", window);
@@ -279,8 +266,7 @@ namespace QuietWitness.EditorTools
             Set("inventoryTab", inventoryTab);
             Set("objectives", objectives);
             Set("objectivesPage", objectivesPage.gameObject);
-            Set("mainGoal", mainGoal);
-            Set("steps", steps);
+            Set("objectivesView", objectivesView);
             Set("inventoryPage", inventoryPage.gameObject);
             Set("itemTemplate", template);
             Set("itemName", itemName);

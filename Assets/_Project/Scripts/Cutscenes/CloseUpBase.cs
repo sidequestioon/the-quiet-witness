@@ -169,6 +169,7 @@ namespace QuietWitness.Cutscenes
                 HideCaption();
                 return;
             }
+            if (captionText.fontSharedMaterial == null && captionText.font != null) captionText.fontSharedMaterial = captionText.font.material;
             captionText.text = line.text.Replace("\\n", "\n");
             float maxWidth = line.plateWidth > 0 ? line.plateWidth * 4f : captionMaxWidth;   // plate width in pixels, at 4x
             Vector2 size = captionText.GetPreferredValues(captionText.text, maxWidth - platePadding.x * 2f, 0f);

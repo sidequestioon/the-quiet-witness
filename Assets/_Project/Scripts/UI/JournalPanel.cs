@@ -126,7 +126,7 @@ namespace QuietWitness.UI
                     clueButtons.Add(Instantiate(clueTemplate, clueTemplate.transform.parent));
 
                 var clue = clues[i];
-                string label = clue.IsKey ? $"<b>{clue.Title}</b>" : clue.Title;
+                string label = clue.IsKey ? $"{clue.Title}" : clue.Title;
                 if (state != null && !state.HasFlag(SeenFlag(clue))) label += "  <color=#B3261E>NEW</color>";
                 if (clue == selected) label = "> " + label;
 
@@ -158,7 +158,7 @@ namespace QuietWitness.UI
             var history = DialogueRunner.Instance != null ? DialogueRunner.Instance.History : null;
             if (history == null || history.Count == 0)
             {
-                logText.text = "<i>No conversations yet.</i>";
+                logText.text = "No conversations yet.";
             }
             else
             {
@@ -166,8 +166,8 @@ namespace QuietWitness.UI
                 foreach (var line in history)
                 {
                     if (line.Text == DialogueRunner.Separator) sb.Append("\n<align=center>* * *</align>\n");
-                    else if (line.IsNarration) sb.Append("<i>").Append(line.Text).Append("</i>\n");
-                    else sb.Append("<b>").Append(line.Speaker).Append(":</b> ").Append(line.Text).Append('\n');
+                    else if (line.IsNarration) sb.Append("").Append(line.Text).Append("\n");
+                    else sb.Append("").Append(line.Speaker).Append(": ").Append(line.Text).Append('\n');
                 }
                 logText.text = sb.ToString();
             }

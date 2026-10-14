@@ -227,6 +227,7 @@ namespace QuietWitness.World
         // Size of the whole line, so the plate is ready before the letters come.
         private void Measure()
         {
+            if (text.fontSharedMaterial == null && text.font != null) text.fontSharedMaterial = text.font.material;   // stale after a font change
             text.rectTransform.sizeDelta = new Vector2(MaxWidth / PixelsPerUnit, 1f);
             text.maxVisibleCharacters = 99999;
             text.ForceMeshUpdate(true, true);

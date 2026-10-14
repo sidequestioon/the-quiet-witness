@@ -15,21 +15,49 @@ MonoBehaviour:
   goals:
   - id: who_sent
     main: 1
+    mini: 0
     text: Find out who sent the envelope, and why.
     showWhen: prologue:envelope_opened
     doneWhen: 
-  - id: riviera
+  - id: badge
     main: 0
-    text: Be at the Riviera for the last show. Row seven, seat twelve.
+    mini: 0
+    text: Get my old badge out of the locked drawer.
     showWhen: prologue:envelope_opened
-    doneWhen: visited:riviera
-  - id: diner
+    doneWhen: office:drawer_opened
+  - id: badge_code
     main: 0
-    text: Ask around at the all-night diner on Main.
+    mini: 1
+    text: Find the four numbers for the lock.
     showWhen: prologue:envelope_opened
-    doneWhen: visited:diner
+    doneWhen: darkroom:photo_seen
   - id: film
     main: 0
-    text: Take a closer look at the film frames in the darkroom.
+    mini: 0
+    text: Take a closer look at the film from the envelope.
     showWhen: prologue:envelope_opened
     doneWhen: darkroom:film_enlarged
+  - id: film_enlarger
+    main: 0
+    mini: 1
+    text: Use the enlarger in the darkroom.
+    showWhen: prologue:envelope_opened
+    doneWhen: darkroom:film_enlarged
+  - id: riviera
+    main: 0
+    mini: 0
+    text: Be at the Riviera for the last show.
+    showWhen: prologue:envelope_opened
+    doneWhen: riviera:seat
+  - id: riviera_go
+    main: 0
+    mini: 1
+    text: Get downtown to the Riviera.
+    showWhen: prologue:envelope_opened
+    doneWhen: visited:riviera
+  - id: riviera_seat
+    main: 0
+    mini: 1
+    text: Find row seven, seat twelve.
+    showWhen: prologue:envelope_opened
+    doneWhen: riviera:seat

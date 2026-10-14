@@ -49,7 +49,7 @@ namespace QuietWitness.UI
         {
             if (!announceClues) return;
             string kind = clue.IsKey ? "Key evidence" : "New clue";
-            queue.Enqueue($"{kind}: <b>{clue.Title}</b>\n<size=75%>[J] Case file</size>");
+            queue.Enqueue($"{kind}: {clue.Title}\n<size=75%>[J] Case file</size>");
             if (!playing) StartCoroutine(Play());
         }
 

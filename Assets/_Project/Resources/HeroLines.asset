@@ -64,3 +64,37 @@ MonoBehaviour:
   - id: map.riviera
     text: The Riviera. Row seven, seat twelve.
     plateWidth: 0
+  - id: map.leave_office
+    text: Am I done here? Once I walk out that door, I'm not coming back tonight.
+    plateWidth: 0
+  - id: office.drawer_lock
+    text: Four numbers. I'd have picked something I couldn't forget. Didn't help.
+    plateWidth: 0
+  - id: office.drawer_badge
+    text: My badge. Eleven years, one shield. Officially it isn't mine anymore. In
+      a dark projection booth, nobody checks.
+    plateWidth: 0
+  - id: office.drawer_empty
+    text: Empty now. Just dust and an old habit.
+    plateWidth: 0
+  - id: office.map_not_yet
+    text: Not yet. I'm not walking into that cinema with empty pockets and no idea
+      who I'm looking for.
+    plateWidth: 0
+  - id: darkroom.look_photo
+    text: Me, fresh out of the academy. Badge one, one, seven, four. Some numbers
+      you don't forget.
+    plateWidth: 0
+  - id: darkroom.enlarger_film
+    text: Two frames, a few seconds of somebody's night. Let's see whose.
+    plateWidth: 0
+  - id: darkroom.film_print
+    text: Not a frame from any movie. Somebody pointed a camera at the booth window.
+      Same man, twice, staring right back at the lens.
+    plateWidth: 0
+  - id: darkroom.enlarger_done
+    text: I've seen his face. Now I need a name to go with it.
+    plateWidth: 0
+  - id: prologue.ready
+    text: Riviera. Last show's at eleven thirty. Time to go.
+    plateWidth: 0
