@@ -39,6 +39,8 @@ namespace QuietWitness.Map
 
         public void Open()
         {
+            // The paper town map, once it is made (Setup > Town map), takes over.
+            if (TownMap.Instance != null) { TownMap.Instance.Open(); return; }
             if (IsOpen) return;
             if (SceneLoader.Instance != null && SceneLoader.Instance.IsTravelling) return;
 

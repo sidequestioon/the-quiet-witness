@@ -58,3 +58,9 @@ MonoBehaviour:
     text: Mix them wrong and a photo forgets everything it saw. Mix them right and
       it remembers too much.
     plateWidth: 67
+  - id: map.default
+    text: Millbrook. Every street has a story, and none of them want to tell it.
+    plateWidth: 0
+  - id: map.riviera
+    text: The Riviera. Row seven, seat twelve.
+    plateWidth: 0
