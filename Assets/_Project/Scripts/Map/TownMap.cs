@@ -265,6 +265,12 @@ namespace QuietWitness.Map
             if (go != null && go.activeSelf != on) go.SetActive(on);
         }
 
+        // The "Go there" row on the plate was clicked.
+        public void GoShown()
+        {
+            if (shownInfo != null && shownInfo.CanGo) Go(shownInfo.Location);
+        }
+
         public bool IsShowing(MapDistrict district) => district != null && shownInfo == district;
 
         // A dot was clicked this frame (so the click doesn't also close its plate).
@@ -310,7 +316,10 @@ namespace QuietWitness.Map
         {
             if (!Application.isPlaying || Instance != this || !open || shownInfo == null || asking) return;
             var mouse = Mouse.current;
-            if (mouse != null && mouse.leftButton.wasReleasedThisFrame && clickFrame != Time.frameCount) HideInfo(null);
+            if (mouse == null || !mouse.leftButton.wasReleasedThisFrame || clickFrame == Time.frameCount) return;
+            // A click on the plate itself keeps it open; anywhere else closes it.
+            if (info != null && RectTransformUtility.RectangleContainsScreenPoint(info, mouse.position.ReadValue(), null)) return;
+            HideInfo(null);
         }
 
         // Outside Play mode: the board with the info box over a district, while Preview is on.

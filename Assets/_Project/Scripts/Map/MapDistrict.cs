@@ -44,6 +44,7 @@ namespace QuietWitness.Map
         public string Title => title;
         public string Description => description;
         public string Hint => hint;
+        public LocationData Location => location;
         public Cutscenes.CaptionSide Side => side;
         public Vector2 PlateOffset => plateOffset;
         public bool IsLit { get; private set; }

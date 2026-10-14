@@ -124,9 +124,16 @@ namespace QuietWitness.EditorTools
                 var le = divider.GetComponent<LayoutElement>();
                 le.minHeight = le.preferredHeight = 2f;
 
-                var row = new GameObject("ActionRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+                var row = new GameObject("ActionRow", typeof(RectTransform), typeof(Image), typeof(HorizontalLayoutGroup));
                 row.transform.SetParent(info, false);
+                var back = row.GetComponent<Image>();      // the soft plate behind it on hover
+                back.sprite = plate.sprite;
+                back.type = plate.type;
+                back.pixelsPerUnitMultiplier = plate.pixelsPerUnitMultiplier;
+                back.color = Color.clear;
+                back.raycastTarget = true;                // catches the mouse
                 var h = row.GetComponent<HorizontalLayoutGroup>();
+                h.padding = new RectOffset(14, 18, 6, 6);
                 h.childAlignment = TextAnchor.MiddleCenter;
                 h.spacing = 10f;
                 h.childControlWidth = h.childControlHeight = true;
@@ -153,6 +160,13 @@ namespace QuietWitness.EditorTools
                 divider.transform.SetSiblingIndex(info.childCount - 1);
                 row.transform.SetSiblingIndex(info.childCount - 1);
                 if (infoTail != null) infoTail.transform.SetAsLastSibling();
+
+                var goButton = row.AddComponent<MapGoButton>();
+                var gso = new SerializedObject(goButton);
+                gso.FindProperty("back").objectReferenceValue = back;
+                gso.FindProperty("icon").objectReferenceValue = iconGo.transform;
+                gso.FindProperty("label").objectReferenceValue = action;
+                gso.ApplyModifiedPropertiesWithoutUndo();
 
                 mso.FindProperty("infoDivider").objectReferenceValue = divider;
                 mso.FindProperty("infoActionRow").objectReferenceValue = row;
