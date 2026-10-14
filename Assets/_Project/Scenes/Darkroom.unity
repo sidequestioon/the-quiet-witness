@@ -610,7 +610,7 @@ MonoBehaviour:
     unless:
     - darkroom:film_enlarged
     line: darkroom.enlarger_film
-    setFlag: 
+    setFlag: darkroom:enlarger_found
     then:
       m_PersistentCalls:
         m_Calls:

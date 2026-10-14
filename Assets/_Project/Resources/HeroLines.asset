@@ -68,7 +68,8 @@ MonoBehaviour:
     text: Am I done here? Once I walk out that door, I'm not coming back tonight.
     plateWidth: 0
   - id: office.drawer_lock
-    text: Four numbers. I'd have picked something I couldn't forget. Didn't help.
+    text: Locked. Four numbers, and I can't remember a single one. I wrote them down
+      somewhere, I'm sure of it.
     plateWidth: 0
   - id: office.drawer_badge
     text: My badge. Eleven years, one shield. Officially it isn't mine anymore. In

@@ -23,8 +23,8 @@ namespace QuietWitness.EditorTools
     //  - the cork board map stays as it is: he can leave earlier, the map asks "Am I done here?"
     // Adds his lines to Hero Lines, two new pieces of evidence; writes the goals (the same as
     // Setup > Case file: objectives look); builds the two close-ups on Systems.
-    // Lines, evidence and hotspot steps are made once and never overwritten; the close-up screens are
-    // rebuilt on every run. Menu: Tools > The Quiet Witness > Setup > Prologue story
+    // Lines and evidence are made once and never overwritten; hotspot steps are remade only when the story
+    // here changed; the close-up screens are rebuilt on every run. Menu: Tools > The Quiet Witness > Setup > Prologue story
     public static class PrologueStorySetup
     {
         private const string Ui = ProjectRoot + "/Art/UI";
@@ -39,12 +39,14 @@ namespace QuietWitness.EditorTools
         public const string FilmEnlarged = "darkroom:film_enlarged";
         public const string Ready = "prologue:ready";
         public const string PhotoSeen = "darkroom:photo_seen";
+        public const string DrawerTried = "office:drawer_tried";
+        public const string EnlargerFound = "darkroom:enlarger_found";
         private const string EnvelopeOpened = "prologue:envelope_opened";
         private const string FilmClue = "clue:envelope_filmclip";
 
         private static readonly (string id, string text)[] Lines =
         {
-            ("office.drawer_lock", "Four numbers. I'd have picked something I couldn't forget. Didn't help."),
+            ("office.drawer_lock", "Locked. Four numbers, and I can't remember a single one. I wrote them down somewhere, I'm sure of it."),
             ("office.drawer_badge", "My badge. Eleven years, one shield. Officially it isn't mine anymore. In a dark projection booth, nobody checks."),
             ("office.drawer_empty", "Empty now. Just dust and an old habit."),
             ("office.map_not_yet", "Not yet. I'm not walking into that cinema with empty pockets and no idea who I'm looking for."),
@@ -113,6 +115,8 @@ namespace QuietWitness.EditorTools
             var opener = Opener();
             WireSteps("Look_LockedDrawer", new[]
             {
+                Step("first time: he forgot the code (a new goal in the case file)", unless: new[] { DrawerOpened, DrawerTried },
+                     line: "office.drawer_lock", setFlag: DrawerTried, then: opener.OpenCodeLock),
                 Step("not opened yet", unless: new[] { DrawerOpened }, then: opener.OpenCodeLock),
                 Step("open, empty", line: "office.drawer_empty"),
             });
@@ -125,7 +129,7 @@ namespace QuietWitness.EditorTools
             WireSteps("Look_Enlarger", new[]
             {
                 Step("the film from the envelope", needs: new[] { FilmClue }, unless: new[] { FilmEnlarged },
-                     line: "darkroom.enlarger_film", then: opener.OpenEnlarger),
+                     line: "darkroom.enlarger_film", then: opener.OpenEnlarger, setFlag: EnlargerFound),
                 Step("already done", needs: new[] { FilmEnlarged }, line: "darkroom.enlarger_done"),
                 Step("before the envelope", line: "darkroom.look_enlarger"),
             });
@@ -197,7 +201,10 @@ namespace QuietWitness.EditorTools
             }
             bool fresh = !go.TryGetComponent<HotspotSteps>(out var steps);
             if (fresh) steps = go.AddComponent<HotspotSteps>();
-            if (fresh || steps.steps.Count == 0)
+            // Rebuilt when the steps here are not the ones this setup makes (the story changed); kept otherwise.
+            bool same = steps.steps.Count == specs.Length &&
+                        steps.steps.Select(s => s.note + "|" + s.setFlag).SequenceEqual(specs.Select(s => s.note + "|" + (s.setFlag ?? string.Empty)));
+            if (fresh || !same)
             {
                 steps.steps.Clear();
                 foreach (var spec in specs)

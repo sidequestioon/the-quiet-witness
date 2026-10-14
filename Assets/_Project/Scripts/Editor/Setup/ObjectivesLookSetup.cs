@@ -13,13 +13,14 @@ namespace QuietWitness.EditorTools
     // "CURRENT OBJECTIVE" over it, a dashed line down the left, the steps on the line and the
     // mini steps under them; done ones crossed out. Also writes the goals for now:
     //   Find out who sent the envelope, and why.
-    //     Get my old badge out of the locked drawer.
-    //       Find the four numbers for the lock.
-    //     Take a closer look at the film from the envelope.
-    //       Use the enlarger in the darkroom.
     //     Be at the Riviera for the last show.
     //       Get downtown to the Riviera.
     //       Find row seven, seat twelve.
+    //     Take a closer look at the film from the envelope.
+    //       Find something to make the frames bigger.
+    //       Enlarge the frames with the enlarger.     <- once he has found the enlarger
+    //     Open the locked drawer.                     <- once he has tried the drawer
+    //       Find the four numbers. I wrote them down somewhere.
     // Rebuilds only the Objectives page (the rest of the case file stays). Run after Setup > Case file.
     // Menu: Tools > The Quiet Witness > Setup > Case file: objectives look
     public static class ObjectivesLookSetup
@@ -36,13 +37,14 @@ namespace QuietWitness.EditorTools
         public static readonly (string id, bool main, bool mini, string text, string show, string done)[] Goals =
         {
             ("who_sent",     true,  false, "Find out who sent the envelope, and why.", Opened, ""),
-            ("badge",        false, false, "Get my old badge out of the locked drawer.", Opened, "office:drawer_opened"),
-            ("badge_code",   false, true,  "Find the four numbers for the lock.", Opened, "darkroom:photo_seen"),
-            ("film",         false, false, "Take a closer look at the film from the envelope.", Opened, "darkroom:film_enlarged"),
-            ("film_enlarger",false, true,  "Use the enlarger in the darkroom.", Opened, "darkroom:film_enlarged"),
             ("riviera",      false, false, "Be at the Riviera for the last show.", Opened, "riviera:seat"),
             ("riviera_go",   false, true,  "Get downtown to the Riviera.", Opened, "visited:riviera"),
             ("riviera_seat", false, true,  "Find row seven, seat twelve.", Opened, "riviera:seat"),
+            ("film",         false, false, "Take a closer look at the film from the envelope.", Opened, "darkroom:film_enlarged"),
+            ("film_find",    false, true,  "Find something to make the frames bigger.", Opened, "darkroom:enlarger_found"),
+            ("film_enlarge", false, true,  "Enlarge the frames with the enlarger.", "darkroom:enlarger_found", "darkroom:film_enlarged"),
+            ("drawer",       false, false, "Open the locked drawer.", "office:drawer_tried", "office:drawer_opened"),
+            ("drawer_code",  false, true,  "Find the four numbers. I wrote them down somewhere.", "office:drawer_tried", "darkroom:photo_seen"),
         };
 
         [MenuItem("Tools/The Quiet Witness/Setup/Case file: objectives look")]
