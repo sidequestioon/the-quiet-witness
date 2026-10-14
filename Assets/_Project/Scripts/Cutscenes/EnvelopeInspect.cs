@@ -188,7 +188,7 @@ namespace QuietWitness.Cutscenes
             // Now they can be moved, and their dots clicked. [Close] when done.
             foreach (var item in items) item.SetInteractive(true);
             ShowPrompt(closeIcon, "Close");
-            yield return WaitForPress(anywhere: false, keys: false, escape: true);   // only a click on Close (or Esc)
+            yield return WaitForPress(anywhere: false, keys: true, escape: true);    // E / Space / Enter, Esc, or a click on Close
             ShowPrompt(null, null);
             UiSounds.Play(s => s.click);
             HideCaption();
