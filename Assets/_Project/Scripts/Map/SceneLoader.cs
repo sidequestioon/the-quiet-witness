@@ -45,6 +45,12 @@ namespace QuietWitness.Map
         public void Travel(LocationData location, bool quick)
         {
             if (IsTravelling || location == null) return;
+            // A place that has no scene yet: its title card says so, and we stay where we are.
+            if (!Application.CanStreamedLevelBeLoaded(location.SceneName))
+            {
+                StartCoroutine(NotYetRoutine(location.DisplayName));
+                return;
+            }
             StartCoroutine(LoadRoutine(location.SceneName, location.DisplayName, null,
                 () => GameState.Instance.SetFlag(location.VisitedFlag), quick));
         }
@@ -90,6 +96,24 @@ namespace QuietWitness.Map
             InputBlocker.Pop();
             IsTravelling = false;
             Arrived?.Invoke();
+        }
+
+        [Tooltip("Under the place's name when it has no scene yet.")]
+        [SerializeField] private string notYetText = "To be continued";
+
+        private IEnumerator NotYetRoutine(string displayName)
+        {
+            IsTravelling = true;
+            InputBlocker.Push();
+            fader.blocksRaycasts = true;
+            yield return Fade(0f, 1f, fadeTime);
+            title.text = $"{displayName}\n<size=60%>{notYetText}</size>";
+            yield return new WaitForSeconds(titleTime + 1.3f);
+            title.text = "";
+            yield return Fade(1f, 0f, fadeTime);
+            fader.blocksRaycasts = false;
+            InputBlocker.Pop();
+            IsTravelling = false;
         }
 
         // A dip to black inside a scene (a cut in a cutscene), without loading anything.
