@@ -103,7 +103,7 @@ namespace QuietWitness.Save
         {
             if (!HasSave)
             {
-                if (JournalToast.Instance != null) JournalToast.Instance.Notify("No save yet");
+                Debug.Log("[Save] No save yet.");
                 return;
             }
 

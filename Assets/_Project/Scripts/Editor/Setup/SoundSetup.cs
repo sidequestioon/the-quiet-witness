@@ -40,19 +40,7 @@ namespace QuietWitness.EditorTools
                 ambience.SaveAndReimport();
             }
 
-            // Map open / close.
-            var root = PrefabUtility.LoadPrefabContents(SystemsPrefab);
-            var map = root.GetComponentInChildren<MapPanel>(true);
-            if (map != null)
-            {
-                var so = new SerializedObject(map);
-                so.FindProperty("openSound").objectReferenceValue = Clip($"{SfxFolder}/Map_Open.wav");
-                so.FindProperty("closeSound").objectReferenceValue = Clip($"{SfxFolder}/Map_Close.wav");
-                so.ApplyModifiedPropertiesWithoutUndo();
-                PrefabUtility.SaveAsPrefabAsset(root, SystemsPrefab);
-            }
-            else Debug.LogWarning("[Setup] No Map Panel in Systems.prefab: the map stays silent.");
-            PrefabUtility.UnloadPrefabContents(root);
+            // Map open / close sounds: Setup > Town map gives them to the town map.
 
             // Office.
             if (!OpenScene(Scene("Office"))) return;

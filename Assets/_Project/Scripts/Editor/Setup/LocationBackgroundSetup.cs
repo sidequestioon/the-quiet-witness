@@ -24,7 +24,7 @@ namespace QuietWitness.EditorTools
     public static class LocationBackgroundSetup
     {
         private const string LocationsFolder = ProjectRoot + "/Art/Locations";
-        private static readonly string[] Scenes = { "Office", "Darkroom", "Diner", "PoliceStation" };
+        private static readonly string[] Scenes = { "Office", "Darkroom" };
         // Pixels between the picture's bottom row and the hero's feet (the camera shows 8 below the feet).
         private const int FeetAboveBottom = 10;
         // How far before the picture's edge the hero stops, in world units.
