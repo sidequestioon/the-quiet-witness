@@ -53,8 +53,8 @@ namespace QuietWitness.EditorTools
             ("office.map_not_yet", "Not yet. I'm not walking into that cinema with empty pockets and no idea who I'm looking for."),
             ("darkroom.look_photo", "Me, fresh out of the academy. Badge one, one, seven, four. Some numbers you don't forget."),
             ("darkroom.enlarger_film", "Two frames, a few seconds of somebody's night. Let's see whose."),
-            ("darkroom.film_print", "Not a frame from any movie. Somebody pointed a camera at the booth window. Same man, twice, staring right back at the lens."),
-            ("darkroom.enlarger_done", "I've seen his face. Now I need a name to go with it."),
+            ("darkroom.film_print", "A cinema hall, shot from the back rows. Somebody's telling me where to be tonight."),
+            ("darkroom.enlarger_done", "A full house and a picture on the screen. The Riviera, if I had to bet."),
             ("prologue.ready", "Riviera. Last show's at eleven thirty. Time to go."),
         };
 

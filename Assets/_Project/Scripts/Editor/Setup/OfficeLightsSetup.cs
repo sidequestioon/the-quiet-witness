@@ -138,8 +138,7 @@ namespace QuietWitness.EditorTools
                 }
                 light.color = spec.Color;
                 light.intensity = spec.Intensity;
-                light.volumeIntensityEnabled = spec.Haze > 0f;
-                light.volumeIntensity = spec.Haze;
+                light.volumeIntensity = spec.Haze;   // the haze is on whenever this is above 0 (Unity 6)
 
                 switch (spec.Kind)
                 {
@@ -301,7 +300,6 @@ namespace QuietWitness.EditorTools
             glow.falloffIntensity = 0.6f;
             glow.color = new Color(1f, 0.45f, 0.35f);
             glow.intensity = 0.8f;
-            glow.volumeIntensityEnabled = true;
             glow.volumeIntensity = 0.08f;
 
             var flicker = go.AddComponent<FlickerLight>();

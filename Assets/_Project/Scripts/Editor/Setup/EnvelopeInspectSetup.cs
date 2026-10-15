@@ -38,7 +38,7 @@ namespace QuietWitness.EditorTools
             ("Item_Matchbook", new Vector2(130f, -280f), 10f,
              "The all-night diner on Main. Nobody goes there for the coffee."),
             ("Item_FilmClip",  new Vector2(420f, -230f), -9f,
-             "Two frames cut out of a reel. The same face, twice."),
+             "Two frames cut out of a reel. Too small to make out by eye."),
         };
 
         private const float IconPixels = 73f;     // the prompt icon, as big as in the room on a 1080p screen

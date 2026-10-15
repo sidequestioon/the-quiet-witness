@@ -1596,7 +1596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Cutscenes.InspectItem
   clue: {fileID: 11400000, guid: d8e4bb94738834d3e9f38f085701507c, type: 2}
   lines:
-  - Two frames cut out of a reel. The same face, twice.
+  - Two frames cut out of a reel. Too small to make out by eye.
   plateWidth: 410
   fontSize: 0
   platePadding: {x: 0, y: 0}

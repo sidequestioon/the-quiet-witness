@@ -90,11 +90,10 @@ MonoBehaviour:
     text: Two frames, a few seconds of somebody's night. Let's see whose.
     plateWidth: 0
   - id: darkroom.film_print
-    text: Not a frame from any movie. Somebody pointed a camera at the booth window.
-      Same man, twice, staring right back at the lens.
+    text: A cinema hall, shot from the back rows. Somebody's telling me where to be tonight.
     plateWidth: 0
   - id: darkroom.enlarger_done
-    text: I've seen his face. Now I need a name to go with it.
+    text: A full house and a picture on the screen. The Riviera, if I had to bet.
     plateWidth: 0
   - id: prologue.ready
     text: Riviera. Last show's at eleven thirty. Time to go.
