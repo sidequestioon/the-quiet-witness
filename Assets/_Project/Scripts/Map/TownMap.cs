@@ -2,6 +2,7 @@ using QuietWitness.Audio;
 using QuietWitness.Core;
 using QuietWitness.UI;
 using QuietWitness.World;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,6 +81,31 @@ namespace QuietWitness.Map
         [SerializeField] private string leaveYes = "Go";
         [SerializeField] private string leaveNo = "Stay";
 
+        [Header("Taking the map off the board (leaving the office for good)")]
+        [Tooltip("In this scene, the first time he leaves through the map, the map tears itself off the board " +
+                 "and goes with him. Empty = never.")]
+        [SerializeField] private string tearInScene = "Office";
+        [Tooltip("Set once the map is taken.")]
+        [SerializeField] private string takenFlag = "office:map_taken";
+        [Tooltip("The board's picture (the Board object).")]
+        [SerializeField] private Image boardImage;
+        [Tooltip("The board without the map: a lighter patch where it hung, the tape left behind.")]
+        [SerializeField] private Sprite emptyBoard;
+        [Tooltip("The map on its own, over the board (hidden until it tears off).")]
+        [SerializeField] private RectTransform tornMap;
+        [Tooltip("The things pinned over the edge of the map (photos, clippings): they stay on the board, " +
+                 "the map slides out from under them. Hidden until it tears off.")]
+        [SerializeField] private RectTransform frontItems;
+        [Tooltip("The map coming off and folding up, drawn ahead frame by frame (Art/UI/Map/Fold): Unity only " +
+                 "swaps the pictures and puts them on whole pixels, so the pixel art never breaks apart.")]
+        [SerializeField] private Sprite[] foldFrames;
+        [Tooltip("Where each fold frame's centre is (board pixels from the board's centre). Filled by the Setup.")]
+        [SerializeField] private Vector2[] foldCentres;
+        [Tooltip("The first frames still hang under the photos (it tugs at the tape); after that it is over everything.")]
+        [SerializeField] private int foldPinned = 7;
+        [Tooltip("Seconds per fold frame.")]
+        [SerializeField] private float foldFrameTime = 0.058f;
+
         [Header("Sounds")]
         [SerializeField] private AudioClip openSound;
         [SerializeField] private AudioClip closeSound;
@@ -92,6 +118,7 @@ namespace QuietWitness.Map
         private bool open;
         private float shown;
         private bool asking;   // the "Am I done here?" question is up
+        private bool tearing;  // the map is tearing off the board
 
         private void Awake()
         {
@@ -151,7 +178,7 @@ namespace QuietWitness.Map
         // Called by a district dot or a pin.
         public void Go(LocationData location)
         {
-            if (!open || location == null || asking) return;
+            if (!open || location == null || asking || tearing) return;
             UiSounds.Play(s => s.click);
 
             // Leaving the office for good: "Am I done here?" first.
@@ -170,9 +197,81 @@ namespace QuietWitness.Map
 
         private void Leave(LocationData location)
         {
+            var state = GameState.Instance;
+            bool tear = tornMap != null && boardImage != null && emptyBoard != null &&
+                        !string.IsNullOrWhiteSpace(tearInScene) && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == tearInScene &&
+                        state != null && !state.HasFlag(takenFlag);
+            if (tear)
+            {
+                StartCoroutine(TearThenLeave(location));
+                return;
+            }
             asking = false;
             Close(sound: false);
             if (SceneLoader.Instance != null) SceneLoader.Instance.Travel(location);
+        }
+
+        // The map pulls itself off the board (no hands), folds up and drops away; then he travels.
+        private IEnumerator TearThenLeave(LocationData location)
+        {
+            tearing = true;                                   // no Esc, no clicks while it plays
+            if (group != null) { group.blocksRaycasts = true; group.interactable = false; }
+            HideInfo(null);
+            if (hint != null) hint.transform.parent.gameObject.SetActive(false);
+            foreach (var d in districts) if (d != null) d.gameObject.SetActive(false);
+            foreach (var p in pins) if (p != null) p.gameObject.SetActive(false);
+            GameState.Instance?.SetFlag(takenFlag);
+            yield return new WaitForSecondsRealtime(0.25f);
+
+            // swap: the board without the map, the map on its own on top
+            var full = boardImage.sprite;
+            boardImage.sprite = emptyBoard;
+            tornMap.gameObject.SetActive(true);
+            if (frontItems != null) { frontItems.gameObject.SetActive(true); frontItems.SetAsLastSibling(); }
+            Vector2 home = tornMap.anchoredPosition;
+            var mapImage = tornMap.GetComponent<Image>();
+            var homeSprite = mapImage != null ? mapImage.sprite : null;
+            var homeSize = tornMap.sizeDelta;
+            tornMap.localRotation = Quaternion.identity;
+            tornMap.localScale = Vector3.one;
+
+            // the drawn frames: it tugs at the tape under the photos, comes off and a little closer over
+            // everything, folds up like paper three times, and drops away
+            int count = foldFrames != null ? foldFrames.Length : 0;
+            bool torn = false;
+            for (int i = 0; i < count; i++)
+            {
+                var frame = foldFrames[i];
+                if (mapImage != null && frame != null)
+                {
+                    mapImage.sprite = frame;
+                    tornMap.sizeDelta = frame.rect.size;
+                }
+                if (foldCentres != null && i < foldCentres.Length)
+                    tornMap.anchoredPosition = new Vector2(Mathf.Round(foldCentres[i].x * 2f) / 2f, Mathf.Round(foldCentres[i].y * 2f) / 2f);
+                if (i >= foldPinned && !torn)
+                {
+                    torn = true;
+                    tornMap.SetAsLastSibling();                 // off the board: over the photos now
+                    UiSounds.Play(s => s.envelopeTear);
+                }
+                yield return new WaitForSecondsRealtime(foldFrameTime);
+            }
+            if (mapImage != null) { var c = mapImage.color; c.a = 0f; mapImage.color = c; }
+
+            // gone: on the road; the map screen shows the whole map again next time it opens
+            tearing = false;
+            asking = false;
+            Close(sound: false);
+            if (SceneLoader.Instance != null) SceneLoader.Instance.Travel(location);
+            yield return new WaitForSecondsRealtime(Mathf.Max(0.3f, fadeTime + 0.05f));
+            tornMap.gameObject.SetActive(false);
+            if (frontItems != null) frontItems.gameObject.SetActive(false);
+            tornMap.anchoredPosition = home;
+            tornMap.sizeDelta = homeSize;
+            if (mapImage != null) { var c = mapImage.color; c.a = 1f; mapImage.color = c; mapImage.sprite = homeSprite; }
+            if (frontItems != null) frontItems.SetAsLastSibling();
+            boardImage.sprite = full;
         }
 
         // ---- The info box ----
@@ -295,7 +394,7 @@ namespace QuietWitness.Map
             if (Instance != this) return;
             // Esc closes the map, but not on the frame it closed the question box.
             bool confirmOpen = ConfirmPanel.Instance != null && ConfirmPanel.Instance.IsOpen;
-            if (open && !confirmOpen && !asking && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (open && !confirmOpen && !asking && !tearing && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 if (shownInfo != null) HideInfo(null);   // Esc closes the plate first, then the map
                 else Close();
@@ -314,7 +413,7 @@ namespace QuietWitness.Map
 
         private void LateUpdate()
         {
-            if (!Application.isPlaying || Instance != this || !open || shownInfo == null || asking) return;
+            if (!Application.isPlaying || Instance != this || !open || shownInfo == null || asking || tearing) return;
             var mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasReleasedThisFrame || clickFrame == Time.frameCount) return;
             // A click on the plate itself keeps it open; anywhere else closes it.

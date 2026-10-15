@@ -9,7 +9,7 @@ namespace QuietWitness.UI
 {
     // Two words in yellow in the bottom-left corner when something new goes into the case file, so it can't
     // be missed (the yellow dot on the icon is easy to overlook): NEW EVIDENCE when a thing is found,
-    // NEW ENTRY when a new goal shows up. It waits until the hero is free (no close-up, no speech), slides in,
+    // NEW OBJECTIVE when a new goal shows up. It waits until the hero is free (no close-up, no speech), slides in,
     // stays a few seconds, fades. Opening the case file clears it. Looks: the Kind text under it;
     // Preview shows it outside Play mode. (Icon and Title are optional and not used now.)
     [ExecuteAlways]
@@ -27,7 +27,7 @@ namespace QuietWitness.UI
 
         [Header("Words")]
         [SerializeField] private string evidenceLabel = "NEW EVIDENCE";
-        [SerializeField] private string entryLabel = "NEW ENTRY";
+        [SerializeField] private string entryLabel = "NEW OBJECTIVE";
         [Tooltip("When several things come at once. {0} = how many.")]
         [SerializeField] private string manyItems = "{0} new items";
         [SerializeField] private string manyEntries = "{0} new entries";
