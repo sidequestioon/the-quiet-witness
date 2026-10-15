@@ -135,6 +135,7 @@ namespace QuietWitness.Cutscenes
         }
 
         // E / Space / Enter (if keys), a click on the prompt (or anywhere), Esc (if escape: sets Escaped).
+        // While his thought is still typing, the first press only shows all of it.
         protected IEnumerator WaitForPress(bool keys, bool escape, bool anywhere = false)
         {
             Escaped = false;
@@ -144,7 +145,10 @@ namespace QuietWitness.Cutscenes
                 var k = Keyboard.current;
                 var m = Mouse.current;
                 if (k != null && keys && (k.eKey.wasPressedThisFrame || k.spaceKey.wasPressedThisFrame || k.enterKey.wasPressedThisFrame))
-                    yield break;
+                {
+                    if (typing) FinishTyping();   // first press: the whole thought at once; the next one goes on
+                    else yield break;
+                }
                 if (k != null && escape && k.escapeKey.wasPressedThisFrame) { Escaped = true; yield break; }
                 if (m != null && m.leftButton.wasPressedThisFrame)
                 {
