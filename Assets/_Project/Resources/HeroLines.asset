@@ -15,90 +15,70 @@ MonoBehaviour:
   lines:
   - id: prologue.get_up
     text: Huh?
-    plateWidth: 0
   - id: office.take_envelope
     text: No stamp, no name. Somebody climbed three floors in the rain to slip this
       under my door.
-    plateWidth: 70
   - id: office.look_aquarium
     text: Captain Miller. The only one in this office who never interrupts me.
-    plateWidth: 47
   - id: office.look_policeshirt
     text: Eleven years in that uniform. They took the badge. I kept the shirt.
-    plateWidth: 67
   - id: office.look_answeringmachine
     text: No blinking light. Nobody called. Again.
-    plateWidth: 47
   - id: office.look_lockeddrawer
     text: Locked. I remember locking it. I don't remember where I put the key.
-    plateWidth: 54
   - id: office.look_bookcase
     text: Law codes, old case files and a cookbook I have never opened.
-    plateWidth: 46
   - id: office.look_window
     text: Rain on Millbrook. It never washes anything clean.
-    plateWidth: 56
   - id: office.look_radio
     text: Rain, jazz and bad news. Usually in that order.
-    plateWidth: 49
   - id: darkroom.look_filmdryer
     text: Negatives drying in the dark. Every frame is a second somebody thought
       nobody saw.
-    plateWidth: 67
   - id: darkroom.look_sink
     text: Developer, stop bath, fixer. Smells like every night I couldn't sleep.
-    plateWidth: 71
   - id: darkroom.look_enlarger
     text: My old enlarger. Still the best way to see what a negative is hiding.
-    plateWidth: 69
   - id: darkroom.look_prints
     text: Prints from old cases. Half of them nobody ever paid for.
-    plateWidth: 60
   - id: darkroom.look_chemicals
     text: Mix them wrong and a photo forgets everything it saw. Mix them right and
       it remembers too much.
-    plateWidth: 67
   - id: map.default
     text: Millbrook. Every street has a story, and none of them want to tell it.
-    plateWidth: 0
   - id: map.riviera
     text: The Riviera. Row seven, seat twelve.
-    plateWidth: 0
   - id: map.leave_office
     text: Am I done here? Once I walk out that door, I'm not coming back tonight.
-    plateWidth: 0
   - id: office.drawer_lock
     text: Locked. Four numbers, and I can't remember a single one. I wrote them down
       somewhere, I'm sure of it.
-    plateWidth: 0
   - id: office.drawer_badge
     text: My badge. Eleven years, one shield. Officially it isn't mine anymore. In
       a dark projection booth, nobody checks.
-    plateWidth: 0
   - id: office.drawer_empty
     text: Empty now. Just dust and an old habit.
-    plateWidth: 0
   - id: office.map_not_yet
     text: Not yet. I'm not walking into that cinema with empty pockets and no idea
       who I'm looking for.
-    plateWidth: 0
   - id: darkroom.look_photo
     text: Me, fresh out of the academy. Badge one, one, seven, four. Some numbers
       you don't forget.
-    plateWidth: 0
   - id: darkroom.enlarger_film
     text: Two frames, a few seconds of somebody's night. Let's see whose.
-    plateWidth: 0
   - id: darkroom.film_print
-    text: A cinema hall, shot from the back rows. Somebody's telling me where to be tonight.
-    plateWidth: 0
+    text: A cinema hall, shot from the back rows. Somebody's telling me where to
+      be tonight.
   - id: darkroom.enlarger_done
     text: A full house and a picture on the screen. The Riviera, if I had to bet.
-    plateWidth: 0
   - id: prologue.ready
     text: Riviera. Last show's at eleven thirty. Time to go.
-    plateWidth: 0
   - id: office.look_map
     text: The cork board. The whole town pinned to one wall, and every case I never
       closed.
-    plateWidth: 0
+  - id: office.machine_blink
+    text: The red light is blinking. One new message. That's one more than usual.
+  - id: office.machine_heard
+    text: Sal's message. The Blue Note, tomorrow, after nine.
+  - id: office.machine_after
+    text: Sal never asks for anything. That's what worries me.

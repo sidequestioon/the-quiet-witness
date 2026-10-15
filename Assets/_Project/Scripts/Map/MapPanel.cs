@@ -17,6 +17,9 @@ namespace QuietWitness.Map
         {
             if (Instance != null && Instance != this) return; // duplicate Systems, removed by its root
             Instance = this;
+            // The old prototype map window, if Setup > Cleanup hasn't removed it yet: never shown.
+            var old = transform.Find("Map");
+            if (old != null) old.gameObject.SetActive(false);
         }
 
         public void Open()

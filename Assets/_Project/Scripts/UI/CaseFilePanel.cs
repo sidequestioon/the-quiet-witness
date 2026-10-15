@@ -114,6 +114,7 @@ namespace QuietWitness.UI
         private readonly List<ClueData> clues = new List<ClueData>();
         private readonly List<Image> pictures = new List<Image>();
         private readonly List<ObjectiveList.Goal> stepList = new List<ObjectiveList.Goal>();
+        private readonly List<ObjectiveList.Goal> sideList = new List<ObjectiveList.Goal>();
         private int index;
         private float shownIndex;
         private float textIn = 1f;
@@ -324,7 +325,8 @@ namespace QuietWitness.UI
         {
             if (objectives == null) return;
             var goal = objectives.Current(stepList);
-            if (objectivesView != null) objectivesView.Show(goal, stepList);
+            objectives.Sides(sideList);
+            if (objectivesView != null) objectivesView.Show(goal, stepList, sideList);
             else if (mainGoal != null)
             {
                 if (goal == null) mainGoal.text = noGoals;

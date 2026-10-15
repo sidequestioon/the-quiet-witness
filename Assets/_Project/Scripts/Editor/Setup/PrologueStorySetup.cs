@@ -189,14 +189,14 @@ namespace QuietWitness.EditorTools
             return go.TryGetComponent<CloseUpOpener>(out var o) ? o : go.AddComponent<CloseUpOpener>();
         }
 
-        private struct StepSpec
+        internal struct StepSpec
         {
             public string note, line, setFlag;
             public string[] needs, unless;
             public UnityAction then;
         }
 
-        private static StepSpec Step(string note, string[] needs = null, string[] unless = null, string line = null,
+        internal static StepSpec Step(string note, string[] needs = null, string[] unless = null, string line = null,
                                      UnityAction then = null, string setFlag = null) =>
             new StepSpec { note = note, needs = needs, unless = unless, line = line, then = then, setFlag = setFlag };
 
@@ -248,7 +248,8 @@ namespace QuietWitness.EditorTools
 
         // Two actions on a hotspot, one under another: Look (top) and Use (bottom, shown by flags).
         // Two Hotspot Steps on it: the first is what Look does, the second what Use does.
-        private static void LookAndUse(string hotspot, StepSpec[] look, StepSpec[] use, string[] useShowWhen, string[] useHideWhen)
+        internal static void LookAndUse(string hotspot, StepSpec[] look, StepSpec[] use, string[] useShowWhen, string[] useHideWhen,
+                                        string useLabel = "Use")
         {
             var go = GameObject.Find(hotspot);
             if (go == null || !go.TryGetComponent<HotspotActions>(out var actions))
@@ -267,7 +268,7 @@ namespace QuietWitness.EditorTools
             while (list.Count > 2) list.RemoveAt(list.Count - 1);
             if (list.Count < 2) list.Add(new HotspotAction());
             SetAction(list[0], ActionKind.Look, "Look", all[0], null, null);
-            SetAction(list[1], ActionKind.Use, "Use", all[1], useShowWhen, useHideWhen);
+            SetAction(list[1], ActionKind.Use, useLabel, all[1], useShowWhen, useHideWhen);
             EditorUtility.SetDirty(actions);
         }
 

@@ -46,6 +46,10 @@ namespace QuietWitness.Cutscenes
         [SerializeField] private string[] afterGettingUp = { "Nobody knocks on my door after nine. Nobody good." };
         // What he says when he picks up the envelope: Take_Envelope > Hotspot Actions > Line.
 
+        [Header("The controls window")]
+        [Tooltip("Seconds after he gets up (and starts talking) before the controls window comes up.")]
+        [SerializeField] private float controlsDelay = 1f;
+
         private IEnumerator Start()
         {
             var state = GameState.Instance;
@@ -100,6 +104,10 @@ namespace QuietWitness.Cutscenes
             InputBlocker.Pop();
             var getUp = new HotspotAction { line = getUpLine, lines = afterGettingUp };
             if (getUp.HasSpeech) HeroSpeech.Say(getUp);
+
+            // A moment after he starts talking: the controls, once (his line may run on behind it).
+            yield return new WaitForSeconds(controlsDelay);
+            if (UI.ControlsHint.Instance != null) UI.ControlsHint.Instance.ShowOnce();
         }
 
         private static bool SkipPressed()
