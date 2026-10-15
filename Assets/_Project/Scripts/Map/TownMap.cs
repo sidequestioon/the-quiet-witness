@@ -423,7 +423,8 @@ namespace QuietWitness.Map
             if (Instance != this) return;
             // Esc closes the map, but not on the frame it closed the question box.
             bool confirmOpen = ConfirmPanel.Instance != null && ConfirmPanel.Instance.IsOpen;
-            if (open && !confirmOpen && !asking && !tearing && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            bool reading = PaperReader.IsOpen || PaperReader.ClosedFrame == Time.frameCount;   // Esc closes the paper first
+            if (open && !confirmOpen && !asking && !tearing && !reading && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 if (shownInfo != null) HideInfo(null);   // Esc closes the plate first, then the map
                 else Close();
@@ -442,7 +443,7 @@ namespace QuietWitness.Map
 
         private void LateUpdate()
         {
-            if (!Application.isPlaying || Instance != this || !open || shownInfo == null || asking || tearing) return;
+            if (!Application.isPlaying || Instance != this || !open || shownInfo == null || asking || tearing || PaperReader.IsOpen) return;
             var mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasReleasedThisFrame || clickFrame == Time.frameCount) return;
             // A click on the plate itself keeps it open; anywhere else closes it.

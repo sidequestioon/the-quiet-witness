@@ -17,13 +17,13 @@ namespace QuietWitness.EditorTools
         private const string Prefix = "Note_";
 
         // What is pinned up: title, the hero's words, where the dot is (board pixels from the top-left).
+        // Only one newspaper has a dot (City Hall, it opens to read); the other one just hangs there.
         public static readonly (string title, string text, int x, int y)[] Notes =
         {
             ("THE RIVIERA", "The Riviera, back when every seat was sold. Now it's the last picture house in town.", 37, 33),
             ("WHO?", "Somebody I couldn't put a name to. Still can't. The question mark stays until I do.", 83, 40),
             ("PLATE?", "A car that kept showing up where it shouldn't. The plate is a blur, no matter how long I stare.", 123, 80),
             ("CLASS OF '74", "Police academy, class of '74. Half of them made sergeant. I made enemies.", 54, 89),
-            ("DETECTIVE FIRED", "March '85. I told the truth on the stand, and the department asked for my badge.", 72, 180),
             ("CITY HALL SAYS NO", "The council voted the Riviera down. Old cinemas don't pay taxes like parking lots do.", 147, 164),
             ("CALL MARTY", "Marty knows a guy for everything. The guy usually turns out to be Marty.", 130, 186),
             ("GOLDEN DRAGON", "They deliver until two. Half my dinners this year came in a paper box.", 33, 228),
@@ -86,6 +86,9 @@ namespace QuietWitness.EditorTools
                 // District_ -> Note_ (so the town map's districts and these stay apart)
                 var made = board.GetChild(board.childCount - 1);
                 made.name = Prefix + n.title.Replace(' ', '_').Replace("'", "").Replace("?", "");
+                // the City Hall clipping opens to read (Setup > Map: the Gazette to read)
+                if (made.name == GazetteSetup.NoteName && System.IO.File.Exists(ProjectRoot + "/Art/UI/Newspaper/Gazette_Page1.png"))
+                    GazetteSetup.SetPages(made.GetComponent<MapDistrict>(), GazetteSetup.Pages());
             }
             // under the torn-off map and the things over it (Setup > Map: tear off), like the districts
             var torn = board.Find("TornMap");

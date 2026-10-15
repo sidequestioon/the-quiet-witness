@@ -34,6 +34,11 @@ namespace QuietWitness.Map
         [Tooltip("Moves this dot's plate from its usual place (canvas units, x right, y up).")]
         [SerializeField] private Vector2 plateOffset = Vector2.zero;
 
+        [Header("A paper to read (a newspaper on the board)")]
+        [Tooltip("Its pages, in order: a click on the dot opens them to read (arrows turn the pages). " +
+                 "Empty = the dot only shows its plate.")]
+        [SerializeField] private Sprite[] readPages;
+
         [Header("Parts")]
         [SerializeField] private Image dot;
         [SerializeField] private Image ring;
@@ -47,6 +52,7 @@ namespace QuietWitness.Map
         public LocationData Location => location;
         public Cutscenes.CaptionSide Side => side;
         public Vector2 PlateOffset => plateOffset;
+        public bool Readable => readPages != null && readPages.Length > 0;
         public bool IsLit { get; private set; }
         public bool IsHere { get; private set; }
         public bool CanGo { get; private set; }
@@ -96,6 +102,13 @@ namespace QuietWitness.Map
             var map = TownMap.Instance;
             if (map == null) return;
             map.Clicked();
+            if (Readable && UI.PaperReader.Instance != null)
+            {
+                map.HideInfo(null);
+                hovered = false;
+                UI.PaperReader.Instance.Show(readPages);
+                return;
+            }
             if (map.IsShowing(this))
             {
                 if (CanGo) map.Go(location);
