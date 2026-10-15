@@ -54,6 +54,9 @@ namespace QuietWitness.Map
         [SerializeField] private string lockedText = "Not yet";
         [Tooltip("Gap between the dot's centre and the tail of the plate (canvas units).")]
         [SerializeField] private float infoGap = 20f;
+        [Tooltip("The widest the plate gets (canvas units). Each text is laid out as an even block, so most plates " +
+                 "are narrower than this.")]
+        [SerializeField] private float infoWidest = 520f;
 
         [Header("Hint under the board")]
         [SerializeField] private TMP_Text hint;
@@ -300,7 +303,33 @@ namespace QuietWitness.Map
             SetActive(infoActionRow, on);
             SetActive(infoGoIcon, on && canGo);
             if (!info.gameObject.activeSelf) info.gameObject.SetActive(true);
+            FitInfoWidth(title, text, on);
             LayoutRebuilder.ForceRebuildLayoutImmediate(info);
+        }
+
+        // The plate as wide as its words: the text an even block (lines about the same length), never wider
+        // than Info Widest; the title and the action row always fit on one line.
+        private void FitInfoWidth(string title, string text, bool action)
+        {
+            var layout = info.GetComponent<VerticalLayoutGroup>();
+            float pad = layout != null ? layout.padding.horizontal : 0f;
+            float max = Mathf.Max(40f, infoWidest - pad);
+            float w = 0f;
+            if (infoText != null && !string.IsNullOrEmpty(text))
+            {
+                float wrap = TextBlock.Width(infoText, text, max);
+                w = Mathf.Max(w, Mathf.Min(wrap, infoText.GetPreferredValues(text, wrap, 0f).x));
+            }
+            if (infoTitle != null && !string.IsNullOrEmpty(title))
+                w = Mathf.Max(w, infoTitle.GetPreferredValues(title, 100000f, 0f).x);
+            if (action && infoActionRow != null)
+            {
+                var row = (RectTransform)infoActionRow.transform;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(row);
+                w = Mathf.Max(w, LayoutUtility.GetPreferredWidth(row));
+            }
+            float width = Mathf.Ceil((w + pad + 2f) / 4f) * 4f;                 // on the 4x pixel grid
+            if (!Mathf.Approximately(info.sizeDelta.x, width)) info.sizeDelta = new Vector2(width, info.sizeDelta.y);
         }
 
         private void PlaceInfo(MapDistrict district)

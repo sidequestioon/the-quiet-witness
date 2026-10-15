@@ -107,6 +107,9 @@ namespace QuietWitness.EditorTools
                              d.location == "Riviera" ? "map.riviera" : null);
                 }
 
+                // The photos and clippings around the map (only to read about)
+                BoardNotesSetup.Build(board.rectTransform, dot, dotHover, dotHere, ring);
+
                 // Info box (on hover)
                 var info = Img("Info", screen, plate, new Color(0.08f, 0.07f, 0.09f, 0.95f));
                 if (plate != null) { info.type = Image.Type.Sliced; info.pixelsPerUnitMultiplier = 100f / (plate.pixelsPerUnit * 4f); }
@@ -166,7 +169,7 @@ namespace QuietWitness.EditorTools
             Debug.Log("[Setup] Town map done. Walk to the cork board in the office.");
         }
 
-        private static void District(RectTransform board, string title, string text, Vector2 at, LocationData location,
+        internal static void District(RectTransform board, string title, string text, Vector2 at, LocationData location,
                                      Sprite dot, Sprite dotHover, Sprite dotHere, Sprite ring, string lightWhen, string hint)
         {
             var root = Img("District_" + title.Replace(' ', '_'), board, null, new Color(0f, 0f, 0f, 0f), raycast: true);
