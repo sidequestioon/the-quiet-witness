@@ -36,6 +36,9 @@ namespace QuietWitness.EditorTools
         private const int HeroStartX = 560;                     // where the hero stands at first (px of the picture)
         private const float Brightness = 0.7f;                  // the hero, away from the lights, at night outside
         private const int RainOrder = 500;                      // in front of the hero
+        // Outside the distances are long: he walks a little faster than indoors (3), the steps sped up to match,
+        // and the camera keeps up with him sooner.
+        private const float WalkSpeed = 3.3f, WalkAnimSpeed = 1.1f, CameraSmooth = 6f;
 
         private readonly struct Lamp
         {
@@ -173,6 +176,7 @@ namespace QuietWitness.EditorTools
             {
                 var so = new SerializedObject(follow);
                 so.FindProperty("viewBottom").floatValue = px(0, ViewBottomY).y;
+                so.FindProperty("smooth").floatValue = CameraSmooth;
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
         }
@@ -181,6 +185,10 @@ namespace QuietWitness.EditorTools
         {
             var mover = Object.FindFirstObjectByType<PlayerMover>();
             if (mover == null) return;
+            var so = new SerializedObject(mover);
+            so.FindProperty("speed").floatValue = WalkSpeed;
+            so.FindProperty("walkAnimSpeed").floatValue = WalkAnimSpeed;
+            so.ApplyModifiedPropertiesWithoutUndo();
             var t = mover.transform;
             t.position = new Vector3(px(HeroStartX, 0).x, t.position.y, t.position.z);
         }

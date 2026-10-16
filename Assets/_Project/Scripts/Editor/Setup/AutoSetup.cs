@@ -25,7 +25,7 @@ namespace QuietWitness.EditorTools
             ("cleanup-prototype", 1, Menu + "Cleanup: old prototype parts"),
             ("controls-window", 1, Menu + "Prologue: controls window"),
             ("answering-machine", 1, Menu + "Office: answering machine"),
-            ("downtown-riviera", 3, Menu + "Downtown: the Riviera"),
+            ("downtown-riviera", 6, Menu + "Downtown: the Riviera"),
         };
 
         private static bool queued;
@@ -33,6 +33,11 @@ namespace QuietWitness.EditorTools
         static AutoSetup()
         {
             if (Application.isBatchMode) return;
+            // New code that arrives while the game is running waits: it runs as soon as Play is stopped.
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredEditMode) Queue();
+            };
             Queue();
         }
 

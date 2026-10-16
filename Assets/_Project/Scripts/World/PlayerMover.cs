@@ -8,6 +8,8 @@ namespace QuietWitness.World
     public class PlayerMover : MonoBehaviour
     {
         [SerializeField] private float speed = 3f;
+        [Tooltip("How fast the walk animation plays: raise it with Speed so the feet don't slide (1 = as drawn).")]
+        [SerializeField] private float walkAnimSpeed = 1f;
         [Tooltip("Walkable area edges in world units.")]
         [SerializeField] private float minX = -8f;
         [SerializeField] private float maxX = 8f;
@@ -59,7 +61,10 @@ namespace QuietWitness.World
         private void SetMoving(bool moving)
         {
             if (animator != null && animator.runtimeAnimatorController != null)
+            {
                 animator.SetBool(MovingParameter, moving);
+                animator.speed = moving ? walkAnimSpeed : 1f;   // breathing when standing stays as drawn
+            }
         }
     }
 }
