@@ -1247,10 +1247,11 @@ MonoBehaviour:
     line: office.look_window
     lines:
     - Rain on Millbrook. It never washes anything clean.
-    plateWidth: 56
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.5111114}
   story: 0
 --- !u!1 &345134158
@@ -1594,10 +1595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Cutscenes.InspectItem
   clue: {fileID: 11400000, guid: d8e4bb94738834d3e9f38f085701507c, type: 2}
   lines:
-  - Two frames cut out of a reel. The same face, twice.
-  plateWidth: 410
-  fontSize: 0
-  platePadding: {x: 0, y: 0}
+  - Two frames cut out of a reel. Too small to make out by eye.
   side: 0
   plateOffset: {x: 0, y: 0}
   dot: {fileID: 1321232358}
@@ -1776,10 +1774,11 @@ MonoBehaviour:
     line: office.look_radio
     lines:
     - Rain, jazz and bad news. Usually in that order.
-    plateWidth: 49
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.0388892}
   story: 0
 --- !u!1 &511338206
@@ -2196,10 +2195,11 @@ MonoBehaviour:
     lines:
     - Eleven years in that uniform.
     - They took the badge. I kept the shirt.
-    plateWidth: 67
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.000000014901161, y: 1.4000003}
   story: 0
 --- !u!1 &537745659
@@ -2395,7 +2395,6 @@ MonoBehaviour:
     lines:
     - No stamp, no name. Somebody climbed three floors in the rain to slip this under
       my door.
-    plateWidth: 70
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -2411,6 +2410,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.19444466, y: -0.71111083}
   story: 1
 --- !u!114 &567360259
@@ -2751,10 +2752,11 @@ MonoBehaviour:
     line: office.look_aquarium
     lines:
     - Captain Miller. The only one in this office who never interrupts me.
-    plateWidth: 47
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.0111114}
   story: 0
 --- !u!1 &619394800
@@ -2891,9 +2893,6 @@ MonoBehaviour:
   lines:
   - A projection booth, drawn in pencil by a steady hand. Whoever drew this was standing
     right there. Eleven forty.
-  plateWidth: 575
-  fontSize: 0
-  platePadding: {x: 0, y: 0}
   side: 0
   plateOffset: {x: 0, y: 0}
   dot: {fileID: 1354235093}
@@ -3001,7 +3000,7 @@ MonoBehaviour:
   getUpLine: prologue.get_up
   afterGettingUp:
   - Nobody knocks on my door after nine. Nobody good.
-  afterGettingUpWidth: 0
+  controlsDelay: 1
 --- !u!4 &683593863
 Transform:
   m_ObjectHideFlags: 0
@@ -4070,6 +4069,97 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &833707963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 833707964}
+  - component: {fileID: 833707965}
+  m_Layer: 0
+  m_Name: Machine_Led
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &833707964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833707963}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.111111164, y: 0.48333365, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 945583958}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &833707965
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833707963}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -98
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: 4e9bce8b0d6c0454baad64a0d27453bb, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.027777778, y: 0.055555556}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &907972906
 GameObject:
   m_ObjectHideFlags: 0
@@ -4350,6 +4440,9 @@ GameObject:
   - component: {fileID: 945583961}
   - component: {fileID: 945583960}
   - component: {fileID: 945583962}
+  - component: {fileID: 945583965}
+  - component: {fileID: 945583964}
+  - component: {fileID: 945583963}
   m_Layer: 0
   m_Name: Look_AnsweringMachine
   m_TagString: Untagged
@@ -4369,7 +4462,8 @@ Transform:
   m_LocalPosition: {x: -3.6805553, y: -1.1500001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 833707964}
   m_Father: {fileID: 243733014}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &945583960
@@ -4449,16 +4543,147 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
   - kind: 0
-    label: Answering machine
-    line: office.look_answeringmachine
-    lines:
-    - No blinking light. Nobody called. Again.
-    plateWidth: 47
+    label: Look
+    line: 
+    lines: []
     onChosen:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 945583964}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen: []
+    hideWhen: []
+  - kind: 2
+    label: Listen
+    line: 
+    lines: []
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 945583963}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 0.90000033}
   story: 0
+--- !u!114 &945583963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945583957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: play the message
+    needs: []
+    unless: []
+    line: 
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 945583965}
+          m_TargetAssemblyTypeName: QuietWitness.World.AnsweringMachine, Assembly-CSharp
+          m_MethodName: Play
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &945583964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945583957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: heard it
+    needs:
+    - office:sal_heard
+    unless: []
+    line: office.machine_heard
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+  - note: a new message
+    needs: []
+    unless: []
+    line: office.machine_blink
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &945583965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945583957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb3417dab3384770809f12479d682f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.AnsweringMachine
+  message:
+  - speaker: ANSWERING MACHINE
+    text: You have... one... new message.
+  - speaker: SAL
+    text: Hey, it's Sal. Yeah, I know. Long time.
+  - speaker: SAL
+    text: Listen, I need a favor. Nothing big. Probably.
+  - speaker: SAL
+    text: My sister's kid, Danny, got himself into something down at the Docks.
+  - speaker: SAL
+    text: I can't go asking around. Not with the badge on. You know how it is.
+  - speaker: SAL
+    text: Meet me at the Blue Note. Tomorrow, after nine. First round's on me.
+  - speaker: ANSWERING MACHINE
+    text: End of messages.
+  heardFlag: office:sal_heard
+  afterFirstTime: office.machine_after
+  led: {fileID: 833707965}
+  ledOn: {fileID: 21300000, guid: 90ff7643343844b9db6189a70605dbb0, type: 3}
+  ledOff: {fileID: 21300000, guid: 4e9bce8b0d6c0454baad64a0d27453bb, type: 3}
+  blinkTime: 0.6
+  beep: {fileID: 8300000, guid: f739c9254fe784d80996644f1720677b, type: 3}
+  beepVolume: 0.5
 --- !u!1 &975952880
 GameObject:
   m_ObjectHideFlags: 0
@@ -4628,9 +4853,6 @@ MonoBehaviour:
   clue: {fileID: 11400000, guid: cd03f895bf0cf49509c304e42c6107ca, type: 2}
   lines:
   - The all-night diner on Main. Nobody goes there for the coffee.
-  plateWidth: 460
-  fontSize: 0
-  platePadding: {x: 0, y: 0}
   side: 0
   plateOffset: {x: 0, y: 0}
   dot: {fileID: 1684127161}
@@ -4838,6 +5060,7 @@ MonoBehaviour:
   fontSize: 1
   iconSpacing: 16
   textGap: 0
+  column: 1
   nearbyDistance: 70
   nearbySize: 0.6
   nearbyOpacity: 0.75
@@ -4879,8 +5102,11 @@ MonoBehaviour:
   tail: {fileID: 1055573018}
   preview: 0
   previewText: Nobody knocks on my door after nine. Nobody good.
-  previewWidth: 0
   maxWidth: 130
+  maxLines: 3
+  charsPerLine: 36
+  widest: 0.7
+  screenMargin: 4
   minWidth: 0
   platePadding: {x: 4, y: 3}
   gapAboveHead: 4
@@ -4958,7 +5184,6 @@ MonoBehaviour:
     label: Darkroom
     line: 
     lines: []
-    plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -4974,6 +5199,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.55555534, y: 0.62222254}
   story: 0
 --- !u!114 &1102112222
@@ -5864,9 +6091,6 @@ MonoBehaviour:
   lines:
   - Riviera, last show, eleven thirty. Row seven, seat twelve. Somebody wants me
     in that seat.
-  plateWidth: 610
-  fontSize: 0
-  platePadding: {x: 0, y: 0}
   side: 0
   plateOffset: {x: 0, y: 0}
   dot: {fileID: 149344580}
@@ -6510,6 +6734,8 @@ GameObject:
   - component: {fileID: 1592913288}
   - component: {fileID: 1592913290}
   - component: {fileID: 1592913291}
+  - component: {fileID: 1592913293}
+  - component: {fileID: 1592913292}
   m_Layer: 0
   m_Name: Look_Map
   m_TagString: Untagged
@@ -6608,17 +6834,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
-  - kind: 2
-    label: Map
+  - kind: 0
+    label: Look
     line: 
     lines: []
-    plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1592913291}
-          m_TargetAssemblyTypeName: QuietWitness.Map.MapOpener, Assembly-CSharp
-          m_MethodName: Open
+        - m_Target: {fileID: 1592913293}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -6628,6 +6853,29 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
+  - kind: 2
+    label: Use
+    line: 
+    lines: []
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1592913292}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013889074, y: 1.566667}
   story: 1
 --- !u!114 &1592913291
@@ -6642,6 +6890,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c0abc1bc91b4562918e16fc6c228c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Map.MapOpener
+--- !u!114 &1592913292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592913285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: open the map
+    needs: []
+    unless: []
+    line: 
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710538028}
+          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
+          m_MethodName: OpenMap
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1592913293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592913285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: about the board
+    needs: []
+    unless: []
+    line: office.look_map
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &1635990710
 GameObject:
   m_ObjectHideFlags: 0
@@ -6676,9 +6978,6 @@ MonoBehaviour:
   clue: {fileID: 11400000, guid: e4231b59c0c3b429f8f24623ea9adc8b, type: 2}
   lines:
   - Forty dollars, crumpled like somebody held them too long. Not a fee. An advance.
-  plateWidth: 440
-  fontSize: 0
-  platePadding: {x: 0, y: 0}
   side: 0
   plateOffset: {x: 0, y: 0}
   dot: {fileID: 1944993408}
@@ -6862,6 +7161,7 @@ GameObject:
   - component: {fileID: 1658080200}
   - component: {fileID: 1658080202}
   - component: {fileID: 1658080203}
+  - component: {fileID: 1658080204}
   m_Layer: 0
   m_Name: Look_LockedDrawer
   m_TagString: Untagged
@@ -6961,10 +7261,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
   - kind: 0
-    label: Locked drawer
+    label: Look
     line: 
     lines: []
-    plateWidth: 54
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -6980,6 +7279,31 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
+  - kind: 2
+    label: Use
+    line: 
+    lines: []
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1658080204}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen:
+    - office:drawer_tried
+    hideWhen:
+    - office:drawer_opened
   promptOffset: {x: 0.013888836, y: 0.34444475}
   story: 0
 --- !u!114 &1658080203
@@ -6995,32 +7319,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
   steps:
-  - note: 'first time: he forgot the code (a new goal in the case file)'
-    needs: []
-    unless:
+  - note: open, empty
+    needs:
     - office:drawer_opened
-    - office:drawer_tried
+    unless: []
+    line: office.drawer_empty
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+  - note: 'locked: he forgot the code (a new goal in the case file)'
+    needs: []
+    unless: []
     line: office.drawer_lock
     setFlag: office:drawer_tried
     then:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 710538028}
-          m_TargetAssemblyTypeName: QuietWitness.Cutscenes.CloseUpOpener, Assembly-CSharp
-          m_MethodName: OpenCodeLock
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - note: not opened yet
+        m_Calls: []
+--- !u!114 &1658080204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658080197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: enter the code
     needs: []
-    unless:
-    - office:drawer_opened
+    unless: []
     line: 
     setFlag: 
     then:
@@ -7038,14 +7369,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - note: open, empty
-    needs: []
-    unless: []
-    line: office.drawer_empty
-    setFlag: 
-    then:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1 &1671831050
 GameObject:
   m_ObjectHideFlags: 0
@@ -7908,10 +8231,11 @@ MonoBehaviour:
     line: office.look_bookcase
     lines:
     - Law codes, old case files and a cookbook I have never opened.
-    plateWidth: 46
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 1.56}
   story: 0
 --- !u!1 &1927612134

@@ -1,61 +1,36 @@
-using QuietWitness.Audio;
-using QuietWitness.Core;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace QuietWitness.Map
 {
-    // The town map: one panel for the whole game.
-    // Opened from the office wall or a location exit (see MapOpener).
+    // Where everything that opens the map calls (the cork board in the office, Map Opener, close-ups):
+    // it opens the town map (Setup > Town map).
     public class MapPanel : MonoBehaviour
     {
         public static MapPanel Instance { get; private set; }
 
-        [Tooltip("The map window that is shown and hidden.")]
-        [SerializeField] private GameObject panel;
-        [Header("Sounds")]
-        [SerializeField] private AudioClip openSound;
-        [SerializeField] private AudioClip closeSound;
-        [Range(0f, 1f)]
-        [SerializeField] private float soundVolume = 0.6f;
+        public bool IsOpen => TownMap.IsOpen;
 
-        private MapButton[] buttons;
-
-        public bool IsOpen => panel.activeSelf;
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics() => Instance = null;
 
         private void Awake()
         {
             if (Instance != null && Instance != this) return; // duplicate Systems, removed by its root
             Instance = this;
-            buttons = panel.GetComponentsInChildren<MapButton>(true);
-            panel.SetActive(false);
-        }
-
-        private void Update()
-        {
-            if (IsOpen && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-                Close();
+            // The old prototype map window, if Setup > Cleanup hasn't removed it yet: never shown.
+            var old = transform.Find("Map");
+            if (old != null) old.gameObject.SetActive(false);
         }
 
         public void Open()
         {
-            // The paper town map, once it is made (Setup > Town map), takes over.
-            if (TownMap.Instance != null) { TownMap.Instance.Open(); return; }
-            if (IsOpen) return;
-            if (SceneLoader.Instance != null && SceneLoader.Instance.IsTravelling) return;
-
-            foreach (var button in buttons) button.Refresh();
-            panel.SetActive(true);
-            Sfx.Play(openSound, soundVolume);
-            InputBlocker.Push();
+            if (TownMap.Instance != null) TownMap.Instance.Open();
+            else Debug.LogWarning("[Map] No town map on Systems: run Setup > Town map.");
         }
 
         public void Close()
         {
-            if (!IsOpen) return;
-            panel.SetActive(false);
-            Sfx.Play(closeSound, soundVolume);
-            InputBlocker.Pop();
+            if (TownMap.Instance != null && TownMap.IsOpen) TownMap.Instance.Close();
         }
     }
 }

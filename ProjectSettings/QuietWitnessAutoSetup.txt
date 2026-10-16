@@ -1,0 +1,7 @@
+# Setup steps already done in this project (Tools > The Quiet Witness > Setup). Kept by AutoSetup.cs.
+map-tear=1
+board-notes=1
+gazette=1
+cleanup-prototype=1
+controls-window=1
+answering-machine=1

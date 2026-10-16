@@ -38,15 +38,17 @@ namespace QuietWitness.Cutscenes
         [SerializeField] private float beforeGettingUp = 1.6f;
 
         [Header("What he says when he gets up")]
-        [Tooltip("A line from Hero Lines (Resources/HeroLines). Its text can be edited right under it.")]
+        [Tooltip("The id of a line in Hero Lines (Resources/HeroLines).")]
         [HeroLine]
         [SerializeField] private string getUpLine = "prologue.get_up";
         [Tooltip("Only used when Get Up Line is empty.")]
         [TextArea(2, 6)]
         [SerializeField] private string[] afterGettingUp = { "Nobody knocks on my door after nine. Nobody good." };
-        [Tooltip("Only used when Get Up Line is empty. Widest the plate may get, in pixels. 0 = Hero Speech > Max Width.")]
-        [SerializeField] private int afterGettingUpWidth = 0;
         // What he says when he picks up the envelope: Take_Envelope > Hotspot Actions > Line.
+
+        [Header("The controls window")]
+        [Tooltip("Seconds after he gets up (and starts talking) before the controls window comes up.")]
+        [SerializeField] private float controlsDelay = 1f;
 
         private IEnumerator Start()
         {
@@ -100,8 +102,12 @@ namespace QuietWitness.Cutscenes
             if (envelopeHotspot != null) envelopeHotspot.SetActive(true);
             state?.SetFlag(doneFlag);
             InputBlocker.Pop();
-            var getUp = new HotspotAction { line = getUpLine, lines = afterGettingUp, plateWidth = afterGettingUpWidth };
+            var getUp = new HotspotAction { line = getUpLine, lines = afterGettingUp };
             if (getUp.HasSpeech) HeroSpeech.Say(getUp);
+
+            // A moment after he starts talking: the controls, once (his line may run on behind it).
+            yield return new WaitForSeconds(controlsDelay);
+            if (UI.ControlsHint.Instance != null) UI.ControlsHint.Instance.ShowOnce();
         }
 
         private static bool SkipPressed()

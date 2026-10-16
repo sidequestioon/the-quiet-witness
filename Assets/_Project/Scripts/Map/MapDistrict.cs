@@ -28,6 +28,17 @@ namespace QuietWitness.Map
         [HeroLine]
         [SerializeField] private string hint;
 
+        [Header("Its info plate (like the envelope things)")]
+        [Tooltip("Where the plate goes: Auto = over the dot (under it when there is no room).")]
+        [SerializeField] private Cutscenes.CaptionSide side = Cutscenes.CaptionSide.Auto;
+        [Tooltip("Moves this dot's plate from its usual place (canvas units, x right, y up).")]
+        [SerializeField] private Vector2 plateOffset = Vector2.zero;
+
+        [Header("A paper to read (a newspaper on the board)")]
+        [Tooltip("Its pages, in order: a click on the dot opens them to read (arrows turn the pages). " +
+                 "Empty = the dot only shows its plate.")]
+        [SerializeField] private Sprite[] readPages;
+
         [Header("Parts")]
         [SerializeField] private Image dot;
         [SerializeField] private Image ring;
@@ -38,6 +49,10 @@ namespace QuietWitness.Map
         public string Title => title;
         public string Description => description;
         public string Hint => hint;
+        public LocationData Location => location;
+        public Cutscenes.CaptionSide Side => side;
+        public Vector2 PlateOffset => plateOffset;
+        public bool Readable => readPages != null && readPages.Length > 0;
         public bool IsLit { get; private set; }
         public bool IsHere { get; private set; }
         public bool CanGo { get; private set; }
@@ -76,21 +91,29 @@ namespace QuietWitness.Map
             }
         }
 
-        public void OnPointerEnter(PointerEventData e)
-        {
-            hovered = true;
-            TownMap.Instance?.ShowInfo(this);
-        }
+        // Like the things from the envelope: the dot stays where it is; hovering only lights it up,
+        // a click opens its plate, a second click on the same dot goes there (if he can).
+        public void OnPointerEnter(PointerEventData e) => hovered = true;
 
-        public void OnPointerExit(PointerEventData e)
-        {
-            hovered = false;
-            TownMap.Instance?.HideInfo(this);
-        }
+        public void OnPointerExit(PointerEventData e) => hovered = false;
 
         public void OnPointerClick(PointerEventData e)
         {
-            if (CanGo) TownMap.Instance?.Go(location);
+            var map = TownMap.Instance;
+            if (map == null) return;
+            map.Clicked();
+            if (Readable && UI.PaperReader.Instance != null)
+            {
+                map.HideInfo(null);
+                hovered = false;
+                UI.PaperReader.Instance.Show(readPages);
+                return;
+            }
+            if (map.IsShowing(this))
+            {
+                if (CanGo) map.Go(location);
+            }
+            else map.ShowInfo(this);
         }
 
         private void OnDisable() => hovered = false;

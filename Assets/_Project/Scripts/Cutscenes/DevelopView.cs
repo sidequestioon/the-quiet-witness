@@ -63,7 +63,7 @@ namespace QuietWitness.Cutscenes
 
             Think(line);
             ShowPrompt(closeIcon, closeLabel);
-            yield return WaitForPress(keys: false, escape: true);
+            yield return WaitForPress(keys: true, escape: true);    // E / Space / Enter, Esc, or a click on Close
             UiSounds.Play(s => s.click);
 
             var state = GameState.Instance;

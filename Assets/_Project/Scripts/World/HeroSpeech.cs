@@ -1,4 +1,5 @@
 using QuietWitness.Core;
+using QuietWitness.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,12 +31,19 @@ namespace QuietWitness.World
         [SerializeField] private bool preview;
         [TextArea(2, 5)]
         [SerializeField] private string previewText = "Nobody knocks on my door after nine. Nobody good.";
-        [Tooltip("Plate width for the sample, in pixels. 0 = Max Width.")]
-        [SerializeField] private int previewWidth;
 
         [Header("Size and place (can be tuned in Play mode and seen at once)")]
         [Tooltip("The plate never gets wider than this (pixels): longer text wraps onto more lines.")]
         [SerializeField] private int maxWidth = 130;
+        [Tooltip("A long text gets a wider plate rather than more lines than this (up to Widest).")]
+        [SerializeField] private int maxLines = 3;
+        [Tooltip("About this many letters per line: a longer text is broken into 2-3 even lines.")]
+        [SerializeField] private int charsPerLine = 36;
+        [Tooltip("However long the text, the plate is never wider than this part of the screen.")]
+        [Range(0.3f, 1f)]
+        [SerializeField] private float widest = 0.7f;
+        [Tooltip("Pixels kept free between the plate and the edge of the screen.")]
+        [SerializeField] private int screenMargin = 4;
         [Tooltip("The plate is never narrower than this (pixels), even for a short line.")]
         [SerializeField] private int minWidth = 0;
         [Tooltip("Pixels of plate around the text: x = left/right, y = top/bottom.")]
@@ -66,6 +74,7 @@ namespace QuietWitness.World
         private float measuredSize;
         private int measuredWidth;
         private string[] lines;
+        private string fullLine = string.Empty;   // the whole current line (the text shows part of it while typing)
         private int lineIndex;
         private float shownLetters;
         private bool speaking;
@@ -96,14 +105,17 @@ namespace QuietWitness.World
             return true;
         }
 
-        // This text's widest plate: the line's own, or the usual one.
-        private int MaxWidth
+        // The widest plate; each text is laid out as an even block within it (TextBlock).
+        private int MaxWidth => maxWidth;
+
+        // However long the text: a part of what the camera shows.
+        private float HardMaxWidth
         {
             get
             {
-                if (source != null && source.SaidWidth > 0) return source.SaidWidth;
-                if (!Application.isPlaying && previewWidth > 0) return previewWidth;
-                return maxWidth;
+                var cam = Camera.main;
+                if (cam == null || !cam.orthographic) return maxWidth * 2f / PixelsPerUnit;
+                return cam.orthographicSize * cam.aspect * 2f * widest - platePadding.x * 2f / PixelsPerUnit;
             }
         }
 
@@ -117,6 +129,7 @@ namespace QuietWitness.World
             plateAlpha = plate.color.a;
             tailAlpha = tail.color.a;
             text.textWrappingMode = TextWrappingModes.Normal;
+            text.alignment = TextAlignmentOptions.Top;   // lines centred, like the envelope plates
             text.text = "";
             Show(false);
         }
@@ -216,11 +229,13 @@ namespace QuietWitness.World
 
         private void ShowLine()
         {
-            text.text = lines[lineIndex];
+            fullLine = lines[lineIndex];
+            text.text = fullLine;
             shownLetters = 0f;
             // Switched on before measuring: a switched-off text keeps its old size.
             Show(true);
             Measure();
+            TextBlock.Reveal(text, fullLine, 0);
             Place();   // right away, so the first frame is already in the right spot
         }
 
@@ -228,17 +243,19 @@ namespace QuietWitness.World
         private void Measure()
         {
             if (text.fontSharedMaterial == null && text.font != null) text.fontSharedMaterial = text.font.material;   // stale after a font change
-            text.rectTransform.sizeDelta = new Vector2(MaxWidth / PixelsPerUnit, 1f);
+            if (text.text != fullLine) text.text = fullLine;   // measured whole
+            float wrap = TextBlock.Width(text, fullLine, MaxWidth / PixelsPerUnit, maxLines, HardMaxWidth, charsPerLine);
+            text.rectTransform.sizeDelta = new Vector2(wrap, 1f);
             text.maxVisibleCharacters = 99999;
             text.ForceMeshUpdate(true, true);
             lineBounds = text.textBounds;
             if (lineBounds.size.x <= 0f)   // font not ready yet: fall back to its preferred size
             {
-                Vector2 size = text.GetPreferredValues(text.text, MaxWidth / PixelsPerUnit, 0f);
+                Vector2 size = text.GetPreferredValues(text.text, wrap, 0f);
                 Rect r = text.rectTransform.rect;
                 lineBounds = new Bounds(new Vector3(r.center.x, r.yMax - size.y / 2f, 0f), new Vector3(size.x, size.y, 0f));
             }
-            if (Application.isPlaying) text.maxVisibleCharacters = Mathf.FloorToInt(shownLetters);
+            if (Application.isPlaying) TextBlock.Reveal(text, fullLine, Mathf.FloorToInt(shownLetters));
             measuredSize = text.fontSize;
             measuredWidth = MaxWidth;
         }
@@ -275,7 +292,7 @@ namespace QuietWitness.World
             if (speaking)
             {
                 shownLetters += lettersPerSecond * Time.deltaTime;
-                text.maxVisibleCharacters = Mathf.FloorToInt(shownLetters);
+                TextBlock.Reveal(text, fullLine, Mathf.FloorToInt(shownLetters));
                 if (Time.frameCount != openedFrame)
                 {
                     if (WalkPressed()) End();          // walking away closes it, and he can move at once
@@ -293,6 +310,7 @@ namespace QuietWitness.World
             if (!on) return;
             source = null;
             string sample = string.IsNullOrEmpty(previewText) ? " " : previewText.Replace("\\n", "\n");
+            fullLine = sample;
             if (text.text != sample) text.text = sample;
             text.textWrappingMode = TextWrappingModes.Normal;
             Measure();
@@ -332,6 +350,23 @@ namespace QuietWitness.World
             int h = Mathf.CeilToInt(lineBounds.size.y * PixelsPerUnit) + platePadding.y * 2;
             int left = heroX - w / 2;
             int bottom = tailBottom + tailH;
+
+            // Kept on screen: near the edge of the room the plate slides in; the tail stays over his head.
+            var cam = Camera.main;
+            if (cam != null && cam.orthographic)
+            {
+                float halfW = cam.orthographicSize * cam.aspect;
+                int viewL = Mathf.CeilToInt((cam.transform.position.x - halfW) * PixelsPerUnit) + screenMargin;
+                int viewR = Mathf.FloorToInt((cam.transform.position.x + halfW) * PixelsPerUnit) - screenMargin;
+                int viewT = Mathf.FloorToInt((cam.transform.position.y + cam.orthographicSize) * PixelsPerUnit) - screenMargin;
+                if (viewR - viewL > w) left = Mathf.Clamp(left, viewL, viewR - w);
+                if (bottom + h > viewT) bottom = viewT - h;   // a tall plate never goes off the top
+                int inside = Mathf.Clamp(tailLeft, left + 2, left + w - 2 - tailW);
+                if (inside != tailLeft)
+                    tail.transform.position = new Vector3((inside + tailW / 2f) / PixelsPerUnit - tb.center.x,
+                                                          tailBottom / PixelsPerUnit - tb.min.y, 0f);
+                tail.enabled = tail.enabled && bottom >= tailBottom + tailH;   // no tail when the plate had to come down
+            }
             plate.size = new Vector2(w, h) / PixelsPerUnit;
             plate.transform.position = new Vector3((left + w / 2f) / PixelsPerUnit, (bottom + h / 2f) / PixelsPerUnit, 0f);
 
@@ -342,11 +377,11 @@ namespace QuietWitness.World
 
         private void Advance()
         {
-            int length = lines[lineIndex].Length;
-            if (text.maxVisibleCharacters < length)
+            int length = fullLine.Length;
+            if (shownLetters < length)
             {
                 shownLetters = length;          // first press: the whole line at once
-                text.maxVisibleCharacters = length;
+                TextBlock.Reveal(text, fullLine, length);
                 return;
             }
             lineIndex++;

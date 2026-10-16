@@ -6,8 +6,8 @@ namespace QuietWitness.World
 {
     // Everything the hero says out loud, in one file: Assets/_Project/Resources/HeroLines.asset.
     // Every line has an id (e.g. prologue.get_up, office.look_aquarium). Hotspots (Hotspot Actions > Line)
-    // and the prologue point at a line by its id, so the text can be changed here at any time
-    // (or right under the Line field of a hotspot) without touching code. Setup never overwrites it.
+    // and the prologue point at a line by its id. Every plate lays the text out as a neat block by itself
+    // (TextBlock), so there is no width to set. Setup never overwrites a line.
     [CreateAssetMenu(fileName = "HeroLines", menuName = "The Quiet Witness/Hero Lines")]
     public class HeroLines : ScriptableObject
     {
@@ -19,8 +19,6 @@ namespace QuietWitness.World
             [Tooltip("What he says. Enter starts a new line on the plate.")]
             [TextArea(2, 8)]
             public string text;
-            [Tooltip("Widest the plate may get for this line, in pixels. 0 = the usual width (Hero Speech > Max Width).")]
-            public int plateWidth;
         }
 
         public const string ResourceName = "HeroLines";
@@ -50,6 +48,6 @@ namespace QuietWitness.World
         private static void ResetStatics() => loaded = null;
     }
 
-    // On a string field: pick a line from Hero Lines in a list, and edit its text right there.
+    // Marks a string field that holds the id of a line in Hero Lines.
     public class HeroLineAttribute : PropertyAttribute { }
 }

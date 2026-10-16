@@ -81,7 +81,7 @@ namespace QuietWitness.EditorTools
             var controller = BuildController(idle.clip, walk);
 
             UpdateInvestigator(idle.first, controller);
-            foreach (var scene in new[] { "Office", "Diner", "PoliceStation" })
+            foreach (var scene in new[] { "Office" })
                 AddPixelPerfectCamera(scene);
 
             AssetDatabase.SaveAssets();

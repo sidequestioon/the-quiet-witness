@@ -75,14 +75,6 @@ namespace QuietWitness.EditorTools
                 if (old != null) Object.DestroyImmediate(old.gameObject);
                 Build(root.transform, font, blur, objectives, icon, iconHover, arrowLeft, arrowRight, badge, marker);
 
-                // The old J journal and its "New clue" notices give way to the case file.
-                foreach (var journal in root.GetComponentsInChildren<JournalPanel>(true)) journal.enabled = false;
-                foreach (var toast in root.GetComponentsInChildren<JournalToast>(true))
-                {
-                    var tso = new SerializedObject(toast);
-                    tso.FindProperty("announceClues").boolValue = false;
-                    tso.ApplyModifiedPropertiesWithoutUndo();
-                }
                 // Saves must know the new evidence.
                 foreach (var save in root.GetComponentsInChildren<SaveSystem>(true))
                 {

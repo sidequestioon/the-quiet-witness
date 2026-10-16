@@ -21,6 +21,9 @@ namespace QuietWitness.UI
     // A yellow dot on the icon and on the menu line = something new there.
     public class CaseFilePanel : MonoBehaviour
     {
+        // Set once a clue has been looked at in the case file (no more NEW on it).
+        public static string SeenFlag(ClueData clue) => "seen:" + clue.Flag;
+
         public enum Page { Objectives, Inventory }
 
         public static CaseFilePanel Instance { get; private set; }
@@ -111,6 +114,7 @@ namespace QuietWitness.UI
         private readonly List<ClueData> clues = new List<ClueData>();
         private readonly List<Image> pictures = new List<Image>();
         private readonly List<ObjectiveList.Goal> stepList = new List<ObjectiveList.Goal>();
+        private readonly List<ObjectiveList.Goal> sideList = new List<ObjectiveList.Goal>();
         private int index;
         private float shownIndex;
         private float textIn = 1f;
@@ -321,7 +325,8 @@ namespace QuietWitness.UI
         {
             if (objectives == null) return;
             var goal = objectives.Current(stepList);
-            if (objectivesView != null) objectivesView.Show(goal, stepList);
+            objectives.Sides(sideList);
+            if (objectivesView != null) objectivesView.Show(goal, stepList, sideList);
             else if (mainGoal != null)
             {
                 if (goal == null) mainGoal.text = noGoals;
@@ -362,7 +367,7 @@ namespace QuietWitness.UI
             var state = GameState.Instance;
             if (state == null) return false;
             foreach (var clue in state.FoundClues)
-                if (clue != null && !state.HasFlag(JournalPanel.SeenFlag(clue))) return true;
+                if (clue != null && !state.HasFlag(SeenFlag(clue))) return true;
             return false;
         }
 
@@ -408,7 +413,7 @@ namespace QuietWitness.UI
             // Start at the first thing not looked at yet.
             if (state != null)
                 for (int i = 0; i < clues.Count; i++)
-                    if (!state.HasFlag(JournalPanel.SeenFlag(clues[i]))) { index = i; break; }
+                    if (!state.HasFlag(SeenFlag(clues[i]))) { index = i; break; }
             index = Mathf.Clamp(index, 0, Mathf.Max(0, clues.Count - 1));
             shownIndex = index;
             ShowItemText();
@@ -441,7 +446,7 @@ namespace QuietWitness.UI
             if (itemText != null) itemText.text = clue.Description != null ? clue.Description.Replace("\\n", "\n") : string.Empty;
             if (counter != null) counter.text = $"{index + 1} / {clues.Count}";
             textIn = 0f;
-            GameState.Instance?.SetFlag(JournalPanel.SeenFlag(clue));
+            GameState.Instance?.SetFlag(SeenFlag(clue));
         }
 
         private void AnimateInventory(float dt)

@@ -47,6 +47,12 @@ namespace QuietWitness.EditorTools
             ("drawer_code",  false, true,  "Find the four numbers. I wrote them down somewhere.", "office:drawer_tried", "darkroom:photo_seen"),
         };
 
+        // Side goals (favors, errands): white, under the main goal and its steps. id, text, shown when, done when.
+        public static readonly (string id, string text, string show, string done)[] SideGoals =
+        {
+            ("sal_favor", "Do Sal a favor. Meet him at the Blue Note, tomorrow after nine.", "office:sal_heard", "sal:met"),
+        };
+
         [MenuItem("Tools/The Quiet Witness/Setup/Case file: objectives look")]
         private static void Run()
         {
@@ -96,6 +102,11 @@ namespace QuietWitness.EditorTools
                 objectives.goals.Add(new ObjectiveList.Goal
                 {
                     id = g.id, main = g.main, mini = g.mini, text = g.text, showWhen = g.show, doneWhen = g.done,
+                });
+            foreach (var g in SideGoals)
+                objectives.goals.Add(new ObjectiveList.Goal
+                {
+                    id = g.id, side = true, text = g.text, showWhen = g.show, doneWhen = g.done,
                 });
             EditorUtility.SetDirty(objectives);
         }

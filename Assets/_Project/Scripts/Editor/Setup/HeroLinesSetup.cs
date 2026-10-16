@@ -41,7 +41,7 @@ namespace QuietWitness.EditorTools
         {
             var asset = Asset();
             if (asset.lines.Exists(l => l != null && l.id == id)) return id;
-            asset.lines.Add(new HeroLines.Line { id = id, text = text, plateWidth = plateWidth });
+            asset.lines.Add(new HeroLines.Line { id = id, text = text });   // plateWidth: not used any more
             EditorUtility.SetDirty(asset);
             AssetDatabase.SaveAssets();
             return id;
@@ -72,7 +72,7 @@ namespace QuietWitness.EditorTools
                     var so = new SerializedObject(intro);
                     var line = so.FindProperty("getUpLine");
                     if (string.IsNullOrWhiteSpace(line.stringValue)) line.stringValue = "prologue.get_up";
-                    Ensure(line.stringValue, Join(so.FindProperty("afterGettingUp")), so.FindProperty("afterGettingUpWidth").intValue);
+                    Ensure(line.stringValue, Join(so.FindProperty("afterGettingUp")));
                     so.ApplyModifiedPropertiesWithoutUndo();
                 }
 
@@ -88,7 +88,7 @@ namespace QuietWitness.EditorTools
                         if (!string.IsNullOrWhiteSpace(line.stringValue)) continue;
                         string text = Join(action.FindPropertyRelative("lines"));
                         if (string.IsNullOrWhiteSpace(text)) continue;
-                        line.stringValue = Ensure(IdFor(scene, hotspot.name, i), text, action.FindPropertyRelative("plateWidth").intValue);
+                        line.stringValue = Ensure(IdFor(scene, hotspot.name, i), text);
                     }
                     so.ApplyModifiedPropertiesWithoutUndo();
                 }

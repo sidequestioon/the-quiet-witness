@@ -21,6 +21,8 @@ namespace QuietWitness.Core
             public bool main;
             [Tooltip("A smaller step of the step above it: shown under it, a little to the right, with a dot.")]
             public bool mini;
+            [Tooltip("A side goal (a favor, an errand): listed under the main goal and its steps, not part of them.")]
+            public bool side;
             [TextArea(1, 3)]
             public string text;
             [Tooltip("Shown once this flag is set, e.g. prologue:envelope_opened or visited:diner. Empty = from the start.")]
@@ -47,15 +49,23 @@ namespace QuietWitness.Core
             for (int i = 0; i < goals.Count; i++)
             {
                 var g = goals[i];
-                if (!g.main || !Shown(g)) continue;
+                if (!g.main || g.side || !Shown(g)) continue;
                 any = i;
                 if (!Done(g)) open = i;
             }
             int main = open >= 0 ? open : any;
             // Steps: from after the main goal up to the next main goal (or, with no main goal, from the start).
             for (int i = main + 1; i < goals.Count && !goals[i].main; i++)
-                if (Shown(goals[i])) steps?.Add(goals[i]);
+                if (!goals[i].side && Shown(goals[i])) steps?.Add(goals[i]);
             return main >= 0 ? goals[main] : null;
+        }
+
+        // The side goals on screen (shown ones, in order).
+        public void Sides(List<Goal> into)
+        {
+            into.Clear();
+            foreach (var g in goals)
+                if (g != null && g.side && Shown(g)) into.Add(g);
         }
     }
 }

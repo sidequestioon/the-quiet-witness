@@ -12,6 +12,7 @@ namespace QuietWitness.UI
     //    :     . Find row seven, seat twelve.              <- mini step
     //    '-- ~~Take a closer look at the film frames.~~    <- done = crossed out
     // A dashed line runs down the left from the circle to the last step.
+    // Side goals (a favor, an errand) come under it all, after a gap, like steps but outside the dashed line.
     // Looks: the hidden templates under Templates (Main, Step, Mini) - every line is a copy of one.
     // Preview: shows the Objectives list right in the editor (goals in Preview Done are crossed out).
     [ExecuteAlways]
@@ -33,6 +34,8 @@ namespace QuietWitness.UI
         [SerializeField] private float dashGap = 6f;
 
         [SerializeField] private string noGoals = "Nothing to do. For now.";
+        [Tooltip("Gap above the side goals.")]
+        [SerializeField] private float sideGap = 36f;
 
         [Header("Preview outside Play mode")]
         [SerializeField] private bool preview = true;
@@ -44,6 +47,7 @@ namespace QuietWitness.UI
             public ObjectiveRow template;
             public string text;
             public bool done;
+            public bool side;
         }
 
         private readonly List<Entry> entries = new List<Entry>();
@@ -52,7 +56,7 @@ namespace QuietWitness.UI
         private bool cleaned;
 
         // Called by the case file when the page opens.
-        public void Show(ObjectiveList.Goal main, List<ObjectiveList.Goal> steps)
+        public void Show(ObjectiveList.Goal main, List<ObjectiveList.Goal> steps, List<ObjectiveList.Goal> sides = null)
         {
             entries.Clear();
             if (main == null && (steps == null || steps.Count == 0))
@@ -67,6 +71,9 @@ namespace QuietWitness.UI
                     if (!s.mini) stepDone = done;
                     entries.Add(new Entry { template = s.mini ? miniTemplate : stepTemplate, text = s.text, done = done });
                 }
+            if (sides != null)
+                foreach (var s in sides)
+                    entries.Add(new Entry { template = s.mini ? miniTemplate : stepTemplate, text = s.text, done = ObjectiveList.Done(s), side = true });
             Layout();
         }
 
@@ -103,9 +110,11 @@ namespace QuietWitness.UI
             float y = 0f;
             ObjectiveRow mainRow = null, last = null;
             int used = 0;
+            bool inSides = false;
             foreach (var e in entries)
             {
                 if (e.template == null || e.template.text == null) continue;
+                if (e.side && !inSides) { inSides = true; if (used > 0) y += sideGap; }
                 var row = RowAt(used++, e.template);
 
                 // Text and colours
@@ -132,7 +141,7 @@ namespace QuietWitness.UI
                 y += top + h + e.template.spaceAfter;
 
                 if (e.template == mainTemplate && mainRow == null) mainRow = row;
-                last = row;
+                if (!e.side) last = row;                   // the dashed line ends at the last main step
             }
             for (int i = used; i < rows.Count; i++)
                 if (rows[i] != null && rows[i].gameObject.activeSelf) rows[i].gameObject.SetActive(false);

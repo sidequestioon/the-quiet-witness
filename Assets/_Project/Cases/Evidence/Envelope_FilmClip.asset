@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ClueData
   id: envelope_filmclip
   title: Film Clip
-  description: Two frames cut out of a reel. The same face, twice.
+  description: Two frames cut out of a reel. Too small to make out by eye.
   icon: {fileID: 21300000, guid: b19ceb3526e2f422d83c90666aecbed2, type: 3}
   isKey: 0

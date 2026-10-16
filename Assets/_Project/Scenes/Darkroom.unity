@@ -181,6 +181,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.0138888955, y: 0.62222254}
   story: 0
 --- !u!114 &66372782
@@ -302,6 +304,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 0.45555586}
   story: 0
 --- !u!114 &139820216
@@ -471,6 +475,7 @@ GameObject:
   - component: {fileID: 207299040}
   - component: {fileID: 207299039}
   - component: {fileID: 207299042}
+  - component: {fileID: 207299043}
   m_Layer: 0
   m_Name: Look_Enlarger
   m_TagString: Untagged
@@ -507,7 +512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotActions
   actions:
   - kind: 0
-    label: Enlarger
+    label: Look
     line: 
     lines: []
     plateWidth: 69
@@ -526,6 +531,33 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
+  - kind: 2
+    label: Use
+    line: 
+    lines: []
+    plateWidth: 0
+    onChosen:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 207299043}
+          m_TargetAssemblyTypeName: QuietWitness.World.HotspotSteps, Assembly-CSharp
+          m_MethodName: Run
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    showWhen:
+    - darkroom:enlarger_found
+    - clue:envelope_filmclip
+    hideWhen:
+    - darkroom:film_enlarged
   promptOffset: {x: -0.027778149, y: 1.066667}
   story: 0
 --- !u!114 &207299040
@@ -604,13 +636,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
   steps:
-  - note: the film from the envelope
+  - note: after the film is done
     needs:
-    - clue:envelope_filmclip
-    unless:
     - darkroom:film_enlarged
-    line: darkroom.enlarger_film
+    unless: []
+    line: darkroom.enlarger_done
+    setFlag: 
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+  - note: finds out about it
+    needs: []
+    unless: []
+    line: darkroom.look_enlarger
     setFlag: darkroom:enlarger_found
+    then:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &207299043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207299037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd6cdde3f02546d0999a080958e16ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.World.HotspotSteps
+  steps:
+  - note: 'develop the film: straight to the close-up, no line'
+    needs: []
+    unless: []
+    line: 
+    setFlag: 
     then:
       m_PersistentCalls:
         m_Calls:
@@ -626,23 +686,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - note: already done
-    needs:
-    - darkroom:film_enlarged
-    unless: []
-    line: darkroom.enlarger_done
-    setFlag: 
-    then:
-      m_PersistentCalls:
-        m_Calls: []
-  - note: before the envelope
-    needs: []
-    unless: []
-    line: darkroom.look_enlarger
-    setFlag: 
-    then:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1 &349510333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,6 +1417,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 0.62222254}
   story: 0
 --- !u!114 &930999827
@@ -1576,6 +1621,7 @@ MonoBehaviour:
   fontSize: 1
   iconSpacing: 16
   textGap: 0
+  column: 1
   nearbyDistance: 70
   nearbySize: 0.6
   nearbyOpacity: 0.75
@@ -1712,6 +1758,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: 0.63888884, y: 0.56666696}
   story: 0
 --- !u!114 &1102112222
@@ -1904,6 +1952,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.027777791, y: 1.9833336}
   story: 0
 --- !u!114 &1247246336
@@ -2116,6 +2166,8 @@ MonoBehaviour:
     onChosen:
       m_PersistentCalls:
         m_Calls: []
+    showWhen: []
+    hideWhen: []
   promptOffset: {x: -0.013888836, y: 0.90000033}
   story: 0
 --- !u!114 &1522450926

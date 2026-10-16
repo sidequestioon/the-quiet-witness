@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuietWitness.Core.ClueData
   id: enlarged_frames
   title: Enlarged Frames
-  description: Not a frame from any movie. Somebody pointed a camera at the booth
-    window. Same man, twice, staring right back at the lens.
+  description: A cinema hall, shot from the back rows. Somebody's telling me where to be tonight.
   icon: {fileID: 21300000, guid: dddcfb9f3a1ff4b14a7caed80d6270be, type: 3}
   isKey: 0

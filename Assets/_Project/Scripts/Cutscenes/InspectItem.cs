@@ -19,13 +19,7 @@ namespace QuietWitness.Cutscenes
         [Tooltip("Used only when there is no Clue: what the hero says about it. Enter (or \\n) starts a new line.")]
         [TextArea(2, 6)]
         public string[] lines;
-        [Header("Its plate (0 = as set on Envelope Inspect / Caption)")]
-        [Tooltip("Widest the plate may get for this text (canvas units). 0 = the usual width (Envelope Inspect > Max Width).")]
-        [SerializeField] private float plateWidth = 0f;
-        [Tooltip("Text size for this thing. 0 = the size on Caption > Text.")]
-        [SerializeField] private float fontSize = 0f;
-        [Tooltip("Plate around the text for this thing (x = left/right, y = top/bottom). 0 = Envelope Inspect > Plate Padding.")]
-        [SerializeField] private Vector2 platePadding = Vector2.zero;
+        [Header("Where its plate goes (the text lays itself out as an even block)")]
         [Tooltip("Where the plate goes: Auto = over the thing (under it when there is no room).")]
         [SerializeField] private CaptionSide side = CaptionSide.Auto;
         [Tooltip("Moves this thing's plate from its usual place (canvas units, x right, y up).")]
@@ -35,9 +29,6 @@ namespace QuietWitness.Cutscenes
         [SerializeField] private Sprite dotHover;
 
         public bool Interactive { get; private set; }
-        public float PlateWidth => plateWidth;
-        public float FontSize => fontSize;
-        public Vector2 PlatePadding => platePadding;
         public CaptionSide Side => side;
         public Vector2 PlateOffset => plateOffset;
         public bool Read { get; private set; }
