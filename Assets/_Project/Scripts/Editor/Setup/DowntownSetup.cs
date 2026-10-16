@@ -10,7 +10,7 @@ using static QuietWitness.EditorTools.SetupUtil;
 
 namespace QuietWitness.EditorTools
 {
-    // Downtown, the street at night. For now only the Riviera between two dark neighbours, to see how it looks:
+    // Downtown, the street at night. For now the Riviera and the Blue Note between two dark neighbours:
     //  - Downtown.unity, made once as a copy of the office with only the basics kept (like the darkroom);
     //  - its picture Art/Locations/Downtown/Downtown.png, placed by Location backgrounds. It is drawn already lit,
     //    so it is shown exactly as drawn (unlit); only the hero takes the street's lights;
@@ -57,6 +57,12 @@ namespace QuietWitness.EditorTools
             new Lamp("Pilaster_Right", 939, 308, 110, new Color(1f, 0.84f, 0.6f), 0.7f, 0.05f),
             new Lamp("Globe", 708, 284, 160, new Color(1f, 0.95f, 0.85f), 0.6f, 0.06f),
             new Lamp("Neon_Riviera", 640, 290, 240, new Color(1f, 0.4f, 0.55f), 0.35f, 0.03f),
+            // The Blue Note, right of the theatre
+            new Lamp("BlueNote_Neon", 1311, 485, 220, new Color(0.35f, 0.65f, 1f), 0.5f, 0.05f),
+            new Lamp("BlueNote_Window", 1217, 630, 140, new Color(0.45f, 0.65f, 1f), 0.45f, 0.04f),
+            new Lamp("BlueNote_Lamp", 1351, 574, 100, new Color(1f, 0.82f, 0.58f), 0.6f, 0.05f),
+            new Lamp("BlueNote_Door", 1462, 590, 80, new Color(1f, 0.84f, 0.62f), 0.5f, 0.04f),
+            new Lamp("BlueNote_CellarRed", 1046, 551, 110, new Color(1f, 0.3f, 0.25f), 0.6f, 0.05f),
         };
 
         [MenuItem("Tools/The Quiet Witness/Setup/Downtown: the Riviera")]
@@ -179,7 +185,7 @@ namespace QuietWitness.EditorTools
             t.position = new Vector3(px(HeroStartX, 0).x, t.position.y, t.position.z);
         }
 
-        // Real 2D lights, for the hero only (the picture is unlit). Made once each.
+        // Real 2D lights, for the hero only (the picture is unlit). Made once each; moved with the picture.
         private static void Lights(System.Func<float, float, Vector2> px, float ppu)
         {
             var parentGo = GameObject.Find("Lights");
@@ -187,7 +193,9 @@ namespace QuietWitness.EditorTools
             int[] layers = SortingLayer.layers.Select(l => l.id).ToArray();
             foreach (var lamp in Lamps)
             {
-                if (parentGo.transform.Find(lamp.Name) != null) continue;
+                // Made once; only its place follows the picture (it gets wider as buildings are added).
+                var existing = parentGo.transform.Find(lamp.Name);
+                if (existing != null) { existing.position = px(lamp.X, lamp.Y); continue; }
                 var go = new GameObject(lamp.Name);
                 go.transform.SetParent(parentGo.transform, false);
                 go.transform.position = px(lamp.X, lamp.Y);

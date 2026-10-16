@@ -5,4 +5,4 @@ gazette=1
 cleanup-prototype=1
 controls-window=1
 answering-machine=1
-downtown-riviera=2
+downtown-riviera=3
