@@ -25,6 +25,7 @@ namespace QuietWitness.EditorTools
             ("cleanup-prototype", 1, Menu + "Cleanup: old prototype parts"),
             ("controls-window", 1, Menu + "Prologue: controls window"),
             ("answering-machine", 1, Menu + "Office: answering machine"),
+            ("downtown-riviera", 2, Menu + "Downtown: the Riviera"),
         };
 
         private static bool queued;

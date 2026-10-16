@@ -24,9 +24,14 @@ namespace QuietWitness.EditorTools
     public static class LocationBackgroundSetup
     {
         private const string LocationsFolder = ProjectRoot + "/Art/Locations";
-        private static readonly string[] Scenes = { "Office", "Darkroom" };
+        private static readonly string[] Scenes = { "Office", "Darkroom", "Downtown" };
         // Pixels between the picture's bottom row and the hero's feet (the camera shows 8 below the feet).
         private const int FeetAboveBottom = 10;
+        // Pictures whose feet line is higher up: the street has the pavement and the road below the hero.
+        private static readonly Dictionary<string, int> FeetAboveBottomFor = new Dictionary<string, int>
+        {
+            ["Downtown"] = 86,
+        };
         // How far before the picture's edge the hero stops, in world units.
         private const float EdgeInset = 0.5f;
         private const int SortingOrder = -100;
@@ -55,6 +60,7 @@ namespace QuietWitness.EditorTools
             {
                 string path = $"{LocationsFolder}/{sceneName}/{sceneName}.png";
                 if (!File.Exists(path)) continue;
+                if (!File.Exists(Scene(sceneName))) continue;   // its scene is made by its own setup
 
                 AssetDatabase.ImportAsset(path);
                 // One picture = one sprite. Unity's 2D default ("Multiple") keeps old cut-out rects
@@ -115,7 +121,7 @@ namespace QuietWitness.EditorTools
             // Left and bottom edges land exactly on the pixel grid, whatever the pivot.
             int widthPx = Mathf.RoundToInt(sprite.rect.width);
             int leftPx = -widthPx / 2;
-            int bottomPx = feetPx - FeetAboveBottom;
+            int bottomPx = feetPx - (FeetAboveBottomFor.TryGetValue(sceneName, out int above) ? above : FeetAboveBottom);
             Bounds local = sprite.bounds;
             background.transform.SetParent(null);
             background.transform.SetPositionAndRotation(

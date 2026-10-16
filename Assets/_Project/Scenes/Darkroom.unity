@@ -177,7 +177,6 @@ MonoBehaviour:
     lines:
     - Mix them wrong and a photo forgets everything it saw. Mix them right and it
       remembers too much.
-    plateWidth: 67
     onChosen:
       m_PersistentCalls:
         m_Calls: []
@@ -300,7 +299,6 @@ MonoBehaviour:
     line: darkroom.look_sink
     lines:
     - Developer, stop bath, fixer. Smells like every night I couldn't sleep.
-    plateWidth: 71
     onChosen:
       m_PersistentCalls:
         m_Calls: []
@@ -515,7 +513,6 @@ MonoBehaviour:
     label: Look
     line: 
     lines: []
-    plateWidth: 69
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -537,7 +534,6 @@ MonoBehaviour:
     label: Use
     line: 
     lines: []
-    plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -1413,7 +1409,6 @@ MonoBehaviour:
     lines:
     - Negatives drying in the dark. Every frame is a second somebody thought nobody
       saw.
-    plateWidth: 67
     onChosen:
       m_PersistentCalls:
         m_Calls: []
@@ -1663,8 +1658,11 @@ MonoBehaviour:
   tail: {fileID: 732293639}
   preview: 0
   previewText: Nobody knocks on my door after nine. Nobody good.
-  previewWidth: 0
   maxWidth: 130
+  maxLines: 3
+  charsPerLine: 36
+  widest: 0.7
+  screenMargin: 4
   minWidth: 0
   platePadding: {x: 4, y: 3}
   gapAboveHead: 4
@@ -1742,7 +1740,6 @@ MonoBehaviour:
     label: Office
     line: 
     lines: []
-    plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -1936,7 +1933,6 @@ MonoBehaviour:
     label: Old photo
     line: 
     lines: []
-    plateWidth: 0
     onChosen:
       m_PersistentCalls:
         m_Calls:
@@ -2162,7 +2158,6 @@ MonoBehaviour:
     line: darkroom.look_prints
     lines:
     - Prints from old cases. Half of them nobody ever paid for.
-    plateWidth: 60
     onChosen:
       m_PersistentCalls:
         m_Calls: []
